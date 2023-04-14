@@ -7,16 +7,21 @@ This is intended as a living codebase for useful custom R functions for our bulk
 It's structured as an R package to keep things tidy, well documented and version controlled. 
 
 # Installation
-That means that if this repo is in your pwd, you can install and load this codebase by simply calling `devtools::install()` in the r console.
 
 # How to use this for analysis
-This package lives in `runs/tools/gencore_analysis_utils/gencore-bulk`. You can use this in two ways:
 
-## 1. Direct install
+## 1. Install to R from github
+
+You can install directly from github using `remotes::install_github` or a similar function. Since this is a private repo, you will have to have a personal access token provided. Once installed, you can load like any other library. 
+
+## 2. Direct install
+
+That means that if this repo is in your pwd, you can install and load this codebase by simply calling `devtools::install()` in the r console.
+This package lives in `runs/tools/gencore_analysis_utils/gencore-bulk`. You can use this in two ways:
 
 Add the path to this dir to your R_LIBS variable `~/.Renviron`, and `devtools::install()` in the R console. This is convenient but dangerous, because if someone made changes to the functions while you are working on a project, you may not be able to reproduce your work in that project easily anymore.
 
-## 2. Clone to working directory
+## 3. Clone to working directory
 
 Clone this repo into the directory your current project and run `devtools::install()` from there, and start a new branch for this specific project. Don't merge this branch to `main`; the code for that project lives there and can be reproduced easily. 
 
