@@ -12,6 +12,23 @@ It's structured as an R package to keep things tidy, well documented and version
 
 ## 1. Install to R from github
 
+Generate a personal access token for RStudio
+
+```
+## create a personal access token for authentication:
+usethis::create_github_token() 
+## in case usethis version < 2.0.0: usethis::browse_github_token() (or even better: update usethis!)
+
+## set personal access token:
+credentials::set_github_pat("YourPAT")
+
+## or store it manually in '.Renviron':
+usethis::edit_r_environ()
+## store your personal access token in the file that opens in your editor with:
+## GITHUB_PAT=xxxyyyzzz
+## and make sure '.Renviron' ends with a newline
+```
+
 You can install directly from github using `remotes::install_github` or a similar function. Since this is a private repo, you will have to have a personal access token provided. Once installed, you can load like any other library. 
 
 ## 2. Direct install
