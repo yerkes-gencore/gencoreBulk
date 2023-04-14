@@ -1,0 +1,8 @@
+Package: gencoreBulk
+Version: 0.1
+Date: 2023-04-14
+Title: NPRC Genomics Core Bulk RNA Analysis Utilities
+Description: A shared codebase for custom R functions we find useful for bulk RNA analysis.
+Author: Derrik Gratz <dgratz@emory.edu>, Micah Fletcher <mpfletc@emory.edu>, Gregory Tharp
+Maintainer: Derrik Gratz <dgratz@emory.edu>
+RoxygenNote: 7.2.3
