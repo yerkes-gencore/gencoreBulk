@@ -61,8 +61,8 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 #' @param title   Optional title for the plot
 #'  
 #' @returns ggplot Plot
+#' 
 #' @export
-
 mappingBinsPlot <- function(mapBins, title=''){
   data <- rownames_to_column(as_tibble(mapBins, rownames = NA),
                              var = "map_result") %>% 
