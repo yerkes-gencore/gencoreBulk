@@ -6,19 +6,21 @@
 \usage{
 parseReadPerGeneFiles(file.paths, library.type = "unstranded")
 }
+\arguments{
+\item{file.paths}{Named vector of file paths to STAR output files, where names
+correspond to sample names}
+
+\item{library.type}{String of column to pull from in the output file. Options
+should be 'unstranded', 'sense', or 'antisense'}
+}
+\value{
+List of 2 data frames, one containing read mapping bins, the other 
+ read per gene counts
+}
 \description{
 Returns the counts per gene and read count bins for a list of STAR output files
 }
-\details{
-@param file.paths Named vector of file paths to STAR output files, where names
-   correspond to sample names
- @param library.type String of column to pull from in the output file. Options
-   should be 'unstranded', 'sense', or 'antisense'
-   
- @returns List of 2 data frames, one containing read mapping bins, the other 
-   read per gene counts
-
- @examples
+\examples{
    readfiles <- sapply(
      analysis$samplefileIDs,
      function(sid) {
@@ -28,5 +30,4 @@ Returns the counts per gene and read count bins for a list of STAR output files
               
    outs <- readCountFiles(readfiles, 'unstranded')
 
- @export
 }

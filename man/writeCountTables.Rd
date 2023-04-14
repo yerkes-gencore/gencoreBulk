@@ -12,21 +12,22 @@ writeCountTables(
   write_sample_table = TRUE
 )
 }
+\arguments{
+\item{raw_counts}{matrix of raw count data}
+
+\item{analysis}{object with config options saved from the template format}
+
+\item{outdir}{folder to store outputs in, will be generated if it doesn't exist}
+
+\item{generate_GSEA_app_tables}{write files for compatibility with GSEA desktop app}
+
+\item{write_sample_table}{write sample metadata to a csv}
+}
 \description{
 Takes the raw counts matrix and an analysis object with yaml config 
  options saved to write data to named file outputs.
- 
- @param raw_counts matrix of raw count data
- @param analysis object with config options saved from the template format
- @param outdir folder to store outputs in, will be generated if it doesn't exist
- @param generate_GSEA_app_tables write files for compatibility with GSEA desktop app
- @param write_sample_table write sample metadata to a csv
 }
-\details{
-@returns NULL
-
- @examples
+\examples{
  writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
  
- @export
 }
