@@ -1,16 +1,16 @@
-#'  Parse STAR readsPerGene.out files
+#' Parse STAR readsPerGene.out files
 #' 
-#'  Returns the counts per gene and read count bins for a list of STAR output files
+#' Returns the counts per gene and read count bins for a list of STAR output files
 #' 
-#'  @param file.paths Named vector of file paths to STAR output files, where names
+#' @param file.paths Named vector of file paths to STAR output files, where names
 #'    correspond to sample names
-#'  @param library.type String of column to pull from in the output file. Options
-#'    should be 'unstranded', 'sense', or 'antisense'
+#' @param library.type String of column to pull from in the output file. Options
+#'  should be 'unstranded', 'sense', or 'antisense'
 #'    
-#'  @returns List of 2 data frames, one containing read mapping bins, the other 
-#'    read per gene counts
+#' @returns List of 2 data frames, one containing read mapping bins, the other 
+#'  read per gene counts
 #'
-#'  @examples
+#' @examples
 #'    readfiles <- sapply(
 #'      analysis$samplefileIDs,
 #'      function(sid) {
@@ -20,7 +20,7 @@
 #'               
 #'    outs <- readCountFiles(readfiles, 'unstranded')
 #' 
-#'  @export
+#' @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
   raw_out <- sapply(readfiles, 
                     function(x) {
