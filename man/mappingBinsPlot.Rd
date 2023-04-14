@@ -11,9 +11,6 @@ mappingBinsPlot(mapBins, title = "")
 
 \item{title}{Optional title for the plot}
 }
-\value{
-ggplot Plot
-}
 \description{
 Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
 }

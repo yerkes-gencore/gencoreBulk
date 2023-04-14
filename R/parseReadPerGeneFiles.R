@@ -59,8 +59,6 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 #'
 #' @param mapBins Data frame of 5 mapping bin categories for each sample
 #' @param title   Optional title for the plot
-#'  
-#' @returns ggplot Plot
 #' 
 #' @examples mappingBinsPlot(analysis$mapBins)
 #' 
