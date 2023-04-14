@@ -48,6 +48,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
                         function(x) {x[-c(1:4),][[paste0(library.type, '_count')]]},
                         USE.NAMES = TRUE)
   rownames(read_counts) <- unlist(genes <- raw_out[[1]][-c(1:4),1])
+  map_bins <- rbind(map_bins,"N_identified" = colSums2(read_counts))
   
   return(list(map_bins = map_bins, read_counts = read_counts))
 }
