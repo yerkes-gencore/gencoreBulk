@@ -2,16 +2,18 @@
 % Please edit documentation in R/parseReadPerGeneFiles.R
 \name{mappingBinsPlot}
 \alias{mappingBinsPlot}
-\title{Mapping bins plot
- 
- Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`}
+\title{Mapping bins plot}
 \usage{
 mappingBinsPlot(mapBins, title = "")
 }
+\arguments{
+\item{mapBins}{Data frame of 5 mapping bin categories for each sample}
+
+\item{title}{Optional title for the plot}
+}
+\value{
+ggplot Plot
+}
 \description{
-@param mapBins Data frame of 5 mapping bin categories for each sample
- @param title   Optional title for the plot
- 
- @returns ggplot Plot
- @export
+Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
 }
