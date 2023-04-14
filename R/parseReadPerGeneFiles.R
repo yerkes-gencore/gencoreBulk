@@ -2,6 +2,7 @@
 #' 
 #' Returns the counts per gene and read count bins for a list of STAR output files
 #' 
+#' @rdname parseReadPerGeneFiles
 #' @param file.paths Named vector of file paths to STAR output files, where names
 #'    correspond to sample names
 #' @param library.type String of column to pull from in the output file. Options
@@ -57,6 +58,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 #'
 #' Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
 #'
+#' @rdname mappingBinsPlot
 #' @param mapBins Data frame of 5 mapping bin categories for each sample
 #' @param title   Optional title for the plot
 #' 
