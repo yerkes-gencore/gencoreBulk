@@ -6,3 +6,4 @@ Description: A shared codebase for custom R functions we find useful for bulk RN
 Author: Derrik Gratz <dgratz@emory.edu>, Micah Fletcher <mpfletc@emory.edu>, Gregory Tharp
 Maintainer: Derrik Gratz <dgratz@emory.edu>
 RoxygenNote: 7.2.3
+Encoding: UTF-8
