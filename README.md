@@ -1,4 +1,4 @@
-# gencoreSC - Utility functions for bulk analyses
+# gencore-bulk - Utility functions for bulk analyses
 
 ## This is an R package
 
