@@ -11,16 +11,14 @@
 #'    read per gene counts
 #'
 #'  @examples
-#'   readfiles <- sapply(
-#'     analysis$samplefileIDs,
-#'     function(sid) {
-#'       paste0(dir(paste0(analysis$config$rootDir,
-#'                         analysis$config$alignmentDir),
-#'                  pattern = sid, full.names = TRUE),
-#'              "/", sid, analysis$config$STARreadSuffix)})
-#'              
+#'    readfiles <- sapply(
+#'      analysis$samplefileIDs,
+#'      function(sid) {
+#'        paste0(dir("my_STAR_output_dir",
+#'                   pattern = sid, full.names = TRUE),
+#'               "/", sid, 'readsPerGene.out.tab')})
 #'               
-#'    outs <- parseReadPerGeneFiles(readfiles, 'unstranded')
+#'    outs <- readCountFiles(readfiles, 'unstranded')
 #' 
 #'  @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
@@ -48,6 +46,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
                         function(x) {x[-c(1:4),][[paste0(library.type, '_count')]]},
                         USE.NAMES = TRUE)
   rownames(read_counts) <- unlist(genes <- raw_out[[1]][-c(1:4),1])
+  
   map_bins <- rbind(map_bins,"N_identified" = colSums2(read_counts))
   
   return(list(map_bins = map_bins, read_counts = read_counts))
