@@ -54,7 +54,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 
 
 #' Mapping bins plot
-#'  
+#'
 #' Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
 #'
 #' @param mapBins Data frame of 5 mapping bin categories for each sample
