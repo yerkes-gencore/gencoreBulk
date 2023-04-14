@@ -11,14 +11,16 @@
 #'    read per gene counts
 #'
 #'  @examples
-#'    readfiles <- sapply(
-#'      analysis$samplefileIDs,
-#'      function(sid) {
-#'        paste0(dir("my_STAR_output_dir",
-#'                   pattern = sid, full.names = TRUE),
-#'               "/", sid, 'readsPerGene.out.tab')})
+#'   readfiles <- sapply(
+#'     analysis$samplefileIDs,
+#'     function(sid) {
+#'       paste0(dir(paste0(analysis$config$rootDir,
+#'                         analysis$config$alignmentDir),
+#'                  pattern = sid, full.names = TRUE),
+#'              "/", sid, analysis$config$STARreadSuffix)})
+#'              
 #'               
-#'    outs <- readCountFiles(readfiles, 'unstranded')
+#'    outs <- parseReadPerGeneFiles(readfiles, 'unstranded')
 #' 
 #'  @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
