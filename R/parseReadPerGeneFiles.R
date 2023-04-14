@@ -53,15 +53,15 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 }
 
 
-#'  Mapping bins plot
+#' Mapping bins plot
 #'  
-#'  Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
+#' Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
 #'
-#'  @param mapBins Data frame of 5 mapping bin categories for each sample
-#'  @param title   Optional title for the plot
+#' @param mapBins Data frame of 5 mapping bin categories for each sample
+#' @param title   Optional title for the plot
 #'  
-#'  @returns ggplot Plot
-#'  @export
+#' @returns ggplot Plot
+#' @export
 
 mappingBinsPlot <- function(mapBins, title=''){
   data <- rownames_to_column(as_tibble(mapBins, rownames = NA),
