@@ -1,12 +1,6 @@
 # gencore-bulk - Utility functions for bulk analyses
 
-## This is an R package
-
-This is intended as a living codebase for useful custom R functions for our bulk analysis workflows.
-
 # Installation
-
-# How to use this for analysis
 
 ## 1. Install to R from github
 
