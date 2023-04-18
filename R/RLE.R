@@ -27,7 +27,7 @@ checkRLE <- function(raw_counts, analysis){
   normLogRatios <- normLogCounts - normMedianLogs
   RLE_raw <- .plotRLE(rawLogRatios, 'RLE Raw')
   RLE_norm <- .plotRLE(normLogRatios, 'RLE Normalized')
-  return(list(RLE_raw, RLE_norm))
+  return(list(RLE_raw=RLE_raw, RLE_norm=RLE_norm))
 }
 
 .plotRLE <- function(data, title){
