@@ -15,22 +15,26 @@ plotPCAFromConfig <- function(analysis){
   .pcaPlotGKT(analysis$vst,
              intgroup = names(colData(analysis$vst)),
              xpc = 1, ypc = 2) +
-    #  geom_path(aes(group = SubjectID)) 
-    geom_point(aes(color = (if (is.null(analysis$config$pcaMapping$color)) NULL else .data[[analysis$config$pcaMapping$color]]),
-                   shape = (if (is.null(analysis$config$pcaMapping$shape)) NULL else .data[[analysis$config$pcaMapping$shape]]),
-                   text  = (if (is.null(analysis$config$pcaMapping$hover)) NULL else .data[[analysis$config$pcaMapping$hover]])),
+    geom_point(aes(color = (if (is.null(analysis$config$pcaMapping$color)) NULL 
+                            else .data[[analysis$config$pcaMapping$color]]),
+                   shape = (if (is.null(analysis$config$pcaMapping$shape)) NULL 
+                            else .data[[analysis$config$pcaMapping$shape]]),
+                   text  = (if (is.null(analysis$config$pcaMapping$hover)) NULL 
+                            else .data[[analysis$config$pcaMapping$hover]])),
                size = 5) +
-    labs(color=analysis$config$pcaMapping$color, shape=analysis$config$pcaMapping$shape) +
-    (if (is.null(analysis$config$pcaMapping$label)) NULL else geom_text_repel(aes(label = .data[[analysis$config$pcaMapping$label]]),
-                                                                              size = 4, hjust = 0.5, vjust = -0.5, alpha=0.5)) +
+    labs(color=analysis$config$pcaMapping$color,
+         shape=analysis$config$pcaMapping$shape) +
+    (if (is.null(analysis$config$pcaMapping$label)) NULL 
+     else geom_text_repel(aes(label = .data[[analysis$config$pcaMapping$label]]),
+                          size = 4, hjust = 0.5, vjust = -0.5, alpha=0.5)) +
     scale_x_continuous(expand = c(0.5,0)) +
-    theme_bw() + ggtitle(paste0(analysis$config$analysis," PCA")) +
+    theme_bw() + 
+    #ggtitle(paste0(analysis$config$analysis," PCA")) +
     (if (!is.null(analysis$config$pcaMapping$path)){
       geom_path(aes(linetype=.data[[analysis$config$pcaMapping$path]]))
     }) +
-    # geom_path(aes(linetype=(if (is.null(analysis$config$pcaMapping$path)) NULL else .data[[analysis$config$pcaMapping$path]]))) +
+    geom_path(aes(linetype=(if (is.null(analysis$config$pcaMapping$path)) NULL else .data[[analysis$config$pcaMapping$path]]))) +
     theme(legend.key.width = unit(1.2, "cm")) +
-    #labs(color="Weeks") +
     (if (!is.null(analysis$config$pcaMapping$ellipse)){
       stat_ellipse(aes(color=.data[[analysis$config$pcaMapping$ellipse]]), type="norm", level=0.67)
     })+
