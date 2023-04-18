@@ -2,9 +2,7 @@
 
 ## This is an R package
 
-This is intended as a living codebase for useful custom R functions for our bulk analysis workflows downstream of generating UMI count tables (e.g. via cellranger). 
-
-It's structured as an R package to keep things tidy, well documented and version controlled. 
+This is intended as a living codebase for useful custom R functions for our bulk analysis workflows.
 
 # Installation
 
@@ -12,7 +10,7 @@ It's structured as an R package to keep things tidy, well documented and version
 
 ## 1. Install to R from github
 
-Generate a personal access token for RStudio
+This is a private repo, so you need to enter your Github credentials to download this package. Generate a personal access token for RStudio
 
 ```
 ## create a personal access token for authentication:
@@ -29,7 +27,7 @@ usethis::edit_r_environ()
 ## and make sure '.Renviron' ends with a newline
 ```
 
-You can install directly from github using `remotes::install_github` or a similar function. Since this is a private repo, you will have to have a personal access token provided. Once installed, you can load like any other library. 
+You can install directly from github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
 ## 2. Direct install
 
