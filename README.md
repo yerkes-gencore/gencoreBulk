@@ -4,7 +4,9 @@
 
 ### 1. Install to R from github
 
-This is a private repo, so you need to enter your Github credentials to download this package. Generate a personal access token for RStudio
+This is a private repo, so you need to enter your Github credentials to download this package. 
+
+Generate a personal access token for RStudio:
 
 ```
 ## create a personal access token for authentication:
@@ -21,7 +23,7 @@ usethis::edit_r_environ()
 ## and make sure '.Renviron' ends with a newline
 ```
 
-You can install directly from github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
+You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
 ### 2. Direct install
 
