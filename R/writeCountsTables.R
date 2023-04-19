@@ -26,13 +26,13 @@ writeCountTables <- function(raw_counts,
   ## raw counts w/ gene symbols
   write_csv(as.data.frame(raw_counts) %>% 
               rownames_to_column(var = "gene_id"),
-            file = paste0("outputs/raw_count_",
+            file = paste0(outdir, "/raw_count_",
                           analysis$config$reference, "_",
                           analysis$config$analysis,".csv"),
             col_names = TRUE)
   if (write_sample_table) {
     write_csv(analysis$sampleTable,
-              file = paste0("outputs/sample_table_",
+              file = paste0(outdir, "/sample_table_",
                             analysis$config$analysis,".csv"))
   }
   if (generate_GSEA_app_tables) {
@@ -48,12 +48,12 @@ writeCountTables <- function(raw_counts,
                collapse = " "),
         paste0(analysis$rldDrop$Group, collapse = " "))
     write_lines(analysis$clsLinesGroup, 
-                file = paste0("outputs/Group_",
+                file = paste0(outdir, "/Group_",
                               analysis$config$analysis,".cls"))
     write_tsv(data.frame(
       Name = str_remove(rownames(analysis$assayRlogForGSEA), "[.].*"),
       Description = "na", analysis$assayRlogForGSEA),
-      file = paste0("outputs/rlog_forGSEA_", 
+      file = paste0(outdir, "/rlog_forGSEA_", 
                     analysis$config$analysis, ".txt"))
   }
 }
