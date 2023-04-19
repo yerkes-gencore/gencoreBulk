@@ -1,18 +1,12 @@
 # gencore-bulk - Utility functions for bulk analyses
 
-## This is an R package
+## Installation
 
-This is intended as a living codebase for useful custom R functions for our bulk analysis workflows downstream of generating UMI count tables (e.g. via cellranger). 
+### 1. Install to R from github
 
-It's structured as an R package to keep things tidy, well documented and version controlled. 
+This is a private repo, so you need to enter your Github credentials to download this package. 
 
-# Installation
-
-# How to use this for analysis
-
-## 1. Install to R from github
-
-Generate a personal access token for RStudio
+Generate a personal access token for RStudio:
 
 ```
 ## create a personal access token for authentication:
@@ -29,16 +23,16 @@ usethis::edit_r_environ()
 ## and make sure '.Renviron' ends with a newline
 ```
 
-You can install directly from github using `remotes::install_github` or a similar function. Since this is a private repo, you will have to have a personal access token provided. Once installed, you can load like any other library. 
+You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
-## 2. Direct install
+### 2. Direct install
 
 That means that if this repo is in your pwd, you can install and load this codebase by simply calling `devtools::install()` in the r console.
 This package lives in `runs/tools/gencore_analysis_utils/gencore-bulk`. You can use this in two ways:
 
 Add the path to this dir to your R_LIBS variable `~/.Renviron`, and `devtools::install()` in the R console. This is convenient but dangerous, because if someone made changes to the functions while you are working on a project, you may not be able to reproduce your work in that project easily anymore.
 
-## 3. Clone to working directory
+### 3. Clone to working directory
 
 Clone this repo into the directory your current project and run `devtools::install()` from there, and start a new branch for this specific project. Don't merge this branch to `main`; the code for that project lives there and can be reproduced easily. 
 
@@ -48,7 +42,7 @@ Until we find a better workflow, we think option 2 is the best practice.
 
 In either case, you can check that the installation worked by running `?readBD`, which should pull up a manual page for that function.
 
-# Making changes
+## Making changes
 
 If you want to make any changes, **do not make any changes to the files in `tools/gencore_analysis_utils/gencore-bulk` directly!** Instead, clone this repo into an isolated working directory (we suggest `.../illumina/runs/analyst/<your_name>`), and make any changes there in a new git branch (e.g. `name_of_new_feature`). After you are satisfied with your changes, rather than merging it to the `main` branch locally, it's best to push to `origin` from that new branch, which will automatically create a pull request on github which we can all review together, run tests on, etc. before merging to main.
 
