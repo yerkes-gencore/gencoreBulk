@@ -17,14 +17,13 @@
 #' @export
 
 
-writeCountTables <- function(raw_counts,
-                             analysis,
+writeCountTables <- function(analysis,
                              outdir = 'outputs',
                              generate_GSEA_app_tables = FALSE,
                              write_sample_table = TRUE) {
   if (!dir.exists(outdir)){ dir.create("outputs") }
   ## raw counts w/ gene symbols
-  write_csv(as.data.frame(raw_counts) %>% 
+  write_csv(as.data.frame(assays(analysis$dds)$counts) %>% 
               rownames_to_column(var = "gene_id"),
             file = here(paste0(outdir, "/raw_count_",
                           analysis$config$reference, "_",
@@ -36,23 +35,23 @@ writeCountTables <- function(raw_counts,
                             analysis$config$analysis,".csv")))
   }
   if (generate_GSEA_app_tables) {
-    analysis$assayRlogForGSEA <- assay(analysis$rld)
-    analysis$assayRlogForGSEA <-
-      analysis$assayRlogForGSEA[rowMeans(analysis$assayRlogForGSEA)>0,]
+    assayRlogForGSEA <- assays(analysis$dds)$rld
+    assayRlogForGSEA <-
+      assayRlogForGSEA[rowMeans(assayRlogForGSEA)>0,]
     ## GSEA cls file
     analysis$clsLinesGroup <-
-      c(paste0(c(length(analysis$rldDrop$Group),
-                 length(unique(analysis$rldDrop$Group)),1),
+      c(paste0(c(length(assays(analysis$dds)$rld$Group),
+                 length(unique(assays(analysis$dds)$rld$Group)),1),
                collapse = " "),
-        paste0(c("#",unique(as.vector(analysis$rldDrop$Group))),
+        paste0(c("#",unique(as.vector(assays(analysis$dds)$rld$Group))),
                collapse = " "),
-        paste0(analysis$rldDrop$Group, collapse = " "))
+        paste0(assays(analysis$dds)$rld$Group, collapse = " "))
     write_lines(analysis$clsLinesGroup, 
                 file = here(paste0(outdir, "/Group_",
                               analysis$config$analysis,".cls")))
     write_tsv(data.frame(
-      Name = str_remove(rownames(analysis$assayRlogForGSEA), "[.].*"),
-      Description = "na", analysis$assayRlogForGSEA),
+      Name = str_remove(rownames(assayRlogForGSEA), "[.].*"),
+      Description = "na", assayRlogForGSEA),
       file = here(paste0(outdir, "/rlog_forGSEA_", 
                     analysis$config$analysis, ".txt")))
   }
