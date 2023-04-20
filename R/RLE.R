@@ -13,7 +13,8 @@
 #' 
 #' @export
 
-checkRLE <- function(raw_counts, analysis){
+checkRLE <- function(analysis){
+  raw_counts <- as.data.frame(assays(analysis$dds)$counts)
   rawLogCounts <- log(raw_counts[rowMins(raw_counts)>0,])
   rawMedianLogs <- rowMedians(rawLogCounts)
   rawLogRatios <- rawLogCounts - rawMedianLogs
