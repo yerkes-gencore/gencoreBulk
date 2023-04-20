@@ -12,8 +12,8 @@
 #' 
 #' @export
 plotPCAFromConfig <- function(analysis){
-  .pcaPlotGKT(analysis$vst,
-             intgroup = names(colData(analysis$vst)),
+  .pcaPlotGKT(assays(analysis$dds)$vst,
+             intgroup = names(colData(assays(analysis$dds)$vst)),
              xpc = 1, ypc = 2) +
     geom_point(aes(color = (if (is.null(analysis$config$pcaMapping$color)) NULL 
                             else .data[[analysis$config$pcaMapping$color]]),
