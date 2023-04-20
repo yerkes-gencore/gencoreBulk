@@ -23,15 +23,16 @@ writeCountTables <- function(analysis,
                              write_sample_table = TRUE) {
   if (!dir.exists(outdir)){ dir.create("outputs") }
   ## raw counts w/ gene symbols
-  write_csv(as.data.frame(assays(analysis$dds)$counts) %>% 
-              rownames_to_column(var = "gene_id"),
-            file = here(paste0(outdir, "/raw_count_",
+  assays(analysis$dds)$counts %>%
+    as.data.frame() %>%
+    rownames_to_column(var = "gene_id") %>%
+    write_csv(file = here::here(paste0(outdir, "/raw_count_",
                           analysis$config$reference, "_",
                           analysis$config$analysis,".csv")),
             col_names = TRUE)
   if (write_sample_table) {
     write_csv(analysis$sampleTable,
-              file = here(paste0(outdir, "/sample_table_",
+              file = here::here(paste0(outdir, "/sample_table_",
                             analysis$config$analysis,".csv")))
   }
   if (generate_GSEA_app_tables) {
@@ -47,12 +48,12 @@ writeCountTables <- function(analysis,
                collapse = " "),
         paste0(assays(analysis$dds)$rld$Group, collapse = " "))
     write_lines(analysis$clsLinesGroup, 
-                file = here(paste0(outdir, "/Group_",
+                file = here::here(paste0(outdir, "/Group_",
                               analysis$config$analysis,".cls")))
     write_tsv(data.frame(
       Name = str_remove(rownames(assayRlogForGSEA), "[.].*"),
       Description = "na", assayRlogForGSEA),
-      file = here(paste0(outdir, "/rlog_forGSEA_", 
+      file = here::here(paste0(outdir, "/rlog_forGSEA_", 
                     analysis$config$analysis, ".txt")))
   }
 }
