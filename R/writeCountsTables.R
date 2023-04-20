@@ -27,8 +27,7 @@ writeCountTables <- function(analysis,
     as.data.frame() %>%
     rownames_to_column(var = "gene_id") %>%
     write_csv(file = here::here(paste0(outdir, "/raw_count_",
-                          analysis$config$reference, "_",
-                          analysis$config$analysis,".csv")),
+                          "_", analysis$config$analysis,".csv")),
             col_names = TRUE)
   if (write_sample_table) {
     write_csv(analysis$sampleTable,
