@@ -72,7 +72,7 @@ mappingBinsPlot <- function(mapBins, title=''){
                              var = "map_result") %>% 
     pivot_longer(!map_result, names_to = "SampleID", values_to = "count") 
   data$map_result <- unlist(lapply(data$map_result,
-                                   function(x)toTitleCase(str_split(x, '_')[[1]][2])))
+                                   function(x)str_to_title(str_split(x, '_')[[1]][2])))
   data$map_result <- factor(data$map_result,
                             levels = c("Unmapped","Multimapping",
                                        "noFeature","Ambiguous","Identified"))
