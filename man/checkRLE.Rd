@@ -4,12 +4,12 @@
 \alias{checkRLE}
 \title{plot relative log expression normalization}
 \usage{
-checkRLE(raw_counts, analysis)
+checkRLE(analysis)
 }
 \arguments{
-\item{raw_counts}{matrix of raw count data}
-
 \item{analysis}{object with config options saved from the template format}
+
+\item{raw_counts}{matrix of raw count data}
 }
 \value{
 2 ggplots

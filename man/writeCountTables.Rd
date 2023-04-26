@@ -5,16 +5,13 @@
 \title{Write data to csvs}
 \usage{
 writeCountTables(
-  raw_counts,
   analysis,
-  outdir = "outputs",
+  outdir = here::here("outputs"),
   generate_GSEA_app_tables = FALSE,
   write_sample_table = TRUE
 )
 }
 \arguments{
-\item{raw_counts}{matrix of raw count data}
-
 \item{analysis}{object with config options saved from the template format}
 
 \item{outdir}{folder to store outputs in, will be generated if it doesn't exist}
@@ -22,6 +19,8 @@ writeCountTables(
 \item{generate_GSEA_app_tables}{write files for compatibility with GSEA desktop app}
 
 \item{write_sample_table}{write sample metadata to a csv}
+
+\item{raw_counts}{matrix of raw count data}
 }
 \description{
 Takes the raw counts matrix and an analysis object with yaml config 
