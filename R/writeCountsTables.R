@@ -18,7 +18,7 @@
 
 
 writeCountTables <- function(analysis,
-                             outdir = 'outputs',
+                             outdir = here::here('outputs'),
                              generate_GSEA_app_tables = FALSE,
                              write_sample_table = TRUE) {
   if (!dir.exists(outdir)){ dir.create("outputs") }
@@ -27,7 +27,7 @@ writeCountTables <- function(analysis,
     as.data.frame() %>%
     rownames_to_column(var = "gene_id") %>%
     write_csv(file = here::here(paste0(outdir, "/raw_count_",
-                          "_", analysis$config$analysis,".csv")),
+                                       analysis$config$analysis,".csv")),
             col_names = TRUE)
   if (write_sample_table) {
     write_csv(analysis$sampleTable,
