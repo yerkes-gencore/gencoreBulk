@@ -17,4 +17,5 @@ Returns plot of PCA using aesthetic labels specified in the analysis config
 }
 \examples{
   plotPCAFromConfig(analysis)
+  
 }

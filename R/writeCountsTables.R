@@ -13,7 +13,9 @@
 #'
 #' @examples
 #'  writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
-#'  
+#'
+#' @import openxlsx
+#' 
 #' @export
 
 

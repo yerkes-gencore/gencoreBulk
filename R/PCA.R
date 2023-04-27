@@ -10,7 +10,7 @@
 #' @examples
 #'   plotPCAFromConfig(analysis)
 #'   
-#' @import ggplot 
+#' @import ggplot2 
 #' @import ggrepel
 #' 
 #' @export

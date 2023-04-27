@@ -20,7 +20,11 @@
 #'               "/", sid, 'readsPerGene.out.tab')})
 #'               
 #'    outs <- readCountFiles(readfiles, 'unstranded')
-#' @import ggplot dplyr stringr
+#'    
+#' @import ggplot2 
+#' @import dplyr 
+#' @importFrom stringr str_to_title
+#' 
 #' @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
   raw_out <- sapply(readfiles, 
@@ -65,6 +69,8 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 #' @examples mappingBinsPlot(analysis$mapBins)
 #' 
 #' @returns ggplot object
+#' 
+#' @import ggplot2
 #' 
 #' @export
 mappingBinsPlot <- function(mapBins, title=''){

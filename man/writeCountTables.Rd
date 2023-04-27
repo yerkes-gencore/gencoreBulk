@@ -28,5 +28,5 @@ Takes the raw counts matrix and an analysis object with yaml config
 }
 \examples{
  writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
- 
+
 }

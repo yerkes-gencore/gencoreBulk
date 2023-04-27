@@ -29,4 +29,5 @@ Returns the counts per gene and read count bins for a list of STAR output files
               "/", sid, 'readsPerGene.out.tab')})
               
    outs <- readCountFiles(readfiles, 'unstranded')
+   
 }
