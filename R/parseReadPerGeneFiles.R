@@ -81,7 +81,7 @@ mappingBinsPlot <- function(mapBins, title=''){
                                    function(x)str_to_title(str_split(x, '_')[[1]][2])))
   data$map_result <- factor(data$map_result,
                             levels = c("Unmapped","Multimapping",
-                                       "noFeature","Ambiguous","Identified"))
+                                       "Nofeature","Ambiguous","Identified"))
   
   ggplot(data, aes(x = SampleID, y = count, fill = map_result)) +
     geom_bar(stat = "identity") +
