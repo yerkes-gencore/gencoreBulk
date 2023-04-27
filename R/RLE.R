@@ -13,7 +13,9 @@
 #' 
 #' @importFrom DESeq2 counts
 #' @importFrom tibble as_tibble
+#' 
 #' @import ggplot
+#' 
 #' @export
 
 checkRLE <- function(analysis){
