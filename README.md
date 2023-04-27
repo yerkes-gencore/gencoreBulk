@@ -4,6 +4,8 @@
 
 ### 1. Install to R from github
 
+You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
+
 ```
 remotes::install_github('yerkes-gencore/gencore-bulk')
 library(gencoreBulk)
@@ -31,8 +33,6 @@ usethis::edit_r_environ()
 ```
 
 </details>
-
-You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
 ### 2. Direct install
 
