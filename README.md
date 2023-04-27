@@ -4,6 +4,13 @@
 
 ### 1. Install to R from github
 
+```
+remotes::install_github('yerkes-gencore/gencore-bulk')
+library(gencoreBulk)
+```
+
+<details><summary>Old way, for private package</summary>
+
 This is a private repo, so you need to enter your Github credentials to download this package. 
 
 Generate a personal access token for RStudio:
@@ -22,6 +29,8 @@ usethis::edit_r_environ()
 ## GITHUB_PAT=xxxyyyzzz
 ## and make sure '.Renviron' ends with a newline
 ```
+
+</details>
 
 You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
