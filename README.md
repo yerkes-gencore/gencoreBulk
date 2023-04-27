@@ -11,7 +11,7 @@ remotes::install_github('yerkes-gencore/gencore-bulk')
 library(gencoreBulk)
 ```
 
-<details><summary>Old way, for private package. Not relevant, kept here in case we revert.</summary>
+<details><summary>Old way, for private package. Kept here in case we revert.</summary>
 
 This is a private repo, so you need to enter your Github credentials to download this package. 
 
