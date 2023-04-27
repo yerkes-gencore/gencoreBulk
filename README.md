@@ -1,6 +1,6 @@
 # gencore-bulk - Utility functions for bulk analyses
 
-## Installation
+## Installation methods
 
 ### 1. Install to R from github
 
