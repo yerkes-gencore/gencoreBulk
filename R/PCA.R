@@ -33,7 +33,6 @@ plotPCAFromConfig <- function(analysis){
     (if (!is.null(analysis$config$pcaMapping$path)){
       geom_path(aes(linetype=.data[[analysis$config$pcaMapping$path]]))
     }) +
-    geom_path(aes(linetype=(if (is.null(analysis$config$pcaMapping$path)) NULL else .data[[analysis$config$pcaMapping$path]]))) +
     theme(legend.key.width = unit(1.2, "cm")) +
     (if (!is.null(analysis$config$pcaMapping$ellipse)){
       stat_ellipse(aes(color=.data[[analysis$config$pcaMapping$ellipse]]), type="norm", level=0.67)
