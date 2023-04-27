@@ -6,6 +6,7 @@
 
 ```
 remotes::install_github('yerkes-gencore/gencore-bulk')
+library(gencoreBulk)
 ```
 
 <details><summary>Old way, for private package</summary>
