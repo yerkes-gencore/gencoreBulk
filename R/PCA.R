@@ -9,7 +9,7 @@
 #'
 #' @examples
 #'   plotPCAFromConfig(analysis)
-#' 
+#' @import ggplot ggrepel
 #' @export
 plotPCAFromConfig <- function(analysis){
   .pcaPlotGKT(assays(analysis$dds)$vst,

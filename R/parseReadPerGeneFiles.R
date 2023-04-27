@@ -20,7 +20,7 @@
 #'               "/", sid, 'readsPerGene.out.tab')})
 #'               
 #'    outs <- readCountFiles(readfiles, 'unstranded')
-#' 
+#' @import ggplot dplyr stringr
 #' @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
   raw_out <- sapply(readfiles, 
@@ -81,7 +81,7 @@ mappingBinsPlot <- function(mapBins, title=''){
     geom_bar(stat = "identity") +
     scale_fill_manual(values = c('Unmapped' = 'grey',
                                  'Multimapping' = '#DB890E', 
-                                 'noFeature' = '#C60A19', 
+                                 'Nofeature' = '#C60A19', 
                                  'Ambiguous' = '#C4B31C', 
                                  'Identified' = '#209964' )) +
     theme_bw() + 
