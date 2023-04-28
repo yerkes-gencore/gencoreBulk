@@ -7,7 +7,7 @@
 You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
 ```
-remotes::install_github('yerkes-gencore/gencore-bulk')
+remotes::install_github('yerkes-gencore/gencoreBulk')
 library(gencoreBulk)
 ```
 
