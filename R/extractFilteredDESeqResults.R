@@ -36,7 +36,7 @@ extractFilteredDESeqResults <- function(comparison,
                       test=test,
                       alpha=alpha,
                       ...,
-                      filter = maxMinFilter(dds,
+                      filter = .maxMinFilter(dds,
                                             intgroup = intgroup,
                                             comp = filt_groups))  
   } else {
@@ -45,7 +45,7 @@ extractFilteredDESeqResults <- function(comparison,
                       test=test,
                       alpha=alpha,
                       ...,
-                      filter = maxMinFilter(dds,
+                      filter = .maxMinFilter(dds,
                                             intgroup = intgroup,
                                             comp = filt_groups))
   }
