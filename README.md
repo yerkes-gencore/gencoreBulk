@@ -1,15 +1,17 @@
 # gencore-bulk - Utility functions for bulk analyses
 
-## Installation
+## Installation methods
 
 ### 1. Install to R from github
+
+You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
 ```
 remotes::install_github('yerkes-gencore/gencore-bulk')
 library(gencoreBulk)
 ```
 
-<details><summary>Old way, for private package</summary>
+<details><summary>Old way, for private package. Kept here in case we revert.</summary>
 
 This is a private repo, so you need to enter your Github credentials to download this package. 
 
@@ -31,8 +33,6 @@ usethis::edit_r_environ()
 ```
 
 </details>
-
-You can install directly from Github using `remotes::install_github` or a similar function. Once installed, you can load like any other library. 
 
 ### 2. Direct install
 
