@@ -17,6 +17,7 @@
 #' @importFrom stats prcomp
 #' @importFrom matrixStats rowVars
 #' @importFrom SummarizedExperiment assays assay
+#' @importFrom rlang .data
 #' 
 #' @export
 plotPCAFromConfig <- function(analysis){
