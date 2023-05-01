@@ -19,6 +19,7 @@
 #' @importFrom forcats fct_inorder
 #' @importFrom tidyr pivot_longer
 #' @importFrom matrixStats rowMedians rowMins
+#' @importFrom rlang .data
 #' @import ggplot2
 #' 
 #' @export

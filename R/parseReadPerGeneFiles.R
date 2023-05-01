@@ -28,6 +28,7 @@
 #' @importFrom stringr str_to_title
 #' @importFrom readr read_tsv
 #' @importFrom matrixStats colSums2
+#' @importFrom rlang .data
 #' 
 #' @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
@@ -79,6 +80,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 #' @importFrom tibble rownames_to_column as_tibble
 #' @importFrom forcats fct_inorder
 #' @importFrom stringr str_split str_to_title
+#' @importFrom rlang .data
 #' 
 #' @export
 mappingBinsPlot <- function(mapBins, title=''){

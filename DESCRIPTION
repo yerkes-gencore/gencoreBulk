@@ -20,6 +20,7 @@ Imports:
     matrixStats,
     methods,
     readr,
+    rlang,
     stringr,
     SummarizedExperiment,
     tibble,
