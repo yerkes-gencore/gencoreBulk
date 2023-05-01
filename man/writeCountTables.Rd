@@ -19,14 +19,13 @@ writeCountTables(
 \item{generate_GSEA_app_tables}{write files for compatibility with GSEA desktop app}
 
 \item{write_sample_table}{write sample metadata to a csv}
-
-\item{raw_counts}{matrix of raw count data}
 }
 \description{
-Takes the raw counts matrix and an analysis object with yaml config 
- options saved to write data to named file outputs.
+Takes the raw counts matrix and an analysis object with yaml config
+options saved to write data to named file outputs.
 }
 \examples{
- writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
-
+\dontrun{
+  writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
+}
 }

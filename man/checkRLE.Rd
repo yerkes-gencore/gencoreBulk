@@ -8,8 +8,6 @@ checkRLE(analysis)
 }
 \arguments{
 \item{analysis}{object with config options saved from the template format}
-
-\item{raw_counts}{matrix of raw count data}
 }
 \value{
 2 ggplots
@@ -18,6 +16,9 @@ checkRLE(analysis)
 Returns plots of count frequencies before and after normalization
 }
 \examples{
+\dontrun{
   checkRLE(raw_counts, analysis)
+}
+  
 
 }

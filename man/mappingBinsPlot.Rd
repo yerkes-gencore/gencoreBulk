@@ -15,7 +15,7 @@ mappingBinsPlot(mapBins, title = "")
 ggplot object
 }
 \description{
-Plot values of mapping bins for each sample. Takes the output of `parseReadPerGeneFiles()`
+Plot values of mapping bins for each sample. Takes the output of \code{parseReadPerGeneFiles()}
 }
 \examples{
 mappingBinsPlot(analysis$mapBins)

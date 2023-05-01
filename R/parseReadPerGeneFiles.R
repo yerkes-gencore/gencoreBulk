@@ -12,6 +12,7 @@
 #'  read per gene counts
 #'
 #' @examples
+#' \dontrun{
 #'    readfiles <- sapply(
 #'      analysis$samplefileIDs,
 #'      function(sid) {
@@ -20,25 +21,28 @@
 #'               "/", sid, 'readsPerGene.out.tab')})
 #'               
 #'    outs <- readCountFiles(readfiles, 'unstranded')
-#'    
+#' }
+#' 
 #' @import ggplot2 
 #' @import dplyr 
 #' @importFrom stringr str_to_title
+#' @importFrom readr read_tsv
+#' @importFrom matrixStats colSums2
 #' 
 #' @export
 parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
-  raw_out <- sapply(readfiles, 
+  raw_out <- sapply(file.paths, 
                     function(x) {
-                      read_tsv(x, 
+                      readr::read_tsv(x, 
                                col_names = c("gene_id",
                                              "unstranded_count",
                                              "sense_count",
                                              "antisense_count"),
-                               col_types = c(gene_id = col_character(),
-                                             unstranded_count = col_double(),
-                                             sense_count = col_double(),
-                                             antisense_count = col_double())) %>% 
-                        select(gene_id, contains(library.type))},
+                               col_types = list('gene_id' = 'c',
+                                                'unstranded_count' = 'd',
+                                                'sense_count' = 'd',
+                                                'antisense_count' = 'd')) %>% 
+                        select(.data$gene_id, contains(library.type))},
                     simplify = FALSE,
                     USE.NAMES = TRUE)
   
@@ -52,7 +56,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
                         USE.NAMES = TRUE)
   rownames(read_counts) <- unlist(genes <- raw_out[[1]][-c(1:4),1])
   
-  map_bins <- rbind(map_bins,"N_identified" = colSums2(read_counts))
+  map_bins <- rbind(map_bins,"N_identified" = matrixStats::colSums2(read_counts))
   
   return(list(map_bins = map_bins, read_counts = read_counts))
 }
@@ -71,19 +75,23 @@ parseReadPerGeneFiles <- function(file.paths, library.type = 'unstranded'){
 #' @returns ggplot object
 #' 
 #' @import ggplot2
+#' @importFrom tidyr pivot_longer
+#' @importFrom tibble rownames_to_column as_tibble
+#' @importFrom forcats fct_inorder
+#' @importFrom stringr str_split str_to_title
 #' 
 #' @export
 mappingBinsPlot <- function(mapBins, title=''){
-  data <- rownames_to_column(as_tibble(mapBins, rownames = NA),
+  data <- tibble::rownames_to_column(tibble::as_tibble(mapBins, rownames = NA),
                              var = "map_result") %>% 
-    pivot_longer(!map_result, names_to = "SampleID", values_to = "count") 
+    tidyr::pivot_longer(!.data$map_result, names_to = "SampleID", values_to = "count") 
   data$map_result <- unlist(lapply(data$map_result,
-                                   function(x)str_to_title(str_split(x, '_')[[1]][2])))
+                                   function(x)stringr::str_to_title(stringr::str_split(x, '_')[[1]][2])))
   data$map_result <- factor(data$map_result,
                             levels = c("Unmapped","Multimapping",
                                        "Nofeature","Ambiguous","Identified"))
   
-  ggplot(data, aes(x = SampleID, y = count, fill = map_result)) +
+  ggplot(data, aes(x = .data$SampleID, y = .data$count, fill = .data$map_result)) +
     geom_bar(stat = "identity") +
     scale_fill_manual(values = c('Unmapped' = 'grey',
                                  'Multimapping' = '#DB890E', 
@@ -93,7 +101,7 @@ mappingBinsPlot <- function(mapBins, title=''){
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
     guides(fill=guide_legend(title="Map Result")) +
-    aes(fct_inorder(SampleID)) + 
+    aes(fct_inorder(.data$SampleID)) + 
     labs(x="Sample", y='Number of reads') +
     ggtitle(title)
 }

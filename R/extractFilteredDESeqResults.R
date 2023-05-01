@@ -19,7 +19,11 @@
 #' @param ... Additional arguments passed to [DESeq2::results()]
 #' 
 #' @returns object of class DESeqResults
+#' 
 #' @import DESeq2
+#' @importFrom matrixStats rowMaxs rowMins rowMeans2
+#' @importFrom SummarizedExperiment colData
+#' @importFrom methods is
 #' 
 #' @export
 
@@ -28,9 +32,9 @@ extractFilteredDESeqResults <- function(comparison,
                                         filt_groups,
                                         test = 'Wald',
                                         dds = analysis$dds,
-                                        alpha=0.05,
+                                        alpha = 0.05,
                                         ...){
-  if (class(comparison) == 'character' & length(comparison) == 1){
+  if (is(comparison, 'character') & length(comparison) == 1){
     result <- results(dds,
                       name=comparison, 
                       test=test,
@@ -69,16 +73,16 @@ extractFilteredDESeqResults <- function(comparison,
   #   #    factor(apply(intgroup.df, 1, paste, collapse = " : "))
   # }
   # else {
-  group <- colData(object)[[intgroup]]
+  group <- SummarizedExperiment::colData(object)[[intgroup]]
   # }
   if (!all(comp %in% levels(group))) {
     stop("the argument 'comp' should specify levels of intgroup")
   }
   if_else(
-    rowMaxs(
+    matrixStats::rowMaxs(
       sapply(comp, function(lvl) {
-        rowMins(counts(object, normalize = TRUE)[,group == lvl])
-      })) > thresh,rowMeans2(counts(object, normalized = TRUE)
+        matrixStats::rowMins(counts(object, normalize = TRUE)[,group == lvl])
+      })) > thresh, matrixStats::rowMeans2(counts(object, normalized = TRUE)
       ), 0
   )
 }

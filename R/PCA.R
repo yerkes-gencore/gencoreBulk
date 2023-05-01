@@ -8,10 +8,15 @@
 #' @returns A ggplot
 #'
 #' @examples
+#' \dontrun{
 #'   plotPCAFromConfig(analysis)
-#'   
+#' }
+#'  
 #' @import ggplot2 
 #' @import ggrepel
+#' @importFrom stats prcomp
+#' @importFrom matrixStats rowVars
+#' @importFrom SummarizedExperiment assays assay
 #' 
 #' @export
 plotPCAFromConfig <- function(analysis){
@@ -47,10 +52,10 @@ plotPCAFromConfig <- function(analysis){
 
 .pcaDataGKT <- function (object, intgroup = "condition", ntop = 500) 
 {
-  rv <- rowVars(assay(object))
+  rv <- matrixStats::rowVars(assay(object))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, 
                                                      length(rv)))]
-  pca <- prcomp(t(assay(object)[select, ]))
+  pca <- stats::prcomp(t(assay(object)[select, ]))
   percentVar <- pca$sdev^2/sum(pca$sdev^2)
   if (!all(intgroup %in% names(colData(object)))) {
     stop("the argument 'intgroup' should specify columns of colData(dds)")
@@ -73,5 +78,6 @@ plotPCAFromConfig <- function(analysis){
 {
   d <- .pcaDataGKT(object, intgroup, ntop)
   percentVar <- round(100 * attr(d, "percentVar"))
-  ggplot(d,aes_string(x = names(d)[xpc], y = names(d)[ypc])) + labs(x=paste0(names(d)[xpc],": ", percentVar[xpc], "% variance"), y=paste0(names(d)[ypc],": ", percentVar[ypc], "% variance"))
+  ggplot(d,aes_string(x = names(d)[xpc], y = names(d)[ypc])) +
+    labs(x=paste0(names(d)[xpc],": ", percentVar[xpc], "% variance"), y=paste0(names(d)[ypc],": ", percentVar[ypc], "% variance"))
 }

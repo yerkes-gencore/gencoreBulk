@@ -15,29 +15,29 @@ extractFilteredDESeqResults(
 )
 }
 \arguments{
-\item{comparison}{Value to pass to [DESeq2::results()] as either a `contrast`
-or a `name`}
+\item{comparison}{Value to pass to \code{\link[DESeq2:results]{DESeq2::results()}} as either a \code{contrast}
+or a \code{name}}
 
 \item{intgroup}{Metadata column on which to draw groups for filtering}
 
-\item{filt_groups}{Character vector of groups to draw from `intgroup`}
+\item{filt_groups}{Character vector of groups to draw from \code{intgroup}}
 
-\item{test}{Test to use, default is `Wald`}
+\item{test}{Test to use, default is \code{Wald}}
 
 \item{dds}{DESeq2 object to draw results from}
 
-\item{alpha}{The significance cutoff used for optimizing the independent 
-filtering (by default 0.05). If the adjusted p-value cutoff (FDR) will be a 
+\item{alpha}{The significance cutoff used for optimizing the independent
+filtering (by default 0.05). If the adjusted p-value cutoff (FDR) will be a
 value other than 0.05, alpha should be set to that value.}
 
-\item{...}{Additional arguments passed to [DESeq2::results()]}
+\item{...}{Additional arguments passed to \code{\link[DESeq2:results]{DESeq2::results()}}}
 }
 \value{
 object of class DESeqResults
 }
 \description{
 Calls DESeq2::results with the filter specified using Greg's
-minMaxFilter function. Greg's filter dynamically filters results for 
+minMaxFilter function. Greg's filter dynamically filters results for
 minimum supporting reads based on the samples involved in the result calculation.
 This function is intended to reduce the
 overall code used to extract all results of interest.

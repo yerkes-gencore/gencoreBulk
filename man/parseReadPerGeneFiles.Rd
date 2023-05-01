@@ -14,13 +14,14 @@ correspond to sample names}
 should be 'unstranded', 'sense', or 'antisense'}
 }
 \value{
-List of 2 data frames, one containing read mapping bins, the other 
- read per gene counts
+List of 2 data frames, one containing read mapping bins, the other
+read per gene counts
 }
 \description{
 Returns the counts per gene and read count bins for a list of STAR output files
 }
 \examples{
+\dontrun{
    readfiles <- sapply(
      analysis$samplefileIDs,
      function(sid) {
@@ -29,5 +30,6 @@ Returns the counts per gene and read count bins for a list of STAR output files
               "/", sid, 'readsPerGene.out.tab')})
               
    outs <- readCountFiles(readfiles, 'unstranded')
-   
+}
+
 }
