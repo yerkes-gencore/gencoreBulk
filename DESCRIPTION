@@ -10,15 +10,19 @@ Description: A shared codebase for custom R functions we find useful for
 License: MIT + file LICENSE
 URL: https://github.com/yerkes-gencore/gencoreBulk
 Imports:
+    circlize,
+    ComplexHeatmap,
     DESeq2,
     dplyr,
     EnhancedVolcano,
+    fgsea,
     forcats,
     ggplot2,
     ggrepel,
     here,
     matrixStats,
     methods,
+    plyr,
     readr,
     rlang,
     stringr,
