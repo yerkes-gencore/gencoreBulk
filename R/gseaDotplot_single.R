@@ -2,19 +2,21 @@
 #'
 #' Make dotplot from fGSEA result, showing top n pathways
 #'
-#' @rdname gseaDotplot
+#' @rdname gseaDotplot_single
 #' @param result A table with GSEA results from `fgsea::fgseaSimple()`
 #' @param min_size Minimum size of gene set to plot
 #' @param filter_source Character vector of pathway sources to filter for
 #' @param signif_only If TRUE, only plot results with padj < `sig_cutoff`
 #' @param top_n Show the top N results sorted by padj
 #' @param sig_cutoff Threshold for significance, default to 0.05
+#' @param use_shortened_pathway_names Pull names from column 'pathway_short' 
+#'  rather than pathway (if `runfgsea()` call had `breakdown_pathway_names` set 
+#'  to `TRUE`)
 #'
 #' @return A ggplot object
 #' @export
 #'
 #' @importFrom rlang .data
-#' @importFrom stringr str_replace_all str_wrap str_count
 #' @importFrom utils head
 #' @import ggplot2
 #' @import dplyr
@@ -29,7 +31,11 @@ gseaDotplot_single <- function(result,
                                signif_only = FALSE,
                                top_n = 20,
                                min_size = 5,
-                               sig_cutoff = 0.05) {
+                               sig_cutoff = 0.05,
+                               use_shortened_pathway_names = FALSE) {
+  if (use_shortened_pathway_names){
+    result$pathway <- result$pathway_short
+  }
   result <- result %>%
     arrange(.data$pval, desc(.data$size)) %>%
     mutate(perc = 100 * lengths(.data$leadingEdge) / .data$size) %>%

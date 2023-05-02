@@ -3,6 +3,8 @@
 export(checkRLE)
 export(extractFilteredDESeqResults)
 export(generateVolcanoPlot)
+export(getTopNGenes)
+export(gseaDotplot_joint)
 export(gseaDotplot_single)
 export(heatmapFromGenelist)
 export(mappingBinsPlot)

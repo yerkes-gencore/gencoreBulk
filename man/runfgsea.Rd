@@ -4,7 +4,14 @@
 \alias{runfgsea}
 \title{runfgsea}
 \usage{
-runfgsea(result, pathways, nperm = 1000, minSize = 10, maxSize = 500)
+runfgsea(
+  result,
+  pathways,
+  nperm = 1000,
+  minSize = 10,
+  maxSize = 500,
+  breakdown_pathway_names = FALSE
+)
 }
 \arguments{
 \item{result}{A DESeqResults result object}
@@ -16,6 +23,9 @@ runfgsea(result, pathways, nperm = 1000, minSize = 10, maxSize = 500)
 \item{minSize}{Minimal size of a gene set to test. All pathways below the threshold are excluded.}
 
 \item{maxSize}{Maximal size of a gene set to test. All pathways above the threshold are excluded.}
+
+\item{breakdown_pathway_names}{Attempt to split pathway names into source and
+pathway for easier reading}
 }
 \value{
 A table with GSEA results. Each row corresponds to a tested pathway.
