@@ -27,7 +27,7 @@ Character vector of gene names
 Title
 }
 \examples{
-\dontrun {
+\dontrun{
   getTopNGenes(results$Group_FAC_vs_Cont)
 }
 

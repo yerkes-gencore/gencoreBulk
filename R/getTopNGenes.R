@@ -14,7 +14,7 @@
 #' @import dplyr
 #'
 #' @examples
-#' \dontrun {
+#' \dontrun{
 #'   getTopNGenes(results$Group_FAC_vs_Cont)
 #' }
 #' 
