@@ -44,13 +44,14 @@ writeDESeqResults <- function(results,
                               drop_NA = TRUE){
   outfile <- file.path(outdir, output_name)
   message(paste0('Writing results to ', outfile))
-  wb <- openxlsx::createWorkbook(outfile)
+  wb <- openxlsx::createWorkbook('ENPRC Gencore')
   mapply(FUN=.addWorksheet_DESeqres,
          result=results,
          sheet_name=sheet_names,
          MoreArgs = list(wb=wb,
                          drop_NA=drop_NA)
   )
+  saveWorkbook(wb, outfile, overwrite = TRUE)
   invisible(NULL)
 }
 
