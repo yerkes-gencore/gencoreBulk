@@ -1,3 +1,5 @@
+#' @importFrom stringr str_replace_all str_wrap str_count
+
 .wrap_underscore_strings_balance <- function(string, width) {
   stringr::str_replace_all(.str_wrap_balance(str_replace_all(string, "_", " "), width), " ", "_")
 }
