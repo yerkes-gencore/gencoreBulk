@@ -6,12 +6,15 @@
 #'  parameter with a value of ~500 is strongly recommended.
 #'
 #' @param result A DESeqResults result object
+#' @param breakdown_pathway_names Attempt to split pathway names into source and
+#'  pathway for easier reading
 #' @inheritParams fgsea::fgseaSimple
 #'
 #' @inherit fgsea::fgseaSimple return
 #' @export
 #'
 #' @importFrom fgsea fgseaSimple
+#' @importFrom stringr str_split
 #' @examples
 #' \dontrun{
 #' runfgsea(results[[1]], gmt.file)
@@ -21,7 +24,8 @@ runfgsea <- function(result,
                      pathways,
                      nperm = 1000,
                      minSize = 10,
-                     maxSize = 500) {
+                     maxSize = 500,
+                     breakdown_pathway_names = FALSE) {
   # result <- result %>% na.omit()
   fgsea_data <- result$stat
   names(fgsea_data) <- rownames(result)
@@ -34,5 +38,9 @@ runfgsea <- function(result,
     minSize = minSize,
     maxSize = maxSize
   )
+  res$source <- unlist(lapply(res$pathway, function(x){stringr::str_split(x, '_')[[1]][1]}))
+  if (breakdown_pathway_names) {
+    res$pathway_short <- unlist(lapply(gsea_result$pathway, function(x){gsub('^[^_]+_(.+)', replacement = '\\1', x = x)}))
+  }
   return(res)
 }
