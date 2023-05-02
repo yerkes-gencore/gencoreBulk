@@ -22,14 +22,19 @@ Returns the counts per gene and read count bins for a list of STAR output files
 }
 \examples{
 \dontrun{
-   readfiles <- sapply(
-     analysis$samplefileIDs,
-     function(sid) {
-       paste0(dir("my_STAR_output_dir",
-                  pattern = sid, full.names = TRUE),
-              "/", sid, 'readsPerGene.out.tab')})
-              
-   outs <- readCountFiles(readfiles, 'unstranded')
+readfiles <- sapply(
+  analysis$samplefileIDs,
+  function(sid) {
+    paste0(
+      dir("my_STAR_output_dir",
+        pattern = sid, full.names = TRUE
+      ),
+      "/", sid, "readsPerGene.out.tab"
+    )
+  }
+)
+
+outs <- readCountFiles(readfiles, "unstranded")
 }
 
 }

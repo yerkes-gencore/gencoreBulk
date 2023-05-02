@@ -40,7 +40,7 @@ parameter with a value of ~500 is strongly recommended.
 }
 \examples{
 \dontrun{
-  runfgsea(results[[1]], gmt.file)
+runfgsea(results[[1]], gmt.file)
 }
 
 }
