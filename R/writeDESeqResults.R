@@ -52,7 +52,6 @@ writeDESeqResults <- function(results,
                          drop_NA=drop_NA)
   )
   saveWorkbook(wb, outfile, overwrite = TRUE)
-  invisible(NULL)
 }
 
 .addWorksheet_DESeqres <- function(wb,
