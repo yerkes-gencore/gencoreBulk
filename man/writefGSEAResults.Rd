@@ -5,20 +5,20 @@
 \title{Write fGSEA results to excel sheet}
 \usage{
 writefGSEAResults(
-  gsea_results,
+  results,
   sheet_names = names(results),
   output_name = paste0(analysis$analysis_config$analysis, "_GSEA_results.xlsx"),
   outdir = here::here("outputs")
 )
 }
 \arguments{
+\item{results}{List of fGSEA results objects}
+
 \item{sheet_names}{List of names for sheets}
 
 \item{output_name}{Name of file}
 
 \item{outdir}{Location of file}
-
-\item{results}{List of fGSEA results objects}
 }
 \value{
 \code{NULL}

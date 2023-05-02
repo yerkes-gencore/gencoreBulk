@@ -29,7 +29,7 @@
 #'  writefGSEAResults(gsea_results)
 #'}
 
-writefGSEAResults <- function(gsea_results,
+writefGSEAResults <- function(results,
                               sheet_names = names(results),
                               output_name = paste0(analysis$analysis_config$analysis,
                                                    "_GSEA_results.xlsx"),
