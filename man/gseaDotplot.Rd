@@ -34,7 +34,7 @@ Make dotplot from fGSEA result, showing top n pathways
 }
 \examples{
 \dontrun{
-  res <- runfgsea(result, gmt.file)
-  gseaDotplot(res, filter_source = 'HALLMARK')
+res <- runfgsea(result, gmt.file)
+gseaDotplot(res, filter_source = "HALLMARK")
 }
 }

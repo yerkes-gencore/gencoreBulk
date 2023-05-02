@@ -17,8 +17,7 @@ Returns plots of count frequencies before and after normalization
 }
 \examples{
 \dontrun{
-  checkRLE(raw_counts, analysis)
+checkRLE(raw_counts, analysis)
 }
-  
 
 }

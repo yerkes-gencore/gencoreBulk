@@ -26,6 +26,6 @@ options saved to write data to named file outputs.
 }
 \examples{
 \dontrun{
-  writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
+writeCountTables(raw_counts, analysis, generate_GSEA_app_tables = TRUE)
 }
 }

@@ -156,23 +156,28 @@ Makes a heatmap of the given list of genes, separating samples slightly by
 group variable. The heatmap will render samples in the order of colnames
 in the provided data, and will be split by the metadata column specified.
 Expression values will be normalized to the median of a specified group.
-
+}
+\details{
 If you want to reorder columns plotted, arrange the data passed into \code{data}.
 }
 \examples{
 \dontrun{
- ## Simple call
-  heatmapFromGenelist(geneList = c('Ccl2', 'Cxcl1', 'Cxcl2', 'Postn', 'Fn1', 'Thbs1'),
-    baseline_grouping = 'Group', 
-    baseline = 'Cont')
-    
-  ## run with custom reordering of data and labeled slices
-  heatmapFromGenelist(geneList = c('Ccl2', 'Cxcl1', 'Cxcl2', 'Postn', 'Fn1', 'Thbs1'),
-    baseline_grouping = 'Group', 
-    baseline = 'Cont',
-    column_split = c(rep(1,3), rep(2,3), rep(3,3), rep(4,3)),
-    slice_labels = c('Cont', 'Fac', 'L', 'M'),
-    data = assays(analysis$dds)$rld[,sort(colnames(assays(analysis$dds)$rld))])
+## Simple call
+heatmapFromGenelist(
+  geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+  baseline_grouping = "Group",
+  baseline = "Cont"
+)
+
+## run with custom reordering of data and labeled slices
+heatmapFromGenelist(
+  geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+  baseline_grouping = "Group",
+  baseline = "Cont",
+  column_split = c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3)),
+  slice_labels = c("Cont", "Fac", "L", "M"),
+  data = assays(analysis$dds)$rld[, sort(colnames(assays(analysis$dds)$rld))]
+)
 }
 
 }

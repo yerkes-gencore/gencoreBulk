@@ -21,60 +21,72 @@
 #'
 #' @examples
 #' \dontrun{
-#'   res <- runfgsea(result, gmt.file)
-#'   gseaDotplot(res, filter_source = 'HALLMARK')
+#' res <- runfgsea(result, gmt.file)
+#' gseaDotplot(res, filter_source = "HALLMARK")
 #' }
 gseaDotplot_single <- function(result,
-                        filter_source = NULL,
-                        signif_only = FALSE,
-                        top_n=20, 
-                        min_size = 5,
-                        sig_cutoff = 0.05){
-  result <- result %>% 
-    arrange(.data$pval, desc(.data$size)) %>% 
+                               filter_source = NULL,
+                               signif_only = FALSE,
+                               top_n = 20,
+                               min_size = 5,
+                               sig_cutoff = 0.05) {
+  result <- result %>%
+    arrange(.data$pval, desc(.data$size)) %>%
     mutate(perc = 100 * lengths(.data$leadingEdge) / .data$size) %>%
-    mutate(name=paste0(.wrap_underscore_strings_balance(.data$pathway,36), "\nn=", .data$size)) %>%
+    mutate(name = paste0(.wrap_underscore_strings_balance(.data$pathway, 36), "\nn=", .data$size)) %>%
     filter(.data$size >= min_size)
-  if (!is.null(filter_source)){
-    result <- result %>% 
+  if (!is.null(filter_source)) {
+    result <- result %>%
       filter(.data$source %in% filter_source)
   }
-  if (signif_only){
+  if (signif_only) {
     result <- result %>%
       filter(.data$padj < sig_cutoff)
   }
-  toppaths <- rbind(utils::head(result, n=top_n))
-  
+  toppaths <- rbind(utils::head(result, n = top_n))
+
   toppaths$name <- factor(toppaths$name)
-  dotplot <- ggplot(toppaths) + 
-    geom_point(aes(x=.data$perc,
-                   y=.data$name, 
-                   size=-log10(.data$pval),
-                   color=.data$NES)) +
-    scale_color_gradient2(low="blue",
-                          mid="white",
-                          high="red",
-                          midpoint=0,
-                          breaks=c(-2,-1,0,1,2),
-                          limits=c(min(toppaths$NES,-1),
-                                   max(toppaths$NES,1))) +
+  dotplot <- ggplot(toppaths) +
+    geom_point(aes(
+      x = .data$perc,
+      y = .data$name,
+      size = -log10(.data$pval),
+      color = .data$NES
+    )) +
+    scale_color_gradient2(
+      low = "blue",
+      mid = "white",
+      high = "red",
+      midpoint = 0,
+      breaks = c(-2, -1, 0, 1, 2),
+      limits = c(
+        min(toppaths$NES, -1),
+        max(toppaths$NES, 1)
+      )
+    ) +
     theme_classic(11) +
-    theme(panel.grid.major = element_line(colour = "grey92"),
-          panel.grid.minor = element_line(colour = "grey92"),
-          panel.grid.major.y = element_line(colour = "grey92"),
-          panel.grid.minor.y = element_line(colour = "grey92")) +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-    labs(x="% of genes in leading edge", y="Gene set",
-         color = "Normalized\nenrichment\nscore", 
-         size="Nom p-val", title="Top enriched pathways", 
-         caption='GSEA p-value calculations are not continuous,\n
+    theme(
+      panel.grid.major = element_line(colour = "grey92"),
+      panel.grid.minor = element_line(colour = "grey92"),
+      panel.grid.major.y = element_line(colour = "grey92"),
+      panel.grid.minor.y = element_line(colour = "grey92")
+    ) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+    labs(
+      x = "% of genes in leading edge", y = "Gene set",
+      color = "Normalized\nenrichment\nscore",
+      size = "Nom p-val", title = "Top enriched pathways",
+      caption = "GSEA p-value calculations are not continuous,\n
          there may be several or many pathways with the same p-value\n
-         n = number of genes in pathway') + 
-    scale_radius(name="NOM p-val",
-                 range=c(1,8),
-                 breaks=-log10(c(0.5,0.1,0.01,0.001)),
-                 limits=c(0,3),
-                 labels=c(0.5,0.1,0.01,0.001)) +
-    scale_y_discrete(limits=toppaths$name)
+         n = number of genes in pathway"
+    ) +
+    scale_radius(
+      name = "NOM p-val",
+      range = c(1, 8),
+      breaks = -log10(c(0.5, 0.1, 0.01, 0.001)),
+      limits = c(0, 3),
+      labels = c(0.5, 0.1, 0.01, 0.001)
+    ) +
+    scale_y_discrete(limits = toppaths$name)
   return(dotplot)
 }
