@@ -40,7 +40,7 @@ runfgsea <- function(result,
   )
   res$source <- unlist(lapply(res$pathway, function(x){stringr::str_split(x, '_')[[1]][1]}))
   if (breakdown_pathway_names) {
-    res$pathway_short <- unlist(lapply(gsea_result$pathway, function(x){gsub('^[^_]+_(.+)', replacement = '\\1', x = x)}))
+    res$pathway_short <- unlist(lapply(res$pathway, function(x){gsub('^[^_]+_(.+)', replacement = '\\1', x = x)}))
   }
   return(res)
 }
