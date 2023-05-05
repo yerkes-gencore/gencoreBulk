@@ -6,6 +6,8 @@
 \usage{
 writeCountTables(
   analysis,
+  normalized = FALSE,
+  normalized_digits = 10,
   outdir = here::here("outputs"),
   generate_GSEA_app_tables = FALSE,
   write_sample_table = TRUE
@@ -13,6 +15,10 @@ writeCountTables(
 }
 \arguments{
 \item{analysis}{object with config options saved from the template format}
+
+\item{normalized}{Whether to write normalized or raw counts}
+
+\item{normalized_digits}{Number of digits to write out for normalized counts}
 
 \item{outdir}{folder to store outputs in, will be generated if it doesn't exist}
 
