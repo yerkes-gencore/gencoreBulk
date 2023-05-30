@@ -9,7 +9,11 @@ plotPCAFromConfig(analysis, shapes = 0:25, alpha = 1, size = 5)
 \arguments{
 \item{analysis}{object with config options saved from the template format}
 
-\item{shape_start}{Integer value to start range of shapes, default 0}
+\item{shapes}{Shape values to pass to \code{ggplot2::scale_shape_manual()}}
+
+\item{alpha}{Alpha to use for \code{ggplot2::geom_point()}}
+
+\item{size}{Size to use for \code{ggplot2::geom_point()}}
 }
 \value{
 A ggplot

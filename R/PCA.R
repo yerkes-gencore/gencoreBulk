@@ -3,9 +3,12 @@
 #' Returns plot of PCA using aesthetic labels specified in the analysis config
 #'
 #' @rdname plotPCAFromConfig
-#' @param analysis object with config options saved from the template format
-#' @param shape_start Integer value to start range of shapes, default 0
 #'
+#' @param analysis object with config options saved from the template format
+#' @param shapes Shape values to pass to `ggplot2::scale_shape_manual()`
+#' @param alpha Alpha to use for `ggplot2::geom_point()`
+#' @param size Size to use for `ggplot2::geom_point()`
+#' 
 #' @returns A ggplot
 #'
 #' @examples
