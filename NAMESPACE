@@ -2,6 +2,7 @@
 
 export(checkRLE)
 export(extractFilteredDESeqResults)
+export(generateSampleTable)
 export(generateVolcanoPlot)
 export(getTopNGenes)
 export(gseaDotplot_joint)

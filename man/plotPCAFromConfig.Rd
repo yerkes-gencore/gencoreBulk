@@ -4,10 +4,12 @@
 \alias{plotPCAFromConfig}
 \title{plot PCA from config}
 \usage{
-plotPCAFromConfig(analysis)
+plotPCAFromConfig(analysis, shape_start = 0)
 }
 \arguments{
 \item{analysis}{object with config options saved from the template format}
+
+\item{shape_start}{Integer value to start range of shapes, default 0}
 }
 \value{
 A ggplot

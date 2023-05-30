@@ -4,6 +4,7 @@
 #'
 #' @rdname plotPCAFromConfig
 #' @param analysis object with config options saved from the template format
+#' @param shape_start Integer value to start range of shapes, default 0
 #'
 #' @returns A ggplot
 #'
@@ -20,7 +21,9 @@
 #' @importFrom rlang .data
 #'
 #' @export
-plotPCAFromConfig <- function(analysis) {
+plotPCAFromConfig <- function(analysis,
+                              shapes = 0:25) {
+  pca_data <- 
   .pcaPlotGKT(assays(analysis$dds)$vst,
     intgroup = names(colData(assays(analysis$dds)$vst)),
     xpc = 1, ypc = 2
@@ -65,6 +68,9 @@ plotPCAFromConfig <- function(analysis) {
     theme(legend.key.width = unit(1.2, "cm")) +
     (if (!is.null(analysis$qc_config$pcaMapping$ellipse)) {
       stat_ellipse(aes(color = .data[[analysis$qc_config$pcaMapping$ellipse]]), type = "norm", level = 0.67)
+    }) +
+    (if (!is.null(analysis$qc_config$pcaMapping$shape)) {
+      scale_shape_manual(values = shapes)
     }) +
     theme(text = element_text(size = 10)) # , arrow=arrow(ends="last", type="closed", length=unit(0.1, "inches")))
 }
