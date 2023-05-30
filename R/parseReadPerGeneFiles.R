@@ -53,7 +53,7 @@ parseReadPerGeneFiles <- function(file.paths, library.type = "unstranded") {
           "antisense_count" = "d"
         )
       ) %>%
-        select(.data$gene_id, contains(library.type))
+        select(.data$gene_id, starts_with(library.type))
     },
     simplify = FALSE,
     USE.NAMES = TRUE
