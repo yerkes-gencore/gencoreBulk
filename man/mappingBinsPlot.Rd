@@ -18,6 +18,8 @@ ggplot object
 Plot values of mapping bins for each sample. Takes the output of \code{parseReadPerGeneFiles()}
 }
 \examples{
+\dontrun{
 mappingBinsPlot(analysis$mapBins)
+}
 
 }
