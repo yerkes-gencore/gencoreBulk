@@ -22,7 +22,9 @@
 #'
 #' @export
 plotPCAFromConfig <- function(analysis,
-                              shapes = 0:25) {
+                              shapes = 0:25,
+                              alpha = 1,
+                              size = 5) {
   pca_data <- 
   .pcaPlotGKT(assays(analysis$dds)$vst,
     intgroup = names(colData(assays(analysis$dds)$vst)),
@@ -46,7 +48,8 @@ plotPCAFromConfig <- function(analysis,
           .data[[analysis$qc_config$pcaMapping$hover]]
         })
       ),
-      size = 5
+      size = size,
+      alpha = alpha
     ) +
     labs(
       color = analysis$qc_config$pcaMapping$color,

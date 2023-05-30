@@ -4,7 +4,7 @@
 \alias{plotPCAFromConfig}
 \title{plot PCA from config}
 \usage{
-plotPCAFromConfig(analysis, shape_start = 0)
+plotPCAFromConfig(analysis, shapes = 0:25, alpha = 1, size = 5)
 }
 \arguments{
 \item{analysis}{object with config options saved from the template format}
