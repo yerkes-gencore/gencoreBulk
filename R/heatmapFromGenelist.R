@@ -1,4 +1,4 @@
-#' Title
+#' Generate heatmap of gene expression from DESeq2 resykts
 #'
 #' Makes a heatmap of the given list of genes, separating samples slightly by
 #'  group variable. The heatmap will render samples in the order of colnames
@@ -9,7 +9,8 @@
 #'
 #' @param geneList Character vector of genes to plot
 #' @param baseline_grouping Character, level of `colnames(colData(data))`
-#' @param baseline level of `baseline_grouping` in `colData(data)`
+#' @param baseline level of `baseline_grouping` in `colData(data)` used to calculate
+#'  median, or leave blank to use all samples to generate median
 #' @param data Object of class DESeqTransform
 #' @param slice_labels Optional labels for sliced columns
 #' @param slice_labels_rot Rotation angle of `slice_labels`
@@ -54,8 +55,8 @@
 #'
 #' @export
 heatmapFromGenelist <- function(geneList,
-                                baseline_grouping,
-                                baseline,
+                                baseline_grouping = NULL,
+                                baseline = NULL,
                                 column_split = NULL,
                                 slice_labels = NULL,
                                 data = assays(analysis$dds)$rld,
@@ -73,15 +74,19 @@ heatmapFromGenelist <- function(geneList,
                                 scale_min = -2,
                                 scale_max = 2,
                                 ...) {
-  if (!baseline_grouping %in% colnames(colData(data))) {
-    stop("Argument 'baseline_grouping' should be in colData(data)")
-  }
-  if (!baseline %in% unique(colData(data)[[baseline_grouping]])) {
-    stop("Argument 'baseline' should be a level of 'baseline_grouping' in colData(data)")
-  }
-
+  
   hmap <- data[geneList, ]
-  baseline <- matrixStats::rowMedians(assay(hmap[, as.character(hmap@colData[[baseline_grouping]]) %in% baseline]))
+  if (is.null(baseline_grouping) | is.null(baseline)) {
+    message('Basline grouping or baseline level not specified, using all samples
+            to generate median expression per gene')
+    baseline <- matrixStats::rowMedians(assay(hmap))
+  } else if (!baseline_grouping %in% colnames(colData(data))) {
+    stop("Argument 'baseline_grouping' should be in colData(data)")
+  } else if (!baseline %in% unique(colData(data)[[baseline_grouping]])) {
+    stop("Argument 'baseline' should be a level of 'baseline_grouping' in colData(data)")
+  } else{
+    baseline <- matrixStats::rowMedians(assay(hmap[, as.character(hmap@colData[[baseline_grouping]]) %in% baseline]))
+  }
   hmap <- assay(hmap) - baseline
   ComplexHeatmap::Heatmap(hmap,
     heatmap_legend_param = list(title = legend_title),
