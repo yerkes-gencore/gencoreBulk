@@ -13,6 +13,7 @@
 #'  median, or leave blank to use all samples to generate median
 #' @param data Object of class DESeqTransform
 #' @param slice_labels Optional labels for sliced columns
+#' @param colors vector of color values passed to colorRamp2, default is c("blue", "white", "red")
 #' @param slice_labels_rot Rotation angle of `slice_labels`
 #' @param legend_title Title for legend
 #' @param box_width Width of heatmap cell
@@ -59,10 +60,10 @@ heatmapFromGenelist <- function(geneList,
                                 baseline = NULL,
                                 column_split = NULL,
                                 slice_labels = NULL,
+                                colors = c("blue", "white", "red"),
                                 data = assays(analysis$dds)$rld,
                                 column_labels = colnames(data),
                                 slice_labels_rot = 90,
-                                legend_title = "log2 fold\ndifference\nfrom\nmedian\nbaseline\nexpression",
                                 box_width = unit(3.5, "mm"),
                                 box_height = unit(3.5, "mm"),
                                 width_buffer = unit(5, "mm"),
@@ -73,6 +74,11 @@ heatmapFromGenelist <- function(geneList,
                                 column_gap = unit(2, "mm"),
                                 scale_min = -2,
                                 scale_max = 2,
+                                heatmap_legend_param = list(
+                                  at = c(scale_min, 0, scale_max),
+                                  labels = c(scale_min,0,scale_max),
+                                  title = 'log2 fold\ndifference\nfrom\nmedian\nexpression'
+                                ),
                                 ...) {
   duds <- geneList[!geneList %in% rownames(data)]
   if (length(duds) > 0){
@@ -97,11 +103,11 @@ heatmapFromGenelist <- function(geneList,
   }
   hmap <- assay(hmap) - baseline
   ComplexHeatmap::Heatmap(hmap,
-    heatmap_legend_param = list(title = legend_title),
-    border = "black",
+    heatmap_legend_param = heatmap_legend_param,
+    #border = "black",
     width = ncol(hmap) * box_width + width_buffer,
     height = nrow(hmap) * box_height + height_buffer,
-    rect_gp = grid::gpar(color = "black"),
+    #rect_gp = grid::gpar(color = "black"),
     column_title = column_title,
     cluster_rows = cluster_rows,
     cluster_columns = cluster_columns,
@@ -120,7 +126,7 @@ heatmapFromGenelist <- function(geneList,
       NULL
     }),
     column_gap = column_gap,
-    col = circlize::colorRamp2(c(scale_min, 0, scale_max), c("blue", "white", "red")),
+    col = circlize::colorRamp2(c(scale_min, 0, scale_max), colors),
     ...
   )
 }
