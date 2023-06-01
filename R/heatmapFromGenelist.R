@@ -74,7 +74,15 @@ heatmapFromGenelist <- function(geneList,
                                 scale_min = -2,
                                 scale_max = 2,
                                 ...) {
-  
+  duds <- geneList[!geneList %in% rownames(data)]
+  if (length(duds) > 0){
+    geneList <- geneList[geneList %in% rownames(data)]
+    if (length(geneList) == 0){
+      stop('No data for requested genes')
+    } else {
+      message(paste0('Genes ', paste0(duds, collapse = ', '), ' not found in data'))
+    }
+  }
   hmap <- data[geneList, ]
   if (is.null(baseline_grouping) | is.null(baseline)) {
     message('Basline grouping or baseline level not specified, using all samples
