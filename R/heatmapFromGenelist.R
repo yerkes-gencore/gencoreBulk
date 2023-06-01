@@ -1,4 +1,4 @@
-#' Generate heatmap of gene expression from DESeq2 resykts
+#' Generate heatmap of gene expression from DESeq2 results
 #'
 #' Makes a heatmap of the given list of genes, separating samples slightly by
 #'  group variable. The heatmap will render samples in the order of colnames
