@@ -2,18 +2,18 @@
 % Please edit documentation in R/heatmapFromGenelist.R
 \name{heatmapFromGenelist}
 \alias{heatmapFromGenelist}
-\title{Title}
+\title{Generate heatmap of gene expression from DESeq2 results}
 \usage{
 heatmapFromGenelist(
   geneList,
-  baseline_grouping,
-  baseline,
+  baseline_grouping = NULL,
+  baseline = NULL,
   column_split = NULL,
   slice_labels = NULL,
+  colors = c("blue", "white", "red"),
   data = assays(analysis$dds)$rld,
   column_labels = colnames(data),
   slice_labels_rot = 90,
-  legend_title = "log2 fold\\ndifference\\nfrom\\nmedian\\nbaseline\\nexpression",
   box_width = unit(3.5, "mm"),
   box_height = unit(3.5, "mm"),
   width_buffer = unit(5, "mm"),
@@ -24,6 +24,8 @@ heatmapFromGenelist(
   column_gap = unit(2, "mm"),
   scale_min = -2,
   scale_max = 2,
+  heatmap_legend_param = list(at = c(scale_min, 0, scale_max), labels = c(scale_min, 0,
+    scale_max), title = "log2 fold\\ndifference\\nfrom\\nmedian\\nexpression"),
   ...
 )
 }
@@ -32,19 +34,20 @@ heatmapFromGenelist(
 
 \item{baseline_grouping}{Character, level of \code{colnames(colData(data))}}
 
-\item{baseline}{level of \code{baseline_grouping} in \code{colData(data)}}
+\item{baseline}{level of \code{baseline_grouping} in \code{colData(data)} used to calculate
+median, or leave blank to use all samples to generate median}
 
 \item{column_split}{Split on columns. For heatmap splitting, please refer to \url{https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html#heatmap-split} .}
 
 \item{slice_labels}{Optional labels for sliced columns}
+
+\item{colors}{vector of color values passed to colorRamp2, default is c("blue", "white", "red")}
 
 \item{data}{Object of class DESeqTransform}
 
 \item{column_labels}{Optional column labels which are put as column names in the heatmap.}
 
 \item{slice_labels_rot}{Rotation angle of \code{slice_labels}}
-
-\item{legend_title}{Title for legend}
 
 \item{box_width}{Width of heatmap cell}
 
@@ -65,6 +68,8 @@ heatmapFromGenelist(
 \item{scale_min}{Minimum value for scaling colors}
 
 \item{scale_max}{Maximum value for scaling colors}
+
+\item{heatmap_legend_param}{A list contains parameters for the heatmap legends. See \code{\link[ComplexHeatmap]{color_mapping_legend,ColorMapping-method}} for all available parameters.}
 
 \item{...}{
   Arguments passed on to \code{\link[ComplexHeatmap:Heatmap]{ComplexHeatmap::Heatmap}}
@@ -137,7 +142,6 @@ heatmapFromGenelist(
     \item{\code{heatmap_width}}{Width of the whole heatmap (including heatmap components)}
     \item{\code{heatmap_height}}{Height of the whole heatmap (including heatmap components). Check \url{https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html#size-of-the-heatmap} .}
     \item{\code{show_heatmap_legend}}{Whether show heatmap legend?}
-    \item{\code{heatmap_legend_param}}{A list contains parameters for the heatmap legends. See \code{\link[ComplexHeatmap]{color_mapping_legend,ColorMapping-method}} for all available parameters.}
     \item{\code{use_raster}}{Whether render the heatmap body as a raster image. It helps to reduce file size when the matrix is huge. If number of rows or columns is more than 2000, it is by default turned on. Note if \code{cell_fun} is set, \code{use_raster} is enforced to be \code{FALSE}.}
     \item{\code{raster_device}}{Graphic device which is used to generate the raster image.}
     \item{\code{raster_quality}}{A value larger than 1.}
