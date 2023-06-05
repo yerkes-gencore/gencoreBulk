@@ -15,7 +15,6 @@
 #' @param slice_labels Optional labels for sliced columns
 #' @param colors vector of color values passed to colorRamp2, default is c("blue", "white", "red")
 #' @param slice_labels_rot Rotation angle of `slice_labels`
-#' @param legend_title Title for legend
 #' @param box_width Width of heatmap cell
 #' @param box_height Height of heatmap cell
 #' @param width_buffer Additional width buffer to add to final heatmap

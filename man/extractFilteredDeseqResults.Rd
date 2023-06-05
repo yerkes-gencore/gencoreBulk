@@ -2,33 +2,44 @@
 % Please edit documentation in R/extractFilteredDESeqResults.R
 \name{extractFilteredDESeqResults}
 \alias{extractFilteredDESeqResults}
-\title{Extract results from processed DESeq2 object using Greg's filtering}
+\title{Extract results from processed DESeq2 object using minimum sample detection filtering}
 \usage{
 extractFilteredDESeqResults(
-  comparison,
-  intgroup,
-  filt_groups,
-  test = "Wald",
-  dds = analysis$dds,
+  dds,
+  contrast,
+  min_counts = 0,
+  max_min_samples = 0,
   alpha = 0.05,
+  parallel = FALSE,
+  generate_shrunken_estimates = TRUE,
+  type = "ashr",
   ...
 )
 }
 \arguments{
-\item{comparison}{Value to pass to \code{\link[DESeq2:results]{DESeq2::results()}} as either a \code{contrast}
-or a \code{name}}
-
-\item{intgroup}{Metadata column on which to draw groups for filtering}
-
-\item{filt_groups}{Character vector of groups to draw from \code{intgroup}}
-
-\item{test}{Test to use, default is \code{Wald}}
-
 \item{dds}{DESeq2 object to draw results from}
+
+\item{contrast}{Contrast vector to pass to \code{\link[DESeq2:results]{DESeq2::results()}}}
+
+\item{min_counts}{Minimum number of counts for a sample to not be ignored}
+
+\item{max_min_samples}{Maximum number of low-count samples allowed in a group
+to still perform the calculation}
 
 \item{alpha}{The significance cutoff used for optimizing the independent
 filtering (by default 0.05). If the adjusted p-value cutoff (FDR) will be a
 value other than 0.05, alpha should be set to that value.}
+
+\item{parallel}{Run DESeq2 commands in parallel}
+
+\item{generate_shrunken_estimates}{Boolean to run and append \code{DESeq2::lfcShrink()}
+estimates to results}
+
+\item{type}{\code{"apeglm"} is the adaptive Student's t prior shrinkage estimator from the 'apeglm' package;
+\code{"ashr"} is the adaptive shrinkage estimator from the 'ashr' package,
+using a fitted mixture of normals prior
+- see the Stephens (2016) reference below for citation;
+\code{"normal"} is the 2014 DESeq2 shrinkage estimator using a Normal prior;}
 
 \item{...}{Additional arguments passed to \code{\link[DESeq2:results]{DESeq2::results()}}}
 }
@@ -36,9 +47,22 @@ value other than 0.05, alpha should be set to that value.}
 object of class DESeqResults
 }
 \description{
-Calls DESeq2::results with the filter specified using Greg's
-minMaxFilter function. Greg's filter dynamically filters results for
-minimum supporting reads based on the samples involved in the result calculation.
+Calls DESeq2::results with a per-gene filter requiring the numerator and
+denominator of the contrast to both have no more than \code{max_zero_samples} samples
+with at least \code{min_counts} reads.
 This function is intended to reduce the
 overall code used to extract all results of interest.
+}
+\examples{
+\dontrun{
+my_contrast <- limma::makeContrasts(
+CelltypeBonemarrow_CD19posCD138pos-CelltypeBonemarrow_CD19negCD138pos,
+(CelltypeBonemarrow_CD19posCD138pos+CelltypeBonemarrow_CD19posCD138neg)/2 -
+  (CelltypeBonemarrow_CD19negCD138neg-CelltypeBonemarrow_CD19negCD138pos)/2,
+levels = colnames(analysis$dds$modelMatrix))
+
+tmp <- apply(my_contrast, 2, extractFilteredDESeqResults, dds = analysis$dds)#' 
+}
+
+
 }
