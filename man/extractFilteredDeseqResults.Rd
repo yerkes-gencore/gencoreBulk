@@ -32,7 +32,7 @@ value other than 0.05, alpha should be set to that value.}
 
 \item{parallel}{Run DESeq2 commands in parallel}
 
-\item{generate_shrunken_estimates}{Boolean to run and append \code{DESeq2::lfcShrink()}
+\item{generate_shrunken_estimates}{Boolean to run and append \code{\link[DESeq2:lfcShrink]{DESeq2::lfcShrink()}}
 estimates to results}
 
 \item{type}{\code{"apeglm"} is the adaptive Student's t prior shrinkage estimator from the 'apeglm' package;
@@ -44,14 +44,15 @@ using a fitted mixture of normals prior
 \item{...}{Additional arguments passed to \code{\link[DESeq2:results]{DESeq2::results()}}}
 }
 \value{
-object of class DESeqResults
+object of class DESeqResults, possibly with additional columns
+for shrunken values
 }
 \description{
-Calls DESeq2::results with a per-gene filter requiring the numerator and
+Calls \code{\link[DESeq2:results]{DESeq2::results()}} with a per-gene filter requiring the numerator and
 denominator of the contrast to both have no more than \code{max_zero_samples} samples
-with at least \code{min_counts} reads.
-This function is intended to reduce the
-overall code used to extract all results of interest.
+with at least \code{min_counts} reads. If shrunken estimates are generated, they
+are added as separate columns in the result rather than overwriting the
+default LFC and error calculations.
 }
 \examples{
 \dontrun{

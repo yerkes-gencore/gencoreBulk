@@ -1,10 +1,10 @@
 #' Extract results from processed DESeq2 object using minimum sample detection filtering
 #'
-#' Calls DESeq2::results with a per-gene filter requiring the numerator and 
-#' denominator of the contrast to both have no more than `max_zero_samples` samples
-#'  with at least `min_counts` reads.
-#' This function is intended to reduce the
-#' overall code used to extract all results of interest.
+#' Calls [DESeq2::results()] with a per-gene filter requiring the numerator and 
+#'  denominator of the contrast to both have no more than `max_zero_samples` samples
+#'  with at least `min_counts` reads. If shrunken estimates are generated, they 
+#'  are added as separate columns in the result rather than overwriting the
+#'  default LFC and error calculations.
 #'
 #' @rdname extractFilteredDeseqResults
 #'
@@ -18,11 +18,12 @@
 #'  value other than 0.05, alpha should be set to that value.
 #' @param ... Additional arguments passed to [DESeq2::results()]
 #' @param parallel Run DESeq2 commands in parallel
-#' @param generate_shrunken_estimates Boolean to run and append `DESeq2::lfcShrink()`
+#' @param generate_shrunken_estimates Boolean to run and append [DESeq2::lfcShrink()]
 #'  estimates to results
 #' @inheritParams DESeq2::lfcShrink
 #'
-#' @returns object of class DESeqResults
+#' @returns object of class DESeqResults, possibly with additional columns
+#'  for shrunken values
 #'
 #' @import DESeq2
 #' @importFrom matrixStats rowMaxs rowMins rowMeans2
