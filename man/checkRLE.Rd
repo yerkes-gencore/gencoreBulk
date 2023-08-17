@@ -4,10 +4,10 @@
 \alias{checkRLE}
 \title{plot relative log expression normalization}
 \usage{
-checkRLE(analysis)
+checkRLE(dds)
 }
 \arguments{
-\item{analysis}{object with config options saved from the template format}
+\item{dds}{object with config options saved from the template format}
 }
 \value{
 2 ggplots
@@ -17,7 +17,7 @@ Returns plots of count frequencies before and after normalization
 }
 \examples{
 \dontrun{
-checkRLE(raw_counts, analysis)
+checkRLE(raw_counts, analysis$dds)
 }
 
 }
