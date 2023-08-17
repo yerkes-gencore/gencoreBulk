@@ -8,6 +8,8 @@
 #' @param shapes Shape values to pass to `ggplot2::scale_shape_manual()`
 #' @param alpha Alpha to use for `ggplot2::geom_point()`
 #' @param size Size to use for `ggplot2::geom_point()`
+#' @param pc.1 Principal component to plot on X axis
+#' @param pc.2 Principal component to plot on Y axis
 #' 
 #' @returns A ggplot
 #'
@@ -27,11 +29,13 @@
 plotPCAFromConfig <- function(analysis,
                               shapes = 0:25,
                               alpha = 1,
-                              size = 5) {
+                              size = 5,
+                              pc.1 = 1,
+                              pc.2 = 2) {
   pca_data <- 
   .pcaPlotGKT(assays(analysis$dds)$vst,
     intgroup = names(colData(assays(analysis$dds)$vst)),
-    xpc = 1, ypc = 2
+    xpc = pc.1, ypc = pc.2
   ) +
     geom_point(
       aes(

@@ -4,7 +4,14 @@
 \alias{plotPCAFromConfig}
 \title{plot PCA from config}
 \usage{
-plotPCAFromConfig(analysis, shapes = 0:25, alpha = 1, size = 5)
+plotPCAFromConfig(
+  analysis,
+  shapes = 0:25,
+  alpha = 1,
+  size = 5,
+  pc.1 = 1,
+  pc.2 = 2
+)
 }
 \arguments{
 \item{analysis}{object with config options saved from the template format}
@@ -14,6 +21,10 @@ plotPCAFromConfig(analysis, shapes = 0:25, alpha = 1, size = 5)
 \item{alpha}{Alpha to use for \code{ggplot2::geom_point()}}
 
 \item{size}{Size to use for \code{ggplot2::geom_point()}}
+
+\item{pc.1}{Principal component to plot on X axis}
+
+\item{pc.2}{Principal component to plot on Y axis}
 }
 \value{
 A ggplot
