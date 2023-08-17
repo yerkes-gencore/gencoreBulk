@@ -3,13 +3,13 @@
 #' Returns plots of count frequencies before and after normalization
 #'
 #' @rdname checkRLE
-#' @param analysis object with config options saved from the template format
+#' @param dds object with config options saved from the template format
 #'
 #' @returns 2 ggplots
 #'
 #' @examples
 #' \dontrun{
-#' checkRLE(raw_counts, analysis)
+#' checkRLE(raw_counts, analysis$dds)
 #' }
 #'
 #' @importFrom DESeq2 counts
@@ -23,16 +23,16 @@
 #'
 #' @export
 
-checkRLE <- function(analysis) {
-  raw_counts <- SummarizedExperiment::assays(analysis$dds)$counts
+checkRLE <- function(dds) {
+  raw_counts <- SummarizedExperiment::assays(dds)$counts
   rawLogCounts <- log(raw_counts[rowMins(raw_counts) > 0, ])
   rawMedianLogs <- matrixStats::rowMedians(rawLogCounts)
   rawLogRatios <- rawLogCounts - rawMedianLogs
 
 
   normLogCounts <- log(
-    DESeq2::counts(analysis$dds, normalized = TRUE)[
-      matrixStats::rowMins(DESeq2::counts(analysis$dds)) > 0,
+    DESeq2::counts(dds, normalized = TRUE)[
+      matrixStats::rowMins(DESeq2::counts(dds)) > 0,
     ]
   )
   normMedianLogs <- matrixStats::rowMedians(normLogCounts)
