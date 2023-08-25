@@ -54,8 +54,18 @@ extractFilteredDESeqResults <- function(dds,
                                         generate_shrunken_estimates = TRUE,
                                         type = 'ashr',
                                          ...){
-  model_matrix <- stats::model.matrix(design(dds),
-                                      SummarizedExperiment::colData(dds))
+  is.formula <- function(x){
+    inherits(x,"formula")
+  }
+  if (is.formula(class(design(dds)))){
+    model_matrix <- stats::model.matrix(design(dds),
+                                        SummarizedExperiment::colData(dds))
+  } else if (is.matrix(design(dds))){
+    model_matrix <- design(dds)
+  } else {
+    errorCondition("Object's design is not a formula or matrix")
+  }
+  
   samples_used <- .extractSamplesInContrast(model_matrix, contrast)
   deseq_filter <- .maxMinFilter(dds,
                                 group_samples = samples_used,
@@ -113,18 +123,22 @@ extractFilteredDESeqResults <- function(dds,
 ## A helper function to extact sample names from a design matrix and contrast,
 ## Used as input to maxMinFilter
 .extractSamplesInContrast <- function(model_matrix, contrast){
-  group1_terms <- names(contrast[contrast>0])
-  group2_terms <- names(contrast[contrast<0])
-  
-  group1_mat <- model_matrix[,group1_terms]
-  group2_mat <- model_matrix[,group2_terms]
-  
   extract_samples <- function(mat){
     if (is.matrix(mat)){
-      rownames(mat[rowSums(mat) != 0])
+      rownames(mat[rowSums(mat) != 0,])
     } else {
       names(mat[mat != 0])
     }
+  }
+  if (is.numeric(contrast)){
+    group1_mat <- model_matrix[,contrast>0]
+    group2_mat <- model_matrix[,contrast<0]
+  } else if (is.character(contrast)) {
+    group1_terms <- names(contrast[contrast>0])
+    group2_terms <- names(contrast[contrast<0])
+    
+    group1_mat <- model_matrix[,group1_terms]
+    group2_mat <- model_matrix[,group2_terms]
   }
   return(list(group1_samples = extract_samples(group1_mat),
               group2_samples = extract_samples(group2_mat)))

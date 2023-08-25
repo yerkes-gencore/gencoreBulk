@@ -2,13 +2,16 @@
 % Please edit documentation in R/getTopNGenes.R
 \name{getTopNGenes}
 \alias{getTopNGenes}
-\title{Title}
+\title{Retreive the top differentially expressed genes from a DESeq results obj}
 \usage{
 getTopNGenes(
   result,
   N = 30,
   min_logFC = log2(1.5),
-  min_padj = analysis$analysis_config$alpha
+  min_padj = analysis$analysis_config$alpha,
+  exclude_ENS = TRUE,
+  ENS_pattern = "^ENS",
+  direction = "mixed"
 )
 }
 \arguments{
@@ -19,12 +22,21 @@ getTopNGenes(
 \item{min_logFC}{Minimum absolute value of log2FoldChange}
 
 \item{min_padj}{Minimum adjusted p value}
+
+\item{exclude_ENS}{Boolean: exclude genes with ENSEMBL IDs instead of symbols}
+
+\item{ENS_pattern}{Pattern used for ENSEMBL id recognition, default "^ENS"}
+
+\item{direction}{Which direction log-fold change to return. Accepts values
+c('up', 'down', 'mixed', 'equal'). Mixed returns the top N genes regardless
+of direction, while equal returns an equal number of up and down regulated
+genes}
 }
 \value{
 Character vector of gene names
 }
 \description{
-Title
+Retreive the top differentially expressed genes from a DESeq results obj
 }
 \examples{
 \dontrun{
