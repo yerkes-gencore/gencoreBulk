@@ -11,7 +11,7 @@ heatmapFromGenelist(
   column_split = NULL,
   slice_labels = NULL,
   colors = c("blue", "white", "red"),
-  data = assays(analysis$dds)$rld,
+  data = SummarizedExperiment::assays(analysis$dds)$rld,
   column_labels = colnames(data),
   slice_labels_rot = 90,
   box_width = unit(3.5, "mm"),

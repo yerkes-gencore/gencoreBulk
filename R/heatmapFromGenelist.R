@@ -27,7 +27,7 @@
 #' @inherit ComplexHeatmap::Heatmap return
 #'
 #' @import ComplexHeatmap
-#' @importFrom SummarizedExperiment assay
+#' @importFrom SummarizedExperiment assay assays
 #' @importFrom plyr mapvalues
 #' @importFrom matrixStats rowMedians
 #' @importFrom grid gpar
@@ -60,7 +60,7 @@ heatmapFromGenelist <- function(geneList,
                                 column_split = NULL,
                                 slice_labels = NULL,
                                 colors = c("blue", "white", "red"),
-                                data = assays(analysis$dds)$rld,
+                                data = SummarizedExperiment::assays(analysis$dds)$rld,
                                 column_labels = colnames(data),
                                 slice_labels_rot = 90,
                                 box_width = unit(3.5, "mm"),
@@ -92,15 +92,15 @@ heatmapFromGenelist <- function(geneList,
   if (is.null(baseline_grouping) | is.null(baseline)) {
     message('Basline grouping or baseline level not specified, using all samples
             to generate median expression per gene')
-    baseline <- matrixStats::rowMedians(assay(hmap))
+    baseline <- matrixStats::rowMedians(SummarizedExperiment::assay(hmap))
   } else if (!baseline_grouping %in% colnames(colData(data))) {
     stop("Argument 'baseline_grouping' should be in colData(data)")
   } else if (!baseline %in% unique(colData(data)[[baseline_grouping]])) {
     stop("Argument 'baseline' should be a level of 'baseline_grouping' in colData(data)")
   } else{
-    baseline <- matrixStats::rowMedians(assay(hmap[, as.character(hmap@colData[[baseline_grouping]]) %in% baseline]))
+    baseline <- matrixStats::rowMedians(SummarizedExperiment::assay(hmap[, as.character(hmap@colData[[baseline_grouping]]) %in% baseline]))
   }
-  hmap <- assay(hmap) - baseline
+  hmap <- SummarizedExperiment::assay(hmap) - baseline
   ComplexHeatmap::Heatmap(hmap,
     heatmap_legend_param = heatmap_legend_param,
     #border = "black",
@@ -115,7 +115,7 @@ heatmapFromGenelist <- function(geneList,
       if (is.null(column_split)) {
         warning("Setting labels requires slices to also be set")
       }
-      HeatmapAnnotation(foo = anno_block(
+      ComplexHeatmap::HeatmapAnnotation(foo = ComplexHeatmap::anno_block(
         gp = gpar(col = NA),
         labels = slice_labels,
         labels_gp = gpar(col = "black", fontsize = 10),
