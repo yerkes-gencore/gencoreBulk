@@ -8,7 +8,7 @@ generateVolcanoPlot(
   result,
   labels = 20,
   FCcutoff = log2(1.3),
-  pCutoff = analysis$analysis_config$alpha,
+  pCutoff = 0.05,
   title = NULL,
   caption = NULL,
   subtitle = NULL,

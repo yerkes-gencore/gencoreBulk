@@ -8,7 +8,7 @@ getTopNGenes(
   result,
   N = 30,
   min_logFC = log2(1.5),
-  min_padj = analysis$analysis_config$alpha,
+  min_padj = 0.05,
   exclude_ENS = TRUE,
   ENS_pattern = "^ENS",
   direction = "mixed"
