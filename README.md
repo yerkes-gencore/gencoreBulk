@@ -34,6 +34,8 @@ usethis::edit_r_environ()
 
 </details>
 
+This package has a fairly large number of dependencies that you may need to install prior to your first install of gencore-bulk.
+
 ### 2. Direct install
 
 That means that if this repo is in your pwd, you can install and load this codebase by simply calling `devtools::install()` in the r console.
