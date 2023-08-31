@@ -42,7 +42,7 @@ writefGSEAResults <- function(results,
          sheet_name=sheet_names,
          MoreArgs = list(wb=wb)
   )
-  saveWorkbook(wb, outfile, overwrite = TRUE)
+  openxlsx::saveWorkbook(wb, outfile, overwrite = TRUE)
 }
 
 .addWorksheet_fGSEAres <- function(wb,
@@ -51,6 +51,7 @@ writefGSEAResults <- function(results,
   if (nchar(sheet_name)>31){
     sheet_name <- substr(sheet_name,1,31)
   }
+  result <- result[order(result$padj),]
   openxlsx::addWorksheet(wb, sheet_name)
   openxlsx::writeData(wb,
                       sheet=sheet_name,
