@@ -3,8 +3,10 @@
 #' Make dotplot from fGSEA result, showing top n pathways
 #'
 #' @rdname gseaDotplot_joint
+#'
 #' @param gsea_results A table with multiple GSEA results from `fgsea::fgseaSimple()` 
 #'  combined by `combine_GSEA_results()`
+#' @param pathway_order Order of pathways to plot
 #'
 #' @return A ggplot object
 #' @export
@@ -26,8 +28,23 @@
 #' joint_GSEA_results <- combine_GSEA_results(gsea_results, pathways)
 #' gseaDotplot_joint(joint_GSEA_results)
 #' }
-gseaDotplot_joint <- function(gsea_results){
-  gsea_results$pathway <- .wrap_underscore_strings_balance(gsea_results$pathway,36)
+gseaDotplot_joint <- function(gsea_results,
+                              pathway_order = NULL){
+  if (!is.null(pathway_order)) {
+    if (all(pathway_order %in% unique(gsea_results$pathway))){
+      pathway_order <- order(factor(gsea_results$pathway, levels = pathway_order))
+      gsea_results$pathway <- .wrap_underscore_strings_balance(gsea_results$pathway,36)
+      ## reordering
+      gsea_results <- gsea_results[pathway_order,]
+      gsea_results$pathway <- factor(gsea_results$pathway, levels = unique(gsea_results$pathway))
+    } else {
+      warning('pathways specified in pathway_order not found, defaulting to arbitrary order')
+    }
+  } else {
+    gsea_results$pathway <- .wrap_underscore_strings_balance(gsea_results$pathway,36)
+  }
+  
+  
   
   ggplot(gsea_results) + 
     geom_point(aes(x=.data$ID, y=.data$pathway, size=-log(.data$pval), color=.data$NES)) +
