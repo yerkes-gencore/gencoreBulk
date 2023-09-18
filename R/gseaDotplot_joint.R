@@ -7,6 +7,7 @@
 #' @param gsea_results A table with multiple GSEA results from `fgsea::fgseaSimple()` 
 #'  combined by `combine_GSEA_results()`
 #' @param pathway_order Order of pathways to plot
+#' @param x_order Order of comparisons on X axis
 #'
 #' @return A ggplot object
 #' @export
@@ -29,7 +30,8 @@
 #' gseaDotplot_joint(joint_GSEA_results)
 #' }
 gseaDotplot_joint <- function(gsea_results,
-                              pathway_order = NULL){
+                              pathway_order = NULL,
+                              x_order = NULL){
   if (!is.null(pathway_order)) {
     if (all(pathway_order %in% unique(gsea_results$pathway))){
       pathway_order <- order(factor(gsea_results$pathway, levels = pathway_order))
@@ -44,7 +46,13 @@ gseaDotplot_joint <- function(gsea_results,
     gsea_results$pathway <- .wrap_underscore_strings_balance(gsea_results$pathway,36)
   }
   
-  
+  if (!is.null(x_order)) {
+    if (all(x_order %in% unique(gsea_results$ID))){
+      gsea_results$ID <- factor(gsea_results$pathway, levels = x_order)
+    } else {
+      warning('Specified x_order not all found in data, defaulting to arbitrary order')
+    }
+  }
   
   ggplot(gsea_results) + 
     geom_point(aes(x=.data$ID, y=.data$pathway, size=-log(.data$pval), color=.data$NES)) +

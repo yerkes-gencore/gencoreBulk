@@ -4,13 +4,15 @@
 \alias{gseaDotplot_joint}
 \title{GSEA dotplot}
 \usage{
-gseaDotplot_joint(gsea_results, pathway_order = NULL)
+gseaDotplot_joint(gsea_results, pathway_order = NULL, x_order = NULL)
 }
 \arguments{
 \item{gsea_results}{A table with multiple GSEA results from \code{fgsea::fgseaSimple()}
 combined by \code{combine_GSEA_results()}}
 
 \item{pathway_order}{Order of pathways to plot}
+
+\item{x_order}{Order of comparisons on X axis}
 }
 \value{
 A ggplot object
