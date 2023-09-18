@@ -48,7 +48,7 @@ gseaDotplot_joint <- function(gsea_results,
   
   if (!is.null(x_order)) {
     if (all(x_order %in% unique(gsea_results$ID))){
-      gsea_results$ID <- factor(gsea_results$pathway, levels = x_order)
+      gsea_results$ID <- factor(gsea_results$ID, levels = x_order)
     } else {
       warning('Specified x_order not all found in data, defaulting to arbitrary order')
     }
