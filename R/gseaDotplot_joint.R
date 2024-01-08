@@ -12,7 +12,7 @@
 #'  Each subsequent value will add an extra asterisk. E.g. `c(0.05, 0.01)` will 
 #'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 #'  If this is null, no asterisks will be plotted.
-#'  @param p_val_col Column to use for significance values. Default 'pval'.
+#' @param p_val_col Column to use for significance values. Default 'pval'.
 #'
 #' @return A ggplot object
 #' @export

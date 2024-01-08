@@ -23,8 +23,9 @@ combined by \code{combine_GSEA_results()}}
 \item{significance}{A vector of values to indicate significance with asterisks.
 Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
 give one asteriks to values below 0.05 and two asterisks to values below 0.01.
-If this is null, no asterisks will be plotted.
-@param p_val_col Column to use for significance values. Default 'pval'.}
+If this is null, no asterisks will be plotted.}
+
+\item{p_val_col}{Column to use for significance values. Default 'pval'.}
 }
 \value{
 A ggplot object
