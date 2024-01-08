@@ -6,12 +6,17 @@
 #' @param result A table with GSEA results from `fgsea::fgseaSimple()`
 #' @param min_size Minimum size of gene set to plot
 #' @param filter_source Character vector of pathway sources to filter for
-#' @param signif_only If TRUE, only plot results with padj < `sig_cutoff`
-#' @param top_n Show the top N results sorted by padj
+#' @param signif_only If TRUE, only plot results with p value < `sig_cutoff`
+#' @param top_n Show the top N results sorted by pval
 #' @param sig_cutoff Threshold for significance, default to 0.05
+#' @param significance A vector of values to indicate significance with asterisks.
+#'  Each subsequent value will add an extra asterisk. E.g. `c(0.05, 0.01)` will 
+#'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
+#'  If this is null, no asterisks will be plotted.
 #' @param use_shortened_pathway_names Pull names from column 'pathway_short' 
 #'  rather than pathway (if `runfgsea()` call had `breakdown_pathway_names` set 
 #'  to `TRUE`)
+#' @param p_val_col Column to use for significance values. Default 'pval'.
 #'
 #' @return A ggplot object
 #' @export
@@ -32,12 +37,14 @@ gseaDotplot_single <- function(result,
                                top_n = 20,
                                min_size = 5,
                                sig_cutoff = 0.05,
-                               use_shortened_pathway_names = FALSE) {
+                               use_shortened_pathway_names = FALSE,
+                               significance = c(0.05, 0.01, 0.001),
+                               p_val_col = 'pval') {
   if (use_shortened_pathway_names){
     result$pathway <- result$pathway_short
   }
   result <- result %>%
-    arrange(.data$pval, desc(.data$size)) %>%
+    arrange(.data[[p_val_col]], desc(.data$size)) %>%
     mutate(perc = 100 * lengths(.data$leadingEdge) / .data$size) %>%
     mutate(name = paste0(.wrap_underscore_strings_balance(.data$pathway, 36), "\nn=", .data$size)) %>%
     filter(.data$size >= min_size)
@@ -47,18 +54,36 @@ gseaDotplot_single <- function(result,
   }
   if (signif_only) {
     result <- result %>%
-      filter(.data$padj < sig_cutoff)
+      filter(.data[[p_val_col]] < sig_cutoff)
   }
+  
+  result$label <- NA
+  caption <- ''
+  if (!is.null(significance)) {
+    if (is.numeric(significance)) {
+      label <- '*'
+      for (cutoff in significance) {
+        result$label <- ifelse(result$pval < cutoff, label, result$label)
+        caption <- paste(caption, label, '<', cutoff, ';', sep = ' ')
+        label <- paste0(label, '*')
+      }
+      # gsea_results$label[is.numeric(gsea_results$label)] <- NA
+    } else {
+      stop('Significance argument should be a numeric vector')
+    }
+  } 
+  
+  
   toppaths <- rbind(utils::head(result, n = top_n))
-
   toppaths$name <- factor(toppaths$name)
-  dotplot <- ggplot(toppaths) +
-    geom_point(aes(
-      x = .data$perc,
-      y = .data$name,
-      size = -log10(.data$pval),
-      color = .data$NES
-    )) +
+  dotplot <- ggplot(toppaths, 
+                    aes(
+                      x = .data[['perc']],
+                      y = .data[['name']],
+                      size = -log10(.data[['pval']]),
+                      color = .data[['NES']],
+                      label = .data[['label']])) +
+    geom_point() +
     scale_color_gradient2(
       low = "blue",
       mid = "white",
@@ -82,10 +107,7 @@ gseaDotplot_single <- function(result,
       x = "% of genes in leading edge", y = "Gene set",
       color = "Normalized\nenrichment\nscore",
       size = "Nom p-val", title = "Top enriched pathways",
-      caption = "GSEA p-value calculations are not continuous,\n
-         there may be several or many pathways with the same p-value\n
-         n = number of genes in pathway"
-    ) +
+      caption = paste0("n = number of genes in pathway\n", caption)) +
     scale_radius(
       name = "NOM p-val",
       range = c(1, 8),
@@ -93,6 +115,7 @@ gseaDotplot_single <- function(result,
       limits = c(0, 3),
       labels = c(0.5, 0.1, 0.01, 0.001)
     ) +
-    scale_y_discrete(limits = toppaths$name)
+    scale_y_discrete(limits = toppaths$name) +
+    geom_text(na.rm = TRUE, color = 'black', size = 3)
   return(dotplot)
 }

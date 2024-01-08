@@ -11,7 +11,9 @@ gseaDotplot_single(
   top_n = 20,
   min_size = 5,
   sig_cutoff = 0.05,
-  use_shortened_pathway_names = FALSE
+  use_shortened_pathway_names = FALSE,
+  significance = c(0.05, 0.01, 0.001),
+  p_val_col = "pval"
 )
 }
 \arguments{
@@ -19,9 +21,9 @@ gseaDotplot_single(
 
 \item{filter_source}{Character vector of pathway sources to filter for}
 
-\item{signif_only}{If TRUE, only plot results with padj < \code{sig_cutoff}}
+\item{signif_only}{If TRUE, only plot results with p value < \code{sig_cutoff}}
 
-\item{top_n}{Show the top N results sorted by padj}
+\item{top_n}{Show the top N results sorted by pval}
 
 \item{min_size}{Minimum size of gene set to plot}
 
@@ -30,6 +32,13 @@ gseaDotplot_single(
 \item{use_shortened_pathway_names}{Pull names from column 'pathway_short'
 rather than pathway (if \code{runfgsea()} call had \code{breakdown_pathway_names} set
 to \code{TRUE})}
+
+\item{significance}{A vector of values to indicate significance with asterisks.
+Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
+give one asteriks to values below 0.05 and two asterisks to values below 0.01.
+If this is null, no asterisks will be plotted.}
+
+\item{p_val_col}{Column to use for significance values. Default 'pval'.}
 }
 \value{
 A ggplot object
