@@ -4,7 +4,12 @@
 \alias{gseaDotplot_joint}
 \title{GSEA dotplot}
 \usage{
-gseaDotplot_joint(gsea_results, pathway_order = NULL, x_order = NULL)
+gseaDotplot_joint(
+  gsea_results,
+  pathway_order = NULL,
+  x_order = NULL,
+  significance = c(0.05, 0.01, 0.001)
+)
 }
 \arguments{
 \item{gsea_results}{A table with multiple GSEA results from \code{fgsea::fgseaSimple()}
@@ -13,6 +18,11 @@ combined by \code{combine_GSEA_results()}}
 \item{pathway_order}{Order of pathways to plot}
 
 \item{x_order}{Order of comparisons on X axis}
+
+\item{significance}{A vector of values to indicate significance with asterisks.
+Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
+give one asteriks to values below 0.05 and two asterisks to values below 0.01.
+If this is null, no asterisks will be plotted.}
 }
 \value{
 A ggplot object

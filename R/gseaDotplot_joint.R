@@ -8,6 +8,10 @@
 #'  combined by `combine_GSEA_results()`
 #' @param pathway_order Order of pathways to plot
 #' @param x_order Order of comparisons on X axis
+#' @param significance A vector of values to indicate significance with asterisks.
+#'  Each subsequent value will add an extra asterisk. E.g. `c(0.05, 0.01)` will 
+#'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
+#'  If this is null, no asterisks will be plotted.
 #'
 #' @return A ggplot object
 #' @export
@@ -31,7 +35,8 @@
 #' }
 gseaDotplot_joint <- function(gsea_results,
                               pathway_order = NULL,
-                              x_order = NULL){
+                              x_order = NULL,
+                              significance = c(0.05, 0.01, 0.001)){
   if (!is.null(pathway_order)) {
     if (all(pathway_order %in% unique(gsea_results$pathway))){
       pathway_order <- order(factor(gsea_results$pathway, levels = pathway_order))
@@ -54,8 +59,24 @@ gseaDotplot_joint <- function(gsea_results,
     }
   }
   
-  ggplot(gsea_results) + 
-    geom_point(aes(x=.data$ID, y=.data$pathway, size=-log(.data$pval), color=.data$NES)) +
+  gsea_results$label <- NA
+  caption <- ''
+  if (!is.null(significance)) {
+    if (is.numeric(significance)) {
+      label <- '*'
+      for (cutoff in significance) {
+        gsea_results$label <- ifelse(gsea_results$pval < cutoff, label, gsea_results$label)
+        caption <- paste(caption, label, '<', cutoff, ';', sep = ' ')
+        label <- paste0(label, '*')
+      }
+      # gsea_results$label[is.numeric(gsea_results$label)] <- NA
+    } else {
+      stop('Significance argument should be a numeric vector')
+    }
+  } 
+  ggplot(gsea_results, aes(x=.data$ID, y=.data$pathway, size=-log(.data$pval),
+                           color=.data$NES, label = .data$label)) + 
+    geom_point() +
     scale_color_gradient2(low="blue",
                           mid="white",
                           high="red",
@@ -75,9 +96,11 @@ gseaDotplot_joint <- function(gsea_results,
          y="Gene set", 
          color = "Normalized\nenrichment\nscore",
          size="Nom p-val",
-         title="GSEA pathway enrichments") +
+         title="GSEA pathway enrichments",
+         caption = caption) +
     scale_radius(name="NOM p-val", 
                  range=c(1,8),
                  breaks=-log10(c(0.1,0.01,0.001,0.0001)),
-                 labels=c(0.1,0.01,0.001,0.0001))
+                 labels=c(0.1,0.01,0.001,0.0001)) +
+    geom_text(na.rm = TRUE, color = 'black', size = 3)
 }
