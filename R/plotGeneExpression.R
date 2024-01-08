@@ -38,7 +38,7 @@ plotGeneExpression <- function(gene,
   plotdata <- as.data.frame(t(SummarizedExperiment::assay(data[gene, ])))
   colnames(plotdata) <- 'Gene'
   plotdata$grouping <- data@colData[[grouping]]
-  ggplot2::ggplot(plotdata, aes(x=grouping, y=.data[[Gene]])) + 
+  ggplot2::ggplot(plotdata, aes(x=grouping, y=.data[['Gene']])) + 
     (if (boxplot) { ggplot2::geom_boxplot(outlier.color = if (jitter) {NA} else {'black'}) }) +
     ggplot2::theme_bw() +
     (if (jitter) { ggplot2::geom_jitter() }) +
