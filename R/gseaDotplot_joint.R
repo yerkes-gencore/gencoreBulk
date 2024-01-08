@@ -12,6 +12,7 @@
 #'  Each subsequent value will add an extra asterisk. E.g. `c(0.05, 0.01)` will 
 #'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 #'  If this is null, no asterisks will be plotted.
+#'  @param p_val_col Column to use for significance values. Default 'pval'.
 #'
 #' @return A ggplot object
 #' @export
@@ -36,7 +37,8 @@
 gseaDotplot_joint <- function(gsea_results,
                               pathway_order = NULL,
                               x_order = NULL,
-                              significance = c(0.05, 0.01, 0.001)){
+                              significance = c(0.05, 0.01, 0.001),
+                              p_val_col = 'pval'){
   if (!is.null(pathway_order)) {
     if (all(pathway_order %in% unique(gsea_results$pathway))){
       pathway_order <- order(factor(gsea_results$pathway, levels = pathway_order))
@@ -65,7 +67,7 @@ gseaDotplot_joint <- function(gsea_results,
     if (is.numeric(significance)) {
       label <- '*'
       for (cutoff in significance) {
-        gsea_results$label <- ifelse(gsea_results$pval < cutoff, label, gsea_results$label)
+        gsea_results$label <- ifelse(gsea_results[[p_val_col]] < cutoff, label, gsea_results$label)
         caption <- paste(caption, label, '<', cutoff, ';', sep = ' ')
         label <- paste0(label, '*')
       }
@@ -74,7 +76,7 @@ gseaDotplot_joint <- function(gsea_results,
       stop('Significance argument should be a numeric vector')
     }
   } 
-  ggplot(gsea_results, aes(x=.data$ID, y=.data$pathway, size=-log(.data$pval),
+  ggplot(gsea_results, aes(x=.data$ID, y=.data$pathway, size=-log(.data[[p_val_col]]),
                            color=.data$NES, label = .data$label)) + 
     geom_point() +
     scale_color_gradient2(low="blue",
