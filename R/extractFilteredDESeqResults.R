@@ -57,7 +57,7 @@ extractFilteredDESeqResults <- function(dds,
   is.formula <- function(x){
     inherits(x,"formula")
   }
-  if (is.formula(class(design(dds)))){
+  if (is.formula(design(dds))){
     model_matrix <- stats::model.matrix(design(dds),
                                         SummarizedExperiment::colData(dds))
   } else if (is.matrix(design(dds))){
