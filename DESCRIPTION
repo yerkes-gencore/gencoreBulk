@@ -20,6 +20,8 @@ Imports:
     ggplot2,
     ggrepel,
     here,
+    limma,
+    magrittr,
     matrixStats,
     methods,
     openxlsx,
