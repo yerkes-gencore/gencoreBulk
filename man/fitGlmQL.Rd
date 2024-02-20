@@ -9,14 +9,13 @@ fitGlmQL(bulkObj, contr.matrix)
 \arguments{
 \item{bulkObj}{List object with raw counts in \code{bulkObj$dge$counts} and design matrix in \code{bulkObj$md$design}.}
 
-\item{contr.matrix}{Contrast matrix creating by \code{limma::makeContrasts()}}
+\item{contr.matrix}{Contrast matrix created by \code{limma::makeContrasts()}}
 }
 \description{
 Model fitting and contrast extraction using quasi-likelihood negative binomial GLM procedure as implemented in \code{\link[edgeR:glmQLFit]{edgeR::glmQLFit()}}.
 }
 \examples{
 \dontrun{
-## Fit a model with repeated measures design with SubjectID treated as a random effect
 bulk <- fitGlmQL(bulk, contr.matrix=contr.matrix)
 }
 

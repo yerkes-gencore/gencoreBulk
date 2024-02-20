@@ -4,9 +4,10 @@
 #' Model fitting and contrast extraction using voom + LmFit procedure as implemented in \code{\link[edgeR:voomLmFit]{edgeR::voomLmFit()}}.
 #' 
 #' @param bulkObj List object with raw counts in `bulkObj$dge$counts` and design matrix in `bulkObj$md$design`.
-#' @param contr.matrix Contrast matrix creating by `limma::makeContrasts()`
+#' @param contr.matrix Contrast matrix created by `limma::makeContrasts()`
 #' @param plotVoom logical, should a plot of the mean-variance trend be displayed?
 #' @inheritParams edgeR::voomLmFit
+#' @inheritParams limma::contrasts.fit
 #' 
 #' @details
 #' This is a convenience wrapper around \code{\link[edgeR:voomLmFit]{edgeR::voomLmFit()}}, \code{\link[limma:contrasts.fit]{limma::contrasts.fit()}}, \code{\link[limma:eBayes]{limma::eBayes()}}, and \code{\link[limma:decideTests]{limma::decideTests()}}.
@@ -63,28 +64,13 @@ fitVoomLm <- function(bulkObj, contr.matrix, block = NULL, sample.weights = TRUE
   return(bulkObj)
 }
 
-# createResTable <- function(clustObj, contr.matrix) {
-#   resultsTables_list <- list()
-#   for (contrast in colnames(clustObj$fit$coefficients)) {
-#     resultsTables_list[[contrast]] <- topTable(clustObj$fit, coef = contrast, n = Inf) %>%
-#       # as_tibble(rownames = "gene") %>%
-#       dplyr::rename(log2FoldChange = logFC, pvalue = P.Value, padj = adj.P.Val)
-#   }
-#   
-#   resultsTable <- lapply(resultsTables_list, function(one_tbl) {
-#     one_tbl %>% rownames_to_column(var = "gene")
-#   }) %>% bind_rows(., .id = "contrast") %>%
-#     as_tibble() %>%
-#     mutate(contrast = fct(contrast, levels = colnames(contr.matrix)))
-#   
-#   return(resultsTable)
-# }#' Running model fitting procedure using edgeR's glmQLFit()
+#' Running model fitting procedure using edgeR's glmQLFit()
 #'
 #' @description
 #' Model fitting and contrast extraction using quasi-likelihood negative binomial GLM procedure as implemented in \code{\link[edgeR:glmQLFit]{edgeR::glmQLFit()}}.
 #' 
 #' @param bulkObj List object with raw counts in `bulkObj$dge$counts` and design matrix in `bulkObj$md$design`.
-#' @param contr.matrix Contrast matrix creating by `limma::makeContrasts()`
+#' @param contr.matrix Contrast matrix created by `limma::makeContrasts()`
 #' @export
 #' @examples
 #' \dontrun{
@@ -101,4 +87,37 @@ fitGlmQL <- function(bulkObj, contr.matrix) {
   }
   names(bulkObj$res) <- colnames(contr.matrix)
   return(bulkObj)
+}
+
+#' Create results table from `bulk` list object
+#'
+#' @description
+#' Create tibble of top genes from linear model fit for each contrast \code{\link[limma:topTable]{limma::topTable()}}.
+#' 
+#' @inheritParams limma::topTable
+#' @param contr.matrix Contrast matrix created by `limma::makeContrasts()`
+#' @export
+#' @examples
+#' \dontrun{
+#' bulk <- runVoomLmFit(bulk, contr.matrix=contr.matrix, 
+#'                      sample.weights = TRUE, 
+#'                      block = bulk$dge$samples$SubjectID)
+#' resultsTable <- createResTable(bulk, contr.matrix)
+#' }
+#'
+createResTable <- function(fit, contr.matrix) {
+  resultsTables_list <- list()
+  for (contrast in colnames(fit$coefficients)) {
+    resultsTables_list[[contrast]] <- limma::topTable(fit, coef = contrast, n = Inf) %>%
+      # as_tibble(rownames = "gene") %>%
+      dplyr::rename(log2FoldChange = .data$logFC, pvalue = .data$P.Value, padj = .data$adj.P.Val)
+  }
+
+  resultsTable <- lapply(resultsTables_list, function(one_tbl) {
+    one_tbl %>% tibble::rownames_to_column(var = "gene")
+  }) %>% dplyr::bind_rows(.id = "contrast") %>%
+    dplyr::as_tibble() %>%
+    dplyr::mutate(contrast = forcats::fct(contrast, levels = colnames(contr.matrix)))
+
+  return(resultsTable)
 }

@@ -17,7 +17,7 @@ fitVoomLm(
 \arguments{
 \item{bulkObj}{List object with raw counts in \code{bulkObj$dge$counts} and design matrix in \code{bulkObj$md$design}.}
 
-\item{contr.matrix}{Contrast matrix creating by \code{limma::makeContrasts()}}
+\item{contr.matrix}{Contrast matrix created by \code{limma::makeContrasts()}}
 
 \item{block}{
     vector or factor specifying a blocking variable on the samples.
@@ -79,10 +79,9 @@ Identify which genes are significantly differentially expressed for each contras
 \examples{
 \dontrun{
 ## Fit a model with repeated measures design with SubjectID treated as a random effect
-bulk <- runVoomLmFit(bulk, 
-                          contr.matrix=contr.matrix, 
-                          sample.weights = TRUE, 
-                          block = bulk$dge$samples$SubjectID)
+bulk <- runVoomLmFit(bulk, contr.matrix=contr.matrix, 
+                     sample.weights = TRUE, 
+                     block = bulk$dge$samples$SubjectID)
 }
 
 }
