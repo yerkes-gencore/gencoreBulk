@@ -13,7 +13,7 @@
 #' 
 #' # Explanation of workflow:
 #' 
-#' ## `edgeR::voomLmFit` (Adapted from `edgeR::voomLmFit()` documentation):
+#' ## edgeR::voomLmFit() (Adapted from edgeR::voomLmFit() documentation):
 #' 
 #' This function adapts the limma voom method (Law et al, 2014) to allow for loss of residual degrees of freedom due to exact zero counts (Lun and Smyth, 2017). 
 #' 
@@ -23,21 +23,21 @@
 #' 
 #' Empirical sample quality weights will be estimated if `sample.weights=TRUE` or if `var.design` or `var.group` are non-NULL (Liu et al 2015). In that case, `voomLmFit` is analogous to running `voomWithQualityWeights` followed by `lmFit`.
 #' 
-#' ## `limma::contrasts.fit()`:
+#' ## limma::contrasts.fit():
 #' 
 #' Re-orient the fitted model object from the coefficients of the original design matrix to the set of contrasts defined above in contr.matrix
 #' 
-#' ## `limma::eBayes()`:
+#' ## limma::eBayes():
 #' 
 #' Run empirical Bayes moderation; borrowing information across all the genes to obtain more precise estimates of gene-wise variability
 #' 
-#' ## `plotSA()`:
+#' ## plotSA():
 #' 
 #' Plot the model's residual variances against average expression values; demonstrating that the variance is no longer dependednt on the mean expression level
 #' 
-#' ## `decideTests()`:
+#' ## decideTests():
 #' 
-#' ## Identify which genes are significantly differentially expressed for each contrast from a fit object containing p-values and test statistics
+#' Identify which genes are significantly differentially expressed for each contrast from a fit object containing p-values and test statistics
 #' 
 #' @export
 #' @examples

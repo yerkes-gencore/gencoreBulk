@@ -9,5 +9,6 @@
 #' @importFrom limma plotMDS
 #' @importFrom limma plotSA
 #' @importFrom magrittr %>%
+#' @importFrom tidyr pivot_longer
 ## usethis namespace: end
 NULL
