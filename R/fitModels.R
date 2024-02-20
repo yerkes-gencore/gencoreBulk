@@ -43,10 +43,9 @@
 #' @examples
 #' \dontrun{
 #' ## Fit a model with repeated measures design with SubjectID treated as a random effect
-#' bulk <- runVoomLmFit(bulk, 
-#'                           contr.matrix=contr.matrix, 
-#'                           sample.weights = TRUE, 
-#'                           block = bulk$dge$samples$SubjectID)
+#' bulk <- runVoomLmFit(bulk, contr.matrix=contr.matrix, 
+#'                      sample.weights = TRUE, 
+#'                      block = bulk$dge$samples$SubjectID)
 #' }
 #'
 fitVoomLm <- function(bulkObj, contr.matrix, block = NULL, sample.weights = TRUE, var.design = NULL, var.group = NULL, plotVoom = TRUE) {
@@ -64,18 +63,6 @@ fitVoomLm <- function(bulkObj, contr.matrix, block = NULL, sample.weights = TRUE
   return(bulkObj)
 }
 
-# fitGlmQL <- function(bulkObj, contr.matrix) {
-#   bulkObj$dge <- estimateDisp(bulkObj$dge, bulkObj$md$design)
-#   plotBCV(bulkObj$dge)
-#   bulkObj$fit <- glmQLFit(bulkObj$dge, bulkObj$md$design, robust = TRUE)
-#   bulkObj$res <- list()
-#   for (i in 1:ncol(contr.matrix)){
-#     bulkObj$res[[i]]<- glmQLFTest(bulkObj$fit, contrast = contr.matrix[,i])
-#   }
-#   names(bulkObj$res) <- colnames(contr.matrix)
-#   return(bulkObj)
-# }
-# 
 # createResTable <- function(clustObj, contr.matrix) {
 #   resultsTables_list <- list()
 #   for (contrast in colnames(clustObj$fit$coefficients)) {
@@ -91,4 +78,27 @@ fitVoomLm <- function(bulkObj, contr.matrix, block = NULL, sample.weights = TRUE
 #     mutate(contrast = fct(contrast, levels = colnames(contr.matrix)))
 #   
 #   return(resultsTable)
-# }
+# }#' Running model fitting procedure using edgeR's glmQLFit()
+#'
+#' @description
+#' Model fitting and contrast extraction using quasi-likelihood negative binomial GLM procedure as implemented in \code{\link[edgeR:glmQLFit]{edgeR::glmQLFit()}}.
+#' 
+#' @param bulkObj List object with raw counts in `bulkObj$dge$counts` and design matrix in `bulkObj$md$design`.
+#' @param contr.matrix Contrast matrix creating by `limma::makeContrasts()`
+#' @export
+#' @examples
+#' \dontrun{
+#' bulk <- fitGlmQL(bulk, contr.matrix=contr.matrix)
+#' }
+#'
+fitGlmQL <- function(bulkObj, contr.matrix) {
+  bulkObj$dge <- edgeR::estimateDisp(bulkObj$dge, bulkObj$md$design)
+  edgeR::plotBCV(bulkObj$dge)
+  bulkObj$fit <- edgeR::glmQLFit(bulkObj$dge, bulkObj$md$design, robust = TRUE, legacy = FALSE)
+  bulkObj$res <- list()
+  for (i in 1:ncol(contr.matrix)){
+    bulkObj$res[[i]]<- edgeR::glmQLFTest(bulkObj$fit, contrast = contr.matrix[,i])
+  }
+  names(bulkObj$res) <- colnames(contr.matrix)
+  return(bulkObj)
+}

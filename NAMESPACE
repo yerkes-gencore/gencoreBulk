@@ -2,6 +2,7 @@
 
 export(checkRLE)
 export(extractFilteredDESeqResults)
+export(fitGlmQL)
 export(fitVoomLm)
 export(generateSampleTable)
 export(generateVolcanoPlot)
