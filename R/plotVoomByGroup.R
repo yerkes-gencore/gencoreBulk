@@ -197,22 +197,43 @@ voomByGroup <- function (counts, group = NULL, design = NULL, lib.size = NULL, d
   new("EList", out)
 }
 
-# getVoomByGroup <- function(bulk, group, ...) {
-#   vbg <- voomByGroup(counts = bulk$dge$counts, 
-#                      design = bulk$md$design, 
-#                      group = bulk$dge$samples[[group]], 
-#                      plot = "combine", save.plot = TRUE)
-#   
-#   vbg_plot_data <- 
-#     lapply(names(vbg$voom.line), function(grp) {
-#       as_tibble(vbg$voom.line[[grp]]) %>%
-#         mutate(group = grp) %>%
-#         distinct()
-#     }) %>% bind_rows()
-#   
-#   return(vbg_plot_data)
-# }
-# 
+#' Run voomByGroup and prepare for ggplot2
+#'
+#' @description
+#' Run voomByGroup and reshape `voom.line` list output into a single tibble for input into `ggplot()`.
+#' 
+#' @note
+#' In practice, this is most useful as a diagnostic tool for pseudobulk data, where heteroscedasticity tends to be larger than for bulk data. See \code{\link[gencoreBulk:voomByGroup]{?voomByGroup}} for details.
+#'
+#' @param bulk List object with counts in `bulk$dge$counts`, design in `bulk$md$design`, and samples in `bulk$dge$samples`.
+#' @param group Name of column in bulk$dge$sample to group by (e.g. individual if running a repeated measures design)
+#' @param ... Arguments passed to voomByGroup.
+#'
+#' @returns Long-format tibble with a columns for `group`, `x` and `y` of voom lines.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' vbg_data <- getVoomByGroupData(bulk, group = "SubjectID") %>% 
+#'   plotVoomByGroupData()
+#' }
+#'
+getVoomByGroup <- function(bulk, group, ...) {
+  vbg <- voomByGroup(counts = bulk$dge$counts,
+                     design = bulk$md$design,
+                     group = bulk$dge$samples[[group]],
+                     plot = "combine", save.plot = TRUE, ...)
+
+  vbg_plot_data <-
+    lapply(names(vbg$voom.line), function(grp) {
+      dplyr::as_tibble(vbg$voom.line[[grp]]) %>%
+        dplyr::mutate(group = .data$grp) %>%
+        dplyr::distinct()
+    }) %>% dplyr::bind_rows()
+
+  return(vbg_plot_data)
+}
+
 # plotVoomByGroup <- function(vbg_data, ...) {
 #   vbg_data %>%
 #     ggplot(data = ., aes(x = x, y = y, color = group)) +
