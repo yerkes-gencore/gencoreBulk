@@ -70,7 +70,7 @@ ggplotMDS <- function(dge, sampleID = "sampleID",
   mds_xy <- mds_data[c("x","y")]
   mds_xy[[sampleID]] <- colnames(dge)
   # mds_xy[[sampleID]] <- str_extract(colnames(dge), "(^[A-Za-z0-9]*)")
-  mds_xy <- mds_xy %>% dplyr::full_join(dge$samples, by = sampleID)
+  mds_xy <- dplyr::as_tibble(mds_xy) %>% dplyr::full_join(dge$samples, by = sampleID)
   
   x_varex <- round(mds_data$var.explained[1]*100, digits = 0)
   y_varex <- round(mds_data$var.explained[2]*100, digits = 0)
