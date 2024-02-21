@@ -227,7 +227,7 @@ getVoomByGroup <- function(bulk, group, ...) {
   vbg_plot_data <-
     lapply(names(vbg$voom.line), function(grp) {
       dplyr::as_tibble(vbg$voom.line[[grp]]) %>%
-        dplyr::mutate(group = .data$grp) %>%
+        dplyr::mutate(group = grp) %>%
         dplyr::distinct()
     }) %>% dplyr::bind_rows()
 
