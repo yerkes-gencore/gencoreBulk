@@ -14,6 +14,7 @@
 #'
 plotFilterByExpr <- function(dge, keep.exprs) {
   dge$counts %>%
+    dplyr::as_tibble(rownames = "gene") %>%
     dplyr::left_join(dplyr::tibble(gene = names(keep.exprs), keep = keep.exprs), 
                      by = c("gene")) %>%
     tidyr::pivot_longer(cols = -c("gene", "keep"), names_to = "sampleID", values_to = "counts") %>%
