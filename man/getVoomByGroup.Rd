@@ -9,7 +9,7 @@ getVoomByGroup(bulk, group, ...)
 \arguments{
 \item{bulk}{List object with counts in \code{bulk$dge$counts}, design in \code{bulk$md$design}, and samples in \code{bulk$dge$samples}.}
 
-\item{group}{Name of column in bulk$dge$sample to group by (e.g. individual if running a repeated measures design)}
+\item{group}{Name of column in bulk$dge$sample to group by (e.g. "SubjectID" if running a repeated measures design)}
 
 \item{...}{Arguments passed to voomByGroup.}
 }
@@ -24,8 +24,8 @@ In practice, this is most useful as a diagnostic tool for pseudobulk data, where
 }
 \examples{
 \dontrun{
-vbg_data <- getVoomByGroupData(bulk, group = "SubjectID") \%>\% 
-  plotVoomByGroupData()
+vbg_data <- getVoomByGroup(bulk, group = "SubjectID") \%>\% 
+  plotVoomByGroup()
 }
 
 }

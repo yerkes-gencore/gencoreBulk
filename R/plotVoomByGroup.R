@@ -206,7 +206,7 @@ voomByGroup <- function (counts, group = NULL, design = NULL, lib.size = NULL, d
 #' In practice, this is most useful as a diagnostic tool for pseudobulk data, where heteroscedasticity tends to be larger than for bulk data. See \code{\link[gencoreBulk:voomByGroup]{?voomByGroup}} for details.
 #'
 #' @param bulk List object with counts in `bulk$dge$counts`, design in `bulk$md$design`, and samples in `bulk$dge$samples`.
-#' @param group Name of column in bulk$dge$sample to group by (e.g. individual if running a repeated measures design)
+#' @param group Name of column in bulk$dge$sample to group by (e.g. "SubjectID" if running a repeated measures design)
 #' @param ... Arguments passed to voomByGroup.
 #'
 #' @returns Long-format tibble with a columns for `group`, `x` and `y` of voom lines.
@@ -214,8 +214,8 @@ voomByGroup <- function (counts, group = NULL, design = NULL, lib.size = NULL, d
 #' @export
 #' @examples
 #' \dontrun{
-#' vbg_data <- getVoomByGroupData(bulk, group = "SubjectID") %>% 
-#'   plotVoomByGroupData()
+#' vbg_data <- getVoomByGroup(bulk, group = "SubjectID") %>% 
+#'   plotVoomByGroup()
 #' }
 #'
 getVoomByGroup <- function(bulk, group, ...) {
@@ -234,12 +234,29 @@ getVoomByGroup <- function(bulk, group, ...) {
   return(vbg_plot_data)
 }
 
-# plotVoomByGroup <- function(vbg_data, ...) {
-#   vbg_data %>%
-#     ggplot(data = ., aes(x = x, y = y, color = group)) +
-#     geom_line() +
-#     scale_color_brewer(palette = "Paired") +
-#     xlab("log2( count size + 0.5 )") +
-#     ylab("Sqrt( standard deviation )") +
-#     theme_classic()
-# }
+#' Plot voomByGroup voom lines
+#'
+#' @description
+#' Plot voomByGroup voom lines using `ggplot2` so that multiple plots can more flexibly be ggarranged.
+#' 
+#' @note
+#' In practice, this is most useful as a diagnostic tool for pseudobulk data, where heteroscedasticity tends to be larger than for bulk data. See \code{\link[gencoreBulk:voomByGroup]{?voomByGroup}} for details.
+#'
+#' @param vbg_data Long-format tibble with a columns for `group`, `x` and `y` of voom lines. In practice, this will be the output of \code{\link[gencoreBulk:getVoomByGroup]{?getVoomByGroup}}.
+#'
+#' @returns `ggplot` plot with each group voomline plotting in a different color
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' vbg_data <- getVoomByGroup(bulk, group = "SubjectID") %>% 
+#'   plotVoomByGroup()
+#' }
+#'
+plotVoomByGroup <- function(vbg_data) {
+  ggplot(vbg_data, aes(x = .data$x, y = .data$y, color = .data$group)) +
+    geom_line() +
+    xlab("log2( count size + 0.5 )") +
+    ylab("Sqrt( standard deviation )") +
+    theme_classic()
+}
