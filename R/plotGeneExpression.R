@@ -103,19 +103,13 @@ plotGeneExpression <- function(gene,
 #'  "the results say JUNB has a significant increase in expression,
 #'   in Day 14 compared to day 0, does this seem to be true?"
 #' 
-#' Your contrast list/dataframe would look something like this:
-#' 
-#' | contrast_name |       numerators         |  denominators |
-#' |---------------|--------------------------|---------------|
-#' | Day14_v_Day0  | '(Intercept) + dayDay14' | '(Intercept)' |
-#' 
-#' You would specify your contrast as 'Day14_v_Day0'
+#' Your numerator/denominator specification would look something like:
+#'  numerator = '(Intercept) + dayDay14', denominator = '(Intercept)'
 #'
 #' @param gene Gene to plot
-#' @param contrast Name of contrast, must be present in `contrasts`
+#' @param numerator Full numerator of contrast, including all cancelled terms
+#' @param denominator Full denominator of contrast, including all cancelled terms
 #' @param coefficients Matrix of coefficients fit by model of your choice
-#' @param contrasts Dataframe of contrasts, with columns for contrast name, 
-#'  numerator, and denominator
 #' @inheritParams plotGeneExpression
 #'
 #' @returns A ggplot object
@@ -126,19 +120,25 @@ plotGeneExpression <- function(gene,
 #' @examples 
 #' \dontrun{ 
 #' 
-#'plotModelCoeffs(gene = 'TMEM204', 
-#'                coefficients = bulk$fit$coefficients,
-#'                counts = bulk$fit$EList$E,
-#'                metadata = bulk$dge$samples, 
-#'                numerator = 'grp3.P14', denominator = 'grp2.P14', 
-#'                grouping = 'grp',
-#'                subsetting = 'day', subsets = 'P14')
+#' contrast_matrix_expanded <- data.frame(
+#'   contrast_names = 'P14_grp3vgrp2',
+#'   numerators = '(Intercept) + grpgrp3',
+#'   denominators = '(Intercept)')
+#'   
+#' model_plot('JUN', 
+#'              counts = model_fit$EList$E, metadata = model_fit$targets,
+#'              grouping = 'grp.day',
+#'              subsetting = 'grp.day', subsets = c('grp2.P14', 'grp3.P14'),
+#'              coefficients = limma_fit$fit$coefficients,
+#'              numerator = '(Intercept) + grpgrp3',
+#'              denominator = '(Intercept)')
 #' }
-plotModelCoeffs <- function(gene, contrast, 
-                       counts, metadata, 
-                       grouping, groups, 
-                       subsetting, subsets,
-                       coefficients, contrasts) { 
+plotModelCoeffs <- function(gene, 
+                            numerator, denominator, 
+                            counts, metadata, 
+                            grouping, groups, 
+                            subsetting, subsets,
+                            coefficients) { 
   baseplot <- plotGeneExpression(gene,
                                  counts =  counts,
                                  metadata = metadata,
@@ -146,19 +146,19 @@ plotModelCoeffs <- function(gene, contrast,
                                  groups = groups,
                                  subsetting = subsetting,
                                  subsets = subsets)
-  contrast_coeffs <- contrasts[contrasts$contrast_names == contrast,]
-  contrast_coeffs <- .extract_coefficients(gene = gene, 
-                                          contrast = contrast_coeffs, 
-                                          coefficients = coefficients)
-  contrast_num <- round(contrast_coeffs$numerator, 2)
-  contrast_den <- round(contrast_coeffs$denominator, 2)
+  contrast_num <- round(.extract_coefficients(gene = gene, 
+                                              terms = numerator, 
+                                              coefficients = coefficients), 2)
+  contrast_den <- round(.extract_coefficients(gene = gene, 
+                                              terms = denominator, 
+                                              coefficients = coefficients), 2)
   contrast_line_num <- ggplot2::geom_hline(yintercept = contrast_num, linetype = 'dashed') 
   contrast_line_den <- ggplot2::geom_hline(yintercept = contrast_den, linetype = 'dashed') 
   
   arrow <- ggplot2::geom_segment(aes(x = 1.5, xend = 1.5, 
-                            y = contrast_den, 
-                            yend = contrast_num),
-                        arrow = ggplot2::arrow()) 
+                                     y = contrast_den, 
+                                     yend = contrast_num),
+                                 arrow = ggplot2::arrow()) 
   baseplot + 
     contrast_line_num +
     contrast_line_den +
@@ -168,28 +168,19 @@ plotModelCoeffs <- function(gene, contrast,
 
 .extract_coefficients <- function(gene,
                                   coefficients,
-                                  contrast) {
+                                  terms) {
   if (!gene %in% rownames(coefficients)) {
     stop('Gene not found in coefficients')
   }
   coefficients <- coefficients[gene,]
-  numerator_terms <- unlist(strsplit(contrast$numerators, '\\s*\\+\\s*', perl = TRUE))
-  numerator <- 0
-  for (term in numerator_terms) {
+  terms <- unlist(strsplit(terms, '\\s*\\+\\s*', perl = TRUE))
+  value <- 0
+  for (term in terms) {
     if (!term %in% names(coefficients)) {
-      stop(paste0("Error in numerator specification. Term '", term,
+      stop(paste0("Error: Term '", term,
                   "' not found in matrix of coefficients"))
     }
-    numerator <- numerator + unname(coefficients[term])
+    value <- value + unname(coefficients[term])
   }
-  denominator_terms <- unlist(strsplit(contrast$denominators, '\\s*\\+\\s*', perl = TRUE))
-  denominator <- 0
-  for (term in denominator_terms) {
-    if (!term %in% names(coefficients)) {
-      stop(paste0("Error in denominator specification. Term '", term,
-                  "' not found in matrix of coefficients"))
-    }
-    denominator <- denominator + unname(coefficients[term])
-  }
-  return(list(contrast_name = contrast$contrast_names, numerator = numerator, denominator = denominator))
+  return(value)
 }

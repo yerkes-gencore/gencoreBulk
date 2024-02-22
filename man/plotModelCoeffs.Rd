@@ -6,21 +6,23 @@
 \usage{
 plotModelCoeffs(
   gene,
-  contrast,
+  numerator,
+  denominator,
   counts,
   metadata,
   grouping,
   groups,
   subsetting,
   subsets,
-  coefficients,
-  contrasts
+  coefficients
 )
 }
 \arguments{
 \item{gene}{Gene to plot}
 
-\item{contrast}{Name of contrast, must be present in \code{contrasts}}
+\item{numerator}{Full numerator of contrast, including all cancelled terms}
+
+\item{denominator}{Full denominator of contrast, including all cancelled terms}
 
 \item{counts}{The expression data to plot}
 
@@ -35,9 +37,6 @@ plotModelCoeffs(
 \item{subsets}{Specification of levels to subset for}
 
 \item{coefficients}{Matrix of coefficients fit by model of your choice}
-
-\item{contrasts}{Dataframe of contrasts, with columns for contrast name,
-numerator, and denominator}
 }
 \value{
 A ggplot object
@@ -53,23 +52,23 @@ For example, if the question is:
 "the results say JUNB has a significant increase in expression,
 in Day 14 compared to day 0, does this seem to be true?"
 
-Your contrast list/dataframe would look something like this:\tabular{lll}{
-   contrast_name \tab numerators \tab denominators \cr
-   Day14_v_Day0 \tab '(Intercept) + dayDay14' \tab '(Intercept)' \cr
-}
-
-
-You would specify your contrast as 'Day14_v_Day0'
+Your numerator/denominator specification would look something like:
+numerator = '(Intercept) + dayDay14', denominator = '(Intercept)'
 }
 \examples{
 \dontrun{ 
 
-plotModelCoeffs(gene = 'TMEM204', 
-               coefficients = bulk$fit$coefficients,
-               counts = bulk$fit$EList$E,
-               metadata = bulk$dge$samples, 
-               numerator = 'grp3.P14', denominator = 'grp2.P14', 
-               grouping = 'grp',
-               subsetting = 'day', subsets = 'P14')
+contrast_matrix_expanded <- data.frame(
+  contrast_names = 'P14_grp3vgrp2',
+  numerators = '(Intercept) + grpgrp3',
+  denominators = '(Intercept)')
+  
+model_plot('JUN', 
+             counts = model_fit$EList$E, metadata = model_fit$targets,
+             grouping = 'grp.day',
+             subsetting = 'grp.day', subsets = c('grp2.P14', 'grp3.P14'),
+             coefficients = limma_fit$fit$coefficients,
+             numerator = '(Intercept) + grpgrp3',
+             denominator = '(Intercept)')
 }
 }
