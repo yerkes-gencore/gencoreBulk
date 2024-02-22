@@ -58,17 +58,12 @@ numerator = '(Intercept) + dayDay14', denominator = '(Intercept)'
 \examples{
 \dontrun{ 
 
-contrast_matrix_expanded <- data.frame(
-  contrast_names = 'P14_grp3vgrp2',
-  numerators = '(Intercept) + grpgrp3',
-  denominators = '(Intercept)')
-  
-model_plot('JUN', 
-             counts = model_fit$EList$E, metadata = model_fit$targets,
-             grouping = 'grp.day',
-             subsetting = 'grp.day', subsets = c('grp2.P14', 'grp3.P14'),
-             coefficients = limma_fit$fit$coefficients,
-             numerator = '(Intercept) + grpgrp3',
-             denominator = '(Intercept)')
+plotModelCoeffs(gene = 'EZR', 
+                coefficients = bulk$fit$coefficients,
+                counts = bulk$fit$EList$E,
+                metadata = bulk$dge$samples, 
+                numerator = 'grp3.P14', denominator = 'grp2.P14', 
+                grouping = 'grp',
+                subsetting = 'day', subsets = 'P14')
 }
 }
