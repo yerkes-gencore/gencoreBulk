@@ -9,7 +9,7 @@
 #' @param counts The expression data to plot
 #' @param metadata The metadata to associate with the counts data
 #' @param grouping Variable to group expression by. Must be a column of `metadata`
-#' @param groups 
+#' @param groups Optional specification of level ordering for grouping var
 #' @param boxplot Boolean, plot `geom_boxplot`?
 #' @param jitter Boolean, plot `geom_jitter`?
 #' @param axis_text_x Option to modify X axis text. Default rotates labels 90
@@ -26,6 +26,10 @@
 #' 
 #'   ## With a limma model fit
 #'   plotGeneExpression('MAMU-A', counts = model_fit$EList$E, metadata = model_fit$targets, grouping = 'groupIDs')
+#'   
+#'   ## With a DESeq model
+#'   plotGeneExpression('MAMU-A', counts = assay(assays(analysis$dds)$rld), 
+#'                      metadata = colData(analysis$dds), grouping = 'groupIDs')
 #' }
 #' 
 plotGeneExpression <- function(gene,

@@ -20,7 +20,7 @@ plotGeneExpression(
 
 \item{grouping}{Variable to group expression by. Must be a column of \code{metadata}}
 
-\item{groups}{}
+\item{groups}{Optional specification of level ordering for grouping var}
 
 \item{counts}{The expression data to plot}
 
@@ -47,6 +47,10 @@ as necessary, but it can still be used as a quick check.
 
   ## With a limma model fit
   plotGeneExpression('MAMU-A', counts = model_fit$EList$E, metadata = model_fit$targets, grouping = 'groupIDs')
+  
+  ## With a DESeq model
+  plotGeneExpression('MAMU-A', counts = assay(assays(analysis$dds)$rld), 
+                     metadata = colData(analysis$dds), grouping = 'groupIDs')
 }
 
 }
