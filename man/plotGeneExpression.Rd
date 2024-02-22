@@ -10,6 +10,8 @@ plotGeneExpression(
   groups,
   counts,
   metadata,
+  subsetting,
+  subsets,
   boxplot = TRUE,
   jitter = TRUE,
   axis_text_x = element_text(angle = 90, vjust = 0.5, hjust = 1)
@@ -25,6 +27,10 @@ plotGeneExpression(
 \item{counts}{The expression data to plot}
 
 \item{metadata}{The metadata to associate with the counts data}
+
+\item{subsetting}{Optional variable to subset expression by. Must be a column of \code{metadata}}
+
+\item{subsets}{Specification of levels to subset for}
 
 \item{boxplot}{Boolean, plot \code{geom_boxplot}?}
 
@@ -46,11 +52,12 @@ as necessary, but it can still be used as a quick check.
 \dontrun{
 
   ## With a limma model fit
-  plotGeneExpression('MAMU-A', counts = model_fit$EList$E, metadata = model_fit$targets, grouping = 'groupIDs')
+  plotGeneExpression('MAMU-A', counts = model_fit$EList$E,
+                      metadata = model_fit$targets, grouping = 'groupIDs')
   
   ## With a DESeq model
   plotGeneExpression('MAMU-A', counts = assay(assays(analysis$dds)$rld), 
-                     metadata = colData(analysis$dds), grouping = 'groupIDs')
+                      metadata = colData(analysis$dds), grouping = 'groupIDs')
 }
 
 }
