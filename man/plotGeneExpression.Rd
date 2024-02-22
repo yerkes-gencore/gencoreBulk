@@ -47,6 +47,9 @@ Returns a simple ggplot of gene expression, optionally with jitter or
 boxplots overlayed. These are optional in case you want to do other
 aesthetics. This is meant to be minimal so you can adjust the aesthetics
 as necessary, but it can still be used as a quick check.
+
+You can subset data using the \code{subsetting} and \code{subsets} arguments to focus
+the plotting.
 }
 \examples{
 \dontrun{
