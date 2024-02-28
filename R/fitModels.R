@@ -57,10 +57,10 @@ fitVoomLm <- function(bulkObj, contr.matrix, block = NULL, sample.weights = TRUE
                                     var.design = var.design,
                                     var.group = var.group,
                                     plot = plotVoom)
-  bulkObj$contrasts <- limma::contrasts.fit(bulkObj$fit, contrasts = contr.matrix)
-  bulkObj$contrasts <- limma::eBayes(bulkObj$contrasts, robust=TRUE)
-  limma::plotSA(bulkObj$contrasts, main="Final model: Mean-variance trend")
-  bulkObj$de <- limma::decideTests(bulkObj$contrasts, lfc = 0)
+  bulkObj$fit.contr <- limma::contrasts.fit(bulkObj$fit, contrasts = contr.matrix)
+  bulkObj$fit.contr <- limma::eBayes(bulkObj$fit.contr, robust=TRUE)
+  limma::plotSA(bulkObj$fit.contr, main="Final model: Mean-variance trend")
+  bulkObj$de <- limma::decideTests(bulkObj$fit.contr, lfc = 0)
   return(bulkObj)
 }
 
