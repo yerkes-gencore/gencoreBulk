@@ -7,7 +7,11 @@
 plotGeneExpression(
   gene,
   grouping,
-  data = SummarizedExperiment::assays(analysis$dds)$rld,
+  groups,
+  counts,
+  metadata,
+  subsetting,
+  subsets,
   boxplot = TRUE,
   jitter = TRUE,
   axis_text_x = element_text(angle = 90, vjust = 0.5, hjust = 1)
@@ -16,10 +20,17 @@ plotGeneExpression(
 \arguments{
 \item{gene}{Gene to plot expression for}
 
-\item{grouping}{Variable to group expression by. Must be a column of \code{data@colData}}
+\item{grouping}{Variable to group expression by. Must be a column of \code{metadata}}
 
-\item{data}{A DESeqDataSet object. Use this argument to select specific assays
-to plot. The default is \code{assays(analysis$dds)$rld} (assumed to be the rlog transform).}
+\item{groups}{Optional specification of level ordering for grouping var}
+
+\item{counts}{The expression data to plot}
+
+\item{metadata}{The metadata to associate with the counts data}
+
+\item{subsetting}{Optional variable to subset expression by. Must be a column of \code{metadata}}
+
+\item{subsets}{Specification of levels to subset for}
 
 \item{boxplot}{Boolean, plot \code{geom_boxplot}?}
 
@@ -36,11 +47,20 @@ Returns a simple ggplot of gene expression, optionally with jitter or
 boxplots overlayed. These are optional in case you want to do other
 aesthetics. This is meant to be minimal so you can adjust the aesthetics
 as necessary, but it can still be used as a quick check.
+
+You can subset data using the \code{subsetting} and \code{subsets} arguments to focus
+the plotting.
 }
 \examples{
 \dontrun{
-## my object is called dds_full, so I have to manually provide data
-plotGeneExpression('MAMU-A', grouping = 'groupIDs', data = assays(dds_full)$rld)
+
+  ## With a limma model fit
+  plotGeneExpression('MAMU-A', counts = model_fit$EList$E,
+                      metadata = model_fit$targets, grouping = 'groupIDs')
+  
+  ## With a DESeq model
+  plotGeneExpression('MAMU-A', counts = assay(assays(analysis$dds)$rld), 
+                      metadata = colData(analysis$dds), grouping = 'groupIDs')
 }
 
 }
