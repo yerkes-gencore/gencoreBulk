@@ -89,93 +89,86 @@ plotGeneExpression <- function(gene,
     ggplot2::theme(axis.text.x = axis_text_x)
 }
 
-
-
-
-#' Plot the results of a model fit 
+#' Create arrows for coefficients from model fit
 #' 
-#' Plots the expression, coefficients, and estimated change for a single gene and
-#' contrast. You have to pass in a contrasts dataframe (or list) and specify which 
-#' contrast to use. See the example for details. The rest of the arguments get 
-#' passed to `plotGeneExpression`. 
-#' 
-#' For example, if the question is:
-#'  "the results say JUNB has a significant increase in expression,
-#'   in Day 14 compared to day 0, does this seem to be true?"
-#' 
-#' Your numerator/denominator specification would look something like:
-#'  numerator = '(Intercept) + dayDay14', denominator = '(Intercept)'
+#' Extracts coefficients from a matrix based on the gene and terms of interest.
+#' Creates a dataframe for a geom_segment to be added to a plot like that returned
+#' from `gencoreBulk::plotGeneExpression()`
 #'
 #' @param gene Gene to plot
-#' @param numerator Full numerator of contrast, including all cancelled terms
-#' @param denominator Full denominator of contrast, including all cancelled terms
-#' @param coefficients Matrix of coefficients fit by model of your choice
-#' @inheritParams plotGeneExpression
+#' @param expression Character vector of a contrast expression,
+#'  consisting of terms present in `coefficients` added or subtracted together
+#' @param coefficients Matrix of coefficients from model fit
+#' @param data_only Whether to return a dataframe instead of a ggplot object. 
+#'  Default FALSE.
 #'
-#' @returns A ggplot object
+#' @returns A ggplot2::geom_segment if data_only = FALSE, else a data.frame
 #' @export
-#' 
-#' @import ggplot2
 #'
 #' @examples 
-#' \dontrun{ 
+#' \dontrun{
+#'  plotGeneExpression(gene = 'JUN', 
+#'                    counts = model_fit$EList$E,
+#'                    metadata = model_fit$targets,
+#'                    grouping = 'grp',
+#'                    subsetting = 'day', subsets = 'D28') +
+#'  plotModelCoeffs(gene = 'JUN',
+#'                  expr = "(Intercept) + dayD28 + grpgrp3 + dayD28:grpgrp3",
+#'                  coefficients = model_fit$coefficients)  
+#'                  
+#'  ## Or you can return the data for manual plotting
+#'  arrow_coords <- plotModelCoeffs(gene = 'JUN',
+#'                                  "(Intercept) + dayD28 + grpgrp3 + dayD28:grpgrp3",
+#'                                  coefficients = model_fit$coefficients, 
+#'                                  data_only = TRUE)  
+#'  ## Can edit values here if desired, such as X coordinates
+#'  ## arrow_coords$x = 0.5
 #' 
-#' plotModelCoeffs(gene = 'EZR', 
-#'                 coefficients = bulk$fit$coefficients,
-#'                 counts = bulk$fit$EList$E,
-#'                 metadata = bulk$dge$samples, 
-#'                 numerator = 'grp3.P14', denominator = 'grp2.P14', 
+#'  plotGeneExpression(gene = 'JUN', 
+#'                 counts = model_fit$EList$E,
+#'                 metadata = model_fit$targets,
 #'                 grouping = 'grp',
-#'                 subsetting = 'day', subsets = 'P14')
+#'                 subsetting = 'day', subsets = 'D28') +
+#'  ## Then manually create the arrows
+#'    ggplot2::geom_segment(data = arrow_coords, 
+#'                          aes(x = x,
+#'                              xend = x,
+#'                              y = y, 
+#'                              yend = yend,
+#'                              color = terms),
+#'                          arrow = ggplot2::arrow()) 
 #' }
-plotModelCoeffs <- function(gene, 
-                            numerator, denominator, 
-                            counts, metadata, 
-                            grouping, groups, 
-                            subsetting, subsets,
-                            coefficients) { 
-  baseplot <- plotGeneExpression(gene,
-                                 counts =  counts,
-                                 metadata = metadata,
-                                 grouping = grouping,
-                                 groups = groups,
-                                 subsetting = subsetting,
-                                 subsets = subsets)
-  contrast_num <- round(.extract_coefficients(gene = gene, 
-                                              terms = numerator, 
-                                              coefficients = coefficients), 2)
-  contrast_den <- round(.extract_coefficients(gene = gene, 
-                                              terms = denominator, 
-                                              coefficients = coefficients), 2)
-  contrast_line_num <- ggplot2::geom_hline(yintercept = contrast_num, linetype = 'dashed') 
-  contrast_line_den <- ggplot2::geom_hline(yintercept = contrast_den, linetype = 'dashed') 
-  
-  arrow <- ggplot2::geom_segment(aes(x = 1.5, xend = 1.5, 
-                                     y = contrast_den, 
-                                     yend = contrast_num),
-                                 arrow = ggplot2::arrow()) 
-  baseplot + 
-    contrast_line_num +
-    contrast_line_den +
-    arrow +
-    ggplot2::scale_y_continuous(breaks = c(contrast_den, contrast_num))
+plotModelCoeffs <- function(gene,
+                            expression,
+                            coefficients,
+                            data_only = FALSE) { 
+  expression <- .substitute_terms(expression, coefficients[gene,])
+  rt <- cumsum(expression$dict)
+  arrow_coords <- data.frame(terms = factor(names(rt), levels = names(rt)),
+                             y = c(0, rt[-length(rt)]), yend = rt,
+                             x = seq(1.4, 1.6, length.out = length(rt)))
+  if (data_only) {
+    return(arrow_coords)
+  }
+  ggplot2::geom_segment(data = arrow_coords, 
+                        aes(x = .data[['x']],
+                            xend = .data[['x']],
+                            y = .data[['y']], 
+                            yend = .data[['yend']],
+                            color = .data[['terms']]),
+                        arrow = ggplot2::arrow()) 
 }
 
-.extract_coefficients <- function(gene,
-                                  coefficients,
-                                  terms) {
-  if (!gene %in% rownames(coefficients)) {
-    stop('Gene not found in coefficients')
-  }
-  coefficients <- coefficients[gene,]
-  terms <- unlist(strsplit(terms, '\\s*\\+\\s*', perl = TRUE))
-  value <- 0
+.substitute_terms <- function(formula, value_list) {
+  terms <- unlist(strsplit(as.character(formula), "[+-]"))
+  term_dict <- list()
   for (term in terms) {
-    if (!term %in% names(coefficients)) {
-      stop(paste0("Error: Term '", term,
-                  "' not found in matrix of coefficients"))
+    term <- trimws(term)
+    if (term %in% names(value_list)) {
+      value <- value_list[[term]]
+      formula <- gsub(term, value, formula, fixed = TRUE)
+      term_dict[[term]] <- as.numeric(value)
     }
-    value <- value + unname(coefficients[term])
   }
-  return(value)
+  return(list(expr = formula, dict = term_dict))
 }
