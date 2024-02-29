@@ -2,68 +2,60 @@
 % Please edit documentation in R/plotGeneExpression.R
 \name{plotModelCoeffs}
 \alias{plotModelCoeffs}
-\title{Plot the results of a model fit}
+\title{Create arrows for coefficients from model fit}
 \usage{
-plotModelCoeffs(
-  gene,
-  numerator,
-  denominator,
-  counts,
-  metadata,
-  grouping,
-  groups,
-  subsetting,
-  subsets,
-  coefficients
-)
+plotModelCoeffs(gene, expression, coefficients, data_only = FALSE)
 }
 \arguments{
 \item{gene}{Gene to plot}
 
-\item{numerator}{Full numerator of contrast, including all cancelled terms}
+\item{expression}{Character vector of a contrast expression,
+consisting of terms present in \code{coefficients} added or subtracted together}
 
-\item{denominator}{Full denominator of contrast, including all cancelled terms}
+\item{coefficients}{Matrix of coefficients from model fit}
 
-\item{counts}{The expression data to plot}
-
-\item{metadata}{The metadata to associate with the counts data}
-
-\item{grouping}{Variable to group expression by. Must be a column of \code{metadata}}
-
-\item{groups}{Optional specification of level ordering for grouping var}
-
-\item{subsetting}{Optional variable to subset expression by. Must be a column of \code{metadata}}
-
-\item{subsets}{Specification of levels to subset for}
-
-\item{coefficients}{Matrix of coefficients fit by model of your choice}
+\item{data_only}{Whether to return a dataframe instead of a ggplot object.
+Default FALSE.}
 }
 \value{
-A ggplot object
+A ggplot2::geom_segment if data_only = FALSE, else a data.frame
 }
 \description{
-Plots the expression, coefficients, and estimated change for a single gene and
-contrast. You have to pass in a contrasts dataframe (or list) and specify which
-contrast to use. See the example for details. The rest of the arguments get
-passed to \code{plotGeneExpression}.
-}
-\details{
-For example, if the question is:
-"the results say JUNB has a significant increase in expression,
-in Day 14 compared to day 0, does this seem to be true?"
-
-Your numerator/denominator specification would look something like:
-numerator = '(Intercept) + dayDay14', denominator = '(Intercept)'
+Extracts coefficients from a matrix based on the gene and terms of interest.
+Creates a dataframe for a geom_segment to be added to a plot like that returned
+from \code{gencoreBulk::plotGeneExpression()}
 }
 \examples{
-\dontrun{ 
+\dontrun{
+ plotGeneExpression(gene = 'JUN', 
+                   counts = model_fit$EList$E,
+                   metadata = model_fit$targets,
+                   grouping = 'grp',
+                   subsetting = 'day', subsets = 'D28') +
+ plotModelCoeffs(gene = 'JUN',
+                 expr = "(Intercept) + dayD28 + grpgrp3 + dayD28:grpgrp3",
+                 coefficients = model_fit$coefficients)  
+                 
+ ## Or you can return the data for manual plotting
+ arrow_coords <- plotModelCoeffs(gene = 'JUN',
+                                 "(Intercept) + dayD28 + grpgrp3 + dayD28:grpgrp3",
+                                 coefficients = model_fit$coefficients, 
+                                 data_only = TRUE)  
+ ## Can edit values here if desired, such as X coordinates
+ ## arrow_coords$x = 0.5
 
-plotModelCoeffs(gene = 'EZR', 
-                coefficients = bulk$fit$coefficients,
-                counts = bulk$fit$EList$E,
-                metadata = bulk$dge$samples, 
-                numerator = 'grp3.P14', denominator = 'grp2.P14', 
+ plotGeneExpression(gene = 'JUN', 
+                counts = model_fit$EList$E,
+                metadata = model_fit$targets,
                 grouping = 'grp',
-                subsetting = 'day', subsets = 'P14')
+                subsetting = 'day', subsets = 'D28') +
+ ## Then manually create the arrows
+   ggplot2::geom_segment(data = arrow_coords, 
+                         aes(x = x,
+                             xend = x,
+                             y = y, 
+                             yend = yend,
+                             color = terms),
+                         arrow = ggplot2::arrow()) 
 }
 }
