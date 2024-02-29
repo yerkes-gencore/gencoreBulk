@@ -85,8 +85,12 @@ plotGeneExpression <- function(gene,
     (if (boxplot) { ggplot2::geom_boxplot(outlier.color = if (jitter) {NA} else {'black'}) }) +
     (if (jitter) { ggplot2::geom_jitter() }) +
     ggplot2::theme_bw() +
-    ggplot2::labs(x = 'Group', y = 'Expression', main = gene) +
-    ggplot2::theme(axis.text.x = axis_text_x)
+    ggplot2::labs(x = 'Group', y = 'Expression', title = gene, 
+                  caption = (if (!missing(subsetting)) {
+                    paste0('Subsetting data on variable ', subsetting, 
+                           ' for value(s) ', paste0(subsets, collapse = ', '))
+                    } else {NULL})) +
+    ggplot2::theme(axis.text.x = axis_text_x) 
 }
 
 #' Create arrows for coefficients from model fit
