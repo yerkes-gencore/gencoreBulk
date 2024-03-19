@@ -80,6 +80,7 @@ plotGeneExpression <- function(gene,
       stop('All groups not found in grouping variable of metadata')
     }
     plotdata$grouping <- factor(plotdata$grouping, levels = groups)
+    plotdata <- plotdata[!is.na(plotdata$grouping),]
   }
   ggplot2::ggplot(plotdata, aes(x=grouping, y=.data[['Gene']])) + 
     (if (boxplot) { ggplot2::geom_boxplot(outlier.color = if (jitter) {NA} else {'black'}) }) +
