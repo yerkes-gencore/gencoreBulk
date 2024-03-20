@@ -108,7 +108,7 @@ plotGeneExpression <- function(gene,
 #'  Default FALSE.
 #'
 #' @returns A ggplot2::geom_segment if data_only = FALSE, else a data.frame
-#' @export
+#' 
 #'
 #' @examples 
 #' \dontrun{
@@ -165,15 +165,17 @@ plotModelCoeffs <- function(gene,
 }
 
 .substitute_terms <- function(formula, value_list) {
-  terms <- unlist(strsplit(as.character(formula), "[+-]"))
+  # terms <- unlist(strsplit(as.character(formula), "[+-]"))
   term_dict <- list()
-  for (term in terms) {
-    term <- trimws(term)
-    if (term %in% names(value_list)) {
-      value <- value_list[[term]]
-      formula <- gsub(term, value, formula, fixed = TRUE)
-      term_dict[[term]] <- as.numeric(value)
+  expr <- formula
+  for (term in names(value_list)) {
+    value <- value_list[[term]]
+    # term_dict[[term]] <- as.numeric(value)
+    pattern <- paste0('\\s+',term,'\\s+')
+    if (grepl(pattern, expr)) {
+      term_dict[term] <- as.numeric(value)
     }
+    expr <- gsub(pattern, paste0(' ',value,' '), expr)
   }
-  return(list(expr = formula, dict = term_dict))
+  return(list(expr = expr, dict = term_dict))
 }
