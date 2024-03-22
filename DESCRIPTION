@@ -35,6 +35,9 @@ Imports:
     SummarizedExperiment,
     tibble,
     tidyr
+Suggests:
+    Seurat,
+    SeuratObject
 biocViews: ComplexHeatmap, EnhancedVolcano, DESeq2, SummarizedExperiment, fgsea
 Encoding: UTF-8
 Roxygen: list(markdown=TRUE)
