@@ -125,6 +125,7 @@ heatmapFromGenelist <- function(geneList,
       NULL
     }),
     column_gap = column_gap,
+    column_labels = column_labels,
     col = circlize::colorRamp2(c(scale_min, 0, scale_max), colors),
     ...
   )

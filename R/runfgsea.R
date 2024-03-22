@@ -8,6 +8,8 @@
 #' @param result A DESeqResults result object
 #' @param breakdown_pathway_names Attempt to split pathway names into source and
 #'  pathway for easier reading
+#' @param na_omit Bool, exclude genes with missing data in results? This checks
+#'  all values for NAs so be mindful of modified `result` objects
 #' @inheritParams fgsea::fgseaSimple
 #'
 #' @inherit fgsea::fgseaSimple return
@@ -25,8 +27,11 @@ runfgsea <- function(result,
                      nperm = 1000,
                      minSize = 10,
                      maxSize = 500,
-                     breakdown_pathway_names = FALSE) {
-  # result <- result %>% na.omit()
+                     breakdown_pathway_names = FALSE,
+                     na_omit = TRUE) {
+  if (na_omit) {
+    result <- result %>% na.omit() 
+  }
   fgsea_data <- result$stat
   names(fgsea_data) <- rownames(result)
   fgsea_data <- fgsea_data[!is.na(fgsea_data)]
