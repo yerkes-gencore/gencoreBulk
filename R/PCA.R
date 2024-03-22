@@ -20,8 +20,6 @@
 #'
 #' @import ggplot2
 #' @import ggrepel
-#' @importFrom stats prcomp
-#' @importFrom matrixStats rowVars
 #' @importFrom SummarizedExperiment assays assay
 #' @importFrom rlang .data
 #'
@@ -32,9 +30,8 @@ plotPCAFromConfig <- function(analysis,
                               size = 5,
                               pc.1 = 1,
                               pc.2 = 2) {
-  pca_data <- 
-  .pcaPlotGKT(assays(analysis$dds)$vst,
-    intgroup = names(colData(assays(analysis$dds)$vst)),
+  pcaPlotSimple(counts = assay(assays(analysis$dds)$vst),
+    metadata = colData(analysis$dds),
     xpc = pc.1, ypc = pc.2
   ) +
     geom_point(
@@ -85,36 +82,50 @@ plotPCAFromConfig <- function(analysis,
     theme(text = element_text(size = 10)) # , arrow=arrow(ends="last", type="closed", length=unit(0.1, "inches")))
 }
 
-.pcaDataGKT <- function(object, intgroup = "condition", ntop = 500) {
-  rv <- matrixStats::rowVars(assay(object))
+
+#' Simple base for PCA plot
+#' 
+#' Calculates PCA on counts data. Returns a ggplot object with the PCA data
+#' and associated metadata. No additional geoms are included, this is meant
+#' to be a blank template. You do need to provide metadata here so it can be 
+#' accessed with geoms you add to this output. 
+#'
+#' @param counts Expression data matrix. Colnames of counts should match rownames
+#'  of `metadata`
+#' @param metadata Dataframe of metadata to associate with counts data. Rownames
+#'  of metadata should match colnames of `counts`. 
+#' @param xpc Numeric, which PC to plot on the x axis. Default 1
+#' @param ypc Numeric, which PC to plot on the y axis. Default 2
+#' @param ntop Number of genes to include in PCA. Default 500
+#'
+#' @returns A ggplot object
+#' @export
+#' 
+#' @import ggplot2
+#' @importFrom stats prcomp
+#' @importFrom matrixStats rowVars
+#' @importFrom rlang .data
+#' 
+#'
+#' @examples 
+#' \dontrun {
+#' pcaPlot <- pcaPlotSimple(assay(assays(pbmc_subset)$vst), metadata = colData(pbmc_subset))
+#' 
+#' ## Manually adding geoms
+#' pcaPlot + geom_point(aes(color = Individual, shape=Timepoint)) 
+#' 
+#' }
+pcaPlotSimple <- function(counts, metadata, xpc = 1, ypc = 2, ntop = 500) {
+  rv <- matrixStats::rowVars(counts)
   select <- order(rv, decreasing = TRUE)[seq_len(min(
     ntop,
     length(rv)
   ))]
-  pca <- stats::prcomp(t(assay(object)[select, ]))
+  pca <- stats::prcomp(t(counts[select,]))
+  d <- merge(pca$x, metadata, by.x = 'row.names', by.y = 'row.names')
   percentVar <- pca$sdev^2 / sum(pca$sdev^2)
-  if (!all(intgroup %in% names(colData(object)))) {
-    stop("the argument 'intgroup' should specify columns of colData(dds)")
-  }
-  intgroup.df <- as.data.frame(colData(object)[, intgroup,
-    drop = FALSE
-  ])
-  group <- if (length(intgroup) > 1) {
-    factor(apply(intgroup.df, 1, paste, collapse = " : "))
-  } else {
-    colData(object)[[intgroup]]
-  }
-  d <- data.frame(pca$x,
-    group = group,
-    intgroup.df, name = colnames(object)
-  )
-  attr(d, "percentVar") <- percentVar
-  return(d)
-}
-
-.pcaPlotGKT <- function(object, intgroup = "condition", xpc = 1, ypc = 2, ntop = 500) {
-  d <- .pcaDataGKT(object, intgroup, ntop)
-  percentVar <- round(100 * attr(d, "percentVar"))
-  ggplot(d, aes_string(x = names(d)[xpc], y = names(d)[ypc])) +
-    labs(x = paste0(names(d)[xpc], ": ", percentVar[xpc], "% variance"), y = paste0(names(d)[ypc], ": ", percentVar[ypc], "% variance"))
+  percentVar <- round(100 * percentVar)
+  ggplot(d, aes(x = .data[[paste0('PC',xpc)]], y = .data[[paste0('PC',ypc)]])) +
+    labs(x = paste0('PC',xpc, ": ", percentVar[xpc], "% variance"), 
+         y = paste0('PC',ypc, ": ", percentVar[ypc], "% variance"))
 }
