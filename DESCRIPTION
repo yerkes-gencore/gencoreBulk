@@ -1,12 +1,10 @@
 Package: gencoreBulk
-Title: NPRC Genomics Core Bulk RNA Analysis Utilities
-Version: 0.2.1
-Date: 2024-03-22
-Author: person("Derrik", "Gratz", email = "derrik.gratz@gmail.com", role =
-    c("aut", "cre"), comment = c(ORCID = "0009-0002-5934-576X"))
-Maintainer: Derrik Gratz <dgratz@emory.edu>
-Description: A shared codebase for custom R functions we find useful for
-    bulk RNA analysis.
+Title: Bulk RNAseq Analysis Tools for the Emory NPRC Genomics Core
+Version: 0.2.0
+Authors@R: c(
+    person(given = "Derrik", family = "Gratz", email = "derrik.gratz@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0009-0002-5934-576X")),
+    person(given = "Micah", family = "Fletcher", email = "micahpfletcher@gmail.com", role = c("aut")))
+Description: This is an R package to facilitate (pseudo)bulk RNAseq analyses at the ENPRC Genomics Core.
 License: MIT + file LICENSE
 URL: https://github.com/yerkes-gencore/gencoreBulk
 Imports:
@@ -35,6 +33,9 @@ Imports:
     SummarizedExperiment,
     tibble,
     tidyr
+Suggests:
+    Seurat,
+    SeuratObject
 biocViews: ComplexHeatmap, EnhancedVolcano, DESeq2, SummarizedExperiment, fgsea
 Encoding: UTF-8
 Roxygen: list(markdown=TRUE)

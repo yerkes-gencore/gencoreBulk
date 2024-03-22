@@ -269,9 +269,9 @@
     },
     "MASS": {
       "Package": "MASS",
-      "Version": "7.3-60",
+      "Version": "7.3-58.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "grDevices",
@@ -280,7 +280,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "a56a6365b3fa73293ea8d084be0d9bb0"
+      "Hash": "762e1804143a332333c054759f89a706"
     },
     "Matrix": {
       "Package": "Matrix",
@@ -691,7 +691,7 @@
     },
     "edgeR": {
       "Package": "edgeR",
-      "Version": "4.0.2",
+      "Version": "4.0.16",
       "Source": "Bioconductor",
       "Repository": "Bioconductor 3.18",
       "Requirements": [
@@ -704,7 +704,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "228df78e7dd73bb1d21a8d369265d9d3"
+      "Hash": "a0405c7890708dcb53809d46758800f4"
     },
     "fansi": {
       "Package": "fansi",

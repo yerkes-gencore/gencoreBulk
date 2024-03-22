@@ -1,6 +1,9 @@
 #' @keywords internal
 "_PACKAGE"
 
+## Define global variables
+utils::globalVariables(c("."))
+
 ## usethis namespace: start
 #' @importFrom Biobase exprs
 #' @importFrom Biobase fData

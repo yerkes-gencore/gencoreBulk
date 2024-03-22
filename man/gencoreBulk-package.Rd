@@ -4,14 +4,23 @@
 \name{gencoreBulk-package}
 \alias{gencoreBulk}
 \alias{gencoreBulk-package}
-\title{gencoreBulk: NPRC Genomics Core Bulk RNA Analysis Utilities}
+\title{gencoreBulk: Bulk RNAseq Analysis Tools for the Emory NPRC Genomics Core}
 \description{
-A shared codebase for custom R functions we find useful for bulk RNA analysis.
+An R package to facilitate (pseudo)bulk RNAseq analyses at the ENPRC Genomics Core
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/yerkes-gencore/gencoreBulk}
+}
+
+}
+\author{
+\strong{Maintainer}: Derrik Gratz \email{derrik.gratz@gmail.com} (\href{https://orcid.org/0009-0002-5934-576X}{ORCID})
+
+Authors:
+\itemize{
+  \item Micah Fletcher \email{micahpfletcher@gmail.com}
 }
 
 }
