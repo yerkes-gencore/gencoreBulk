@@ -38,7 +38,7 @@ getTopNGenes <- function(result,
     tibble::rownames_to_column('Gene') %>%
     dplyr::arrange(.data$pvalue)
   if (exclude_ENS){
-    filtered_results <- filtered_results[grepl(pattern = ENS_pattern,
+    filtered_results <- filtered_results[!grepl(pattern = ENS_pattern,
                                                filtered_results$Gene),]
   }
   if (direction == 'mixed') {

@@ -10,7 +10,8 @@ runfgsea(
   nperm = 1000,
   minSize = 10,
   maxSize = 500,
-  breakdown_pathway_names = FALSE
+  breakdown_pathway_names = FALSE,
+  na_omit = TRUE
 )
 }
 \arguments{
@@ -26,6 +27,9 @@ runfgsea(
 
 \item{breakdown_pathway_names}{Attempt to split pathway names into source and
 pathway for easier reading}
+
+\item{na_omit}{Bool, exclude genes with missing data in results? This checks
+all values for NAs so be mindful of modified \code{result} objects}
 }
 \value{
 A table with GSEA results. Each row corresponds to a tested pathway.
