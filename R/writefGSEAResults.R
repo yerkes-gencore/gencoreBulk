@@ -31,8 +31,7 @@
 
 writefGSEAResults <- function(results,
                               sheet_names = names(results),
-                              output_name = paste0(analysis$analysis_config$analysis,
-                                                   "_GSEA_results.xlsx"),
+                              output_name = "GSEA_results.xlsx",
                               outdir = here::here('outputs')){
   outfile <- file.path(outdir, output_name)
   message(paste0('Writing results to ', outfile))
