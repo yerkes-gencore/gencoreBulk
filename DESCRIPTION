@@ -1,6 +1,6 @@
 Package: gencoreBulk
 Title: NPRC Genomics Core Bulk RNA Analysis Utilities
-Version: 0.2.1
+Version: 0.2.2
 Date: 2024-03-22
 Author: person("Derrik", "Gratz", email = "derrik.gratz@gmail.com", role =
     c("aut", "cre"), comment = c(ORCID = "0009-0002-5934-576X"))
