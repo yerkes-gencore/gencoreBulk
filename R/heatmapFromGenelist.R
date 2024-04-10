@@ -3,14 +3,13 @@
 #' Makes a heatmap of the given list of genes, separating samples slightly by
 #'  group variable. The heatmap will render samples in the order of colnames
 #'  in the provided data, and will be split by the metadata column specified.
-#'  Expression values will be normalized to the median of a specified group.
+#'  Normalization by groups or samples is no longer contained in this function.
+#'  See `gencoreBulk::normalizeCounts` for help on normalizing data for heatmaps.
 #'
 #'  If you want to reorder columns plotted, arrange the data passed into `data`.
+#'  See the examples
 #'
 #' @param geneList Character vector of genes to plot
-#' @param baseline_grouping Character, level of `colnames(colData(data))`
-#' @param baseline level of `baseline_grouping` in `colData(data)` used to calculate
-#'  median, or leave blank to use all samples to generate median
 #' @param data Object of class DESeqTransform
 #' @param slice_labels Optional labels for sliced columns
 #' @param colors vector of color values passed to colorRamp2, default is c("blue", "white", "red")
@@ -55,30 +54,32 @@
 #'
 #' @export
 heatmapFromGenelist <- function(geneList,
-                                baseline_grouping = NULL,
-                                baseline = NULL,
-                                column_split = NULL,
-                                slice_labels = NULL,
-                                colors = c("blue", "white", "red"),
-                                data = SummarizedExperiment::assays(analysis$dds)$rld,
-                                column_labels = colnames(data),
-                                slice_labels_rot = 90,
-                                box_width = unit(3.5, "mm"),
-                                box_height = unit(3.5, "mm"),
-                                width_buffer = unit(5, "mm"),
-                                height_buffer = unit(10, "mm"),
-                                column_title = " ",
-                                cluster_rows = FALSE,
-                                cluster_columns = FALSE,
-                                column_gap = unit(2, "mm"),
-                                scale_min = -2,
-                                scale_max = 2,
-                                heatmap_legend_param = list(
-                                  at = c(scale_min, 0, scale_max),
-                                  labels = c(scale_min,0,scale_max),
-                                  title = 'log2 fold\ndifference\nfrom\nmedian\nexpression'
-                                ),
-                                ...) {
+                                 data,
+                                 column_split = NULL,
+                                 slice_labels = NULL,
+                                 colors = c("blue", "white", "red"),
+                                 column_labels = colnames(data),
+                                 slice_labels_rot = 90,
+                                 box_width = unit(3.5, "mm"),
+                                 box_height = unit(3.5, "mm"),
+                                 width_buffer = unit(5, "mm"),
+                                 height_buffer = unit(10, "mm"),
+                                 column_title = " ",
+                                 cluster_rows = FALSE,
+                                 cluster_columns = FALSE,
+                                 column_gap = unit(2, "mm"),
+                                 scale_min = -2,
+                                 scale_max = 2,
+                                 heatmap_legend_param = list(
+                                   at = c(scale_min, 0, scale_max),
+                                   labels = c(scale_min,0,scale_max),
+                                   title = 'log2 fold\nchange'
+                                 ),
+                                 ...) {
+  if (inherits(data, 'DESeqTransform')) {
+    message('Converting DESeqTransform data into matrix')
+    data <- SummarizedExperiment::assay(data)
+  }
   duds <- geneList[!geneList %in% rownames(data)]
   if (length(duds) > 0){
     geneList <- geneList[geneList %in% rownames(data)]
@@ -88,45 +89,33 @@ heatmapFromGenelist <- function(geneList,
       message(paste0('Genes ', paste0(duds, collapse = ', '), ' not found in data'))
     }
   }
-  hmap <- data[geneList, ]
-  if (is.null(baseline_grouping) | is.null(baseline)) {
-    message('Basline grouping or baseline level not specified, using all samples
-            to generate median expression per gene')
-    baseline <- matrixStats::rowMedians(SummarizedExperiment::assay(hmap))
-  } else if (!baseline_grouping %in% colnames(colData(data))) {
-    stop("Argument 'baseline_grouping' should be in colData(data)")
-  } else if (!baseline %in% unique(colData(data)[[baseline_grouping]])) {
-    stop("Argument 'baseline' should be a level of 'baseline_grouping' in colData(data)")
-  } else{
-    baseline <- matrixStats::rowMedians(SummarizedExperiment::assay(hmap[, as.character(hmap@colData[[baseline_grouping]]) %in% baseline]))
-  }
-  hmap <- SummarizedExperiment::assay(hmap) - baseline
-  ComplexHeatmap::Heatmap(hmap,
-    heatmap_legend_param = heatmap_legend_param,
-    #border = "black",
-    width = ncol(hmap) * box_width + width_buffer,
-    height = nrow(hmap) * box_height + height_buffer,
-    #rect_gp = grid::gpar(color = "black"),
-    column_title = column_title,
-    cluster_rows = cluster_rows,
-    cluster_columns = cluster_columns,
-    column_split = column_split,
-    top_annotation = (if (!is.null(slice_labels)) {
-      if (is.null(column_split)) {
-        warning("Setting labels requires slices to also be set")
-      }
-      ComplexHeatmap::HeatmapAnnotation(foo = ComplexHeatmap::anno_block(
-        gp = gpar(col = NA),
-        labels = slice_labels,
-        labels_gp = gpar(col = "black", fontsize = 10),
-        labels_rot = slice_labels_rot, height = unit(2, "cm")
-      ))
-    } else {
-      NULL
-    }),
-    column_gap = column_gap,
-    column_labels = column_labels,
-    col = circlize::colorRamp2(c(scale_min, 0, scale_max), colors),
-    ...
+  data <- data[geneList, ]
+  ComplexHeatmap::Heatmap(data,
+                          heatmap_legend_param = heatmap_legend_param,
+                          #border = "black",
+                          width = ncol(data) * box_width + width_buffer,
+                          height = nrow(data) * box_height + height_buffer,
+                          #rect_gp = grid::gpar(color = "black"),
+                          column_title = column_title,
+                          cluster_rows = cluster_rows,
+                          cluster_columns = cluster_columns,
+                          column_split = column_split,
+                          top_annotation = (if (!is.null(slice_labels)) {
+                            if (is.null(column_split)) {
+                              warning("Setting labels requires slices to also be set")
+                            }
+                            ComplexHeatmap::HeatmapAnnotation(foo = ComplexHeatmap::anno_block(
+                              gp = gpar(col = NA),
+                              labels = slice_labels,
+                              labels_gp = gpar(col = "black", fontsize = 10),
+                              labels_rot = slice_labels_rot, height = unit(2, "cm")
+                            ))
+                          } else {
+                            NULL
+                          }),
+                          column_gap = column_gap,
+                          column_labels = column_labels,
+                          col = circlize::colorRamp2(c(scale_min, 0, scale_max), colors),
+                          ...
   )
 }
