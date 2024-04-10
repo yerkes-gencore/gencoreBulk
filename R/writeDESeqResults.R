@@ -7,6 +7,7 @@
 #' @param sheet_names List of names for sheets
 #' @param output_name Name of file
 #' @param outdir Location of file
+#' @param padj_col Name of column with adjusted p values. For filtering and sorting
 #' @param drop_NA Whether to exclude results with an adjusted p-value of `NA` 
 #'
 #' @return `NULL`
@@ -38,9 +39,9 @@
 #' }
 writeDESeqResults <- function(results,
                               sheet_names = names(results),
-                              output_name = paste0(analysis$analysis_config$analysis,
-                                                   "_DESeq2_results.xlsx"),
+                              output_name = "DEG_results.xlsx",
                               outdir = here::here('outputs'),
+                              padj_col = 'padj',
                               drop_NA = TRUE){
   outfile <- file.path(outdir, output_name)
   message(paste0('Writing results to ', outfile))
@@ -48,6 +49,7 @@ writeDESeqResults <- function(results,
   mapply(FUN = .addWorksheet_DESeqres,
          result=results,
          sheet_name=sheet_names,
+         padj_col = padj_col,
          MoreArgs = list(wb=wb,
                          drop_NA=drop_NA)
   )
@@ -57,14 +59,15 @@ writeDESeqResults <- function(results,
 .addWorksheet_DESeqres <- function(wb,
                                    result,
                                    sheet_name,
+                                   padj_col,
                                    drop_NA){
   if (nchar(sheet_name)>31){
     sheet_name <- substr(sheet_name,1,31)
   }
   if (drop_NA) {
-    result <- result[!is.na(result$padj),] 
+    result <- result[!is.na(result[[padj_col]]),] 
   }
-  result <- result[order(result$padj),]
+  result <- result[order(result[[padj_col]]),]
   openxlsx::addWorksheet(wb, sheet_name)
   openxlsx::writeData(wb,
             sheet=sheet_name,

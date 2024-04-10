@@ -7,8 +7,9 @@
 writeDESeqResults(
   results,
   sheet_names = names(results),
-  output_name = paste0(analysis$analysis_config$analysis, "_DESeq2_results.xlsx"),
+  output_name = "DEG_results.xlsx",
   outdir = here::here("outputs"),
+  padj_col = "padj",
   drop_NA = TRUE
 )
 }
@@ -20,6 +21,8 @@ writeDESeqResults(
 \item{output_name}{Name of file}
 
 \item{outdir}{Location of file}
+
+\item{padj_col}{Name of column with adjusted p values. For filtering and sorting}
 
 \item{drop_NA}{Whether to exclude results with an adjusted p-value of \code{NA}}
 }
