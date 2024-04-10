@@ -9,6 +9,7 @@ Description: A shared codebase for custom R functions we find useful for
     bulk RNA analysis.
 License: MIT + file LICENSE
 URL: https://github.com/yerkes-gencore/gencoreBulk
+biocViews:
 Imports:
     Biobase,
     circlize,
@@ -35,7 +36,9 @@ Imports:
     SummarizedExperiment,
     tibble,
     tidyr
-biocViews: ComplexHeatmap, EnhancedVolcano, DESeq2, SummarizedExperiment, fgsea
 Encoding: UTF-8
 Roxygen: list(markdown=TRUE)
 RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
