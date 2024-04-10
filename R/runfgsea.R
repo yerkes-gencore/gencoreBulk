@@ -17,6 +17,7 @@
 #'
 #' @importFrom fgsea fgseaSimple
 #' @importFrom stringr str_split
+#' @importFrom stats na.omit
 #' @examples
 #' \dontrun{
 #' runfgsea(results[[1]], gmt.file)
@@ -30,7 +31,7 @@ runfgsea <- function(result,
                      breakdown_pathway_names = FALSE,
                      na_omit = TRUE) {
   if (na_omit) {
-    result <- result %>% na.omit() 
+    result <- stats::na.omit(result) 
   }
   fgsea_data <- result$stat
   names(fgsea_data) <- rownames(result)
