@@ -108,13 +108,14 @@ plotPCAFromConfig <- function(analysis,
 #' 
 #'
 #' @examples 
-#' \dontrun {
+#' \dontrun{
 #' pcaPlot <- pcaPlotSimple(assay(assays(pbmc_subset)$vst), metadata = colData(pbmc_subset))
 #' 
 #' ## Manually adding geoms
 #' pcaPlot + geom_point(aes(color = Individual, shape=Timepoint)) 
 #' 
 #' }
+#' 
 pcaPlotSimple <- function(counts, metadata, xpc = 1, ypc = 2, ntop = 500) {
   if (colnames(counts) != rownames(metadata)) {
     stop('Colnames of counts does not match rownames of metadata')

@@ -29,11 +29,12 @@ to be a blank template. You do need to provide metadata here so it can be
 accessed with geoms you add to this output.
 }
 \examples{
-\dontrun {
+\dontrun{
 pcaPlot <- pcaPlotSimple(assay(assays(pbmc_subset)$vst), metadata = colData(pbmc_subset))
 
 ## Manually adding geoms
 pcaPlot + geom_point(aes(color = Individual, shape=Timepoint)) 
 
 }
+
 }
