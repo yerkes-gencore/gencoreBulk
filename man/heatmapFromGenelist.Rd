@@ -30,7 +30,7 @@ heatmapFromGenelist(
 \arguments{
 \item{geneList}{Character vector of genes to plot}
 
-\item{data}{Object of class DESeqTransform}
+\item{data}{Matrix of processed counts}
 
 \item{column_split}{Split on columns. For heatmap splitting, please refer to \url{https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html#heatmap-split} .}
 
@@ -161,9 +161,18 @@ See the examples
 }
 \examples{
 \dontrun{
+
+## Normalize data for plotting
+data_to_plot <- normalizeCountsForHeatmapByIndividual(assay(assays(obj.pbmc)$rld),
+  obj.pbmc@colData,
+  group_var = 'Timepoint', baseline = 'pre', 
+  individual_var = 'Individual',
+  remove_baseline = FALSE)
+  
 ## Simple call
 heatmapFromGenelist(
   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+  data_to_plot,
   baseline_grouping = "Group",
   baseline = "Cont"
 )
@@ -171,6 +180,7 @@ heatmapFromGenelist(
 ## run with custom reordering of data and labeled slices
 heatmapFromGenelist(
   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+  data_to_plot,
   baseline_grouping = "Group",
   baseline = "Cont",
   column_split = c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3)),

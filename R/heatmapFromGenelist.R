@@ -10,7 +10,7 @@
 #'  See the examples
 #'
 #' @param geneList Character vector of genes to plot
-#' @param data Object of class DESeqTransform
+#' @param data Matrix of processed counts
 #' @param slice_labels Optional labels for sliced columns
 #' @param colors vector of color values passed to colorRamp2, default is c("blue", "white", "red")
 #' @param slice_labels_rot Rotation angle of `slice_labels`
@@ -34,9 +34,18 @@
 #'
 #' @examples
 #' \dontrun{
+#' 
+#' ## Normalize data for plotting
+#' data_to_plot <- normalizeCountsForHeatmapByIndividual(assay(assays(obj.pbmc)$rld),
+#'   obj.pbmc@colData,
+#'   group_var = 'Timepoint', baseline = 'pre', 
+#'   individual_var = 'Individual',
+#'   remove_baseline = FALSE)
+#'   
 #' ## Simple call
 #' heatmapFromGenelist(
 #'   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+#'   data_to_plot,
 #'   baseline_grouping = "Group",
 #'   baseline = "Cont"
 #' )
@@ -44,6 +53,7 @@
 #' ## run with custom reordering of data and labeled slices
 #' heatmapFromGenelist(
 #'   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+#'   data_to_plot,
 #'   baseline_grouping = "Group",
 #'   baseline = "Cont",
 #'   column_split = c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3)),
