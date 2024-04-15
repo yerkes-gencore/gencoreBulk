@@ -104,5 +104,5 @@ gseaDotplot_joint <- function(gsea_results,
                  range=c(1,8),
                  breaks=-log10(c(0.1,0.01,0.001,0.0001)),
                  labels=c(0.1,0.01,0.001,0.0001)) +
-    geom_text(na.rm = TRUE, color = 'black', size = 3)
+    geom_text(na.rm = TRUE, color = 'white', size = 3)
 }

@@ -6,12 +6,10 @@
 \usage{
 heatmapFromGenelist(
   geneList,
-  baseline_grouping = NULL,
-  baseline = NULL,
+  data,
   column_split = NULL,
   slice_labels = NULL,
   colors = c("blue", "white", "red"),
-  data = SummarizedExperiment::assays(analysis$dds)$rld,
   column_labels = colnames(data),
   slice_labels_rot = 90,
   box_width = unit(3.5, "mm"),
@@ -25,25 +23,20 @@ heatmapFromGenelist(
   scale_min = -2,
   scale_max = 2,
   heatmap_legend_param = list(at = c(scale_min, 0, scale_max), labels = c(scale_min, 0,
-    scale_max), title = "log2 fold\\ndifference\\nfrom\\nmedian\\nexpression"),
+    scale_max), title = "log2 fold\\nchange"),
   ...
 )
 }
 \arguments{
 \item{geneList}{Character vector of genes to plot}
 
-\item{baseline_grouping}{Character, level of \code{colnames(colData(data))}}
-
-\item{baseline}{level of \code{baseline_grouping} in \code{colData(data)} used to calculate
-median, or leave blank to use all samples to generate median}
+\item{data}{Matrix of processed counts}
 
 \item{column_split}{Split on columns. For heatmap splitting, please refer to \url{https://jokergoo.github.io/ComplexHeatmap-reference/book/a-single-heatmap.html#heatmap-split} .}
 
 \item{slice_labels}{Optional labels for sliced columns}
 
 \item{colors}{vector of color values passed to colorRamp2, default is c("blue", "white", "red")}
-
-\item{data}{Object of class DESeqTransform}
 
 \item{column_labels}{Optional column labels which are put as column names in the heatmap.}
 
@@ -159,16 +152,27 @@ A \code{\link[ComplexHeatmap]{Heatmap-class}} object.
 Makes a heatmap of the given list of genes, separating samples slightly by
 group variable. The heatmap will render samples in the order of colnames
 in the provided data, and will be split by the metadata column specified.
-Expression values will be normalized to the median of a specified group.
+Normalization by groups or samples is no longer contained in this function.
+See \code{gencoreBulk::normalizeCounts} for help on normalizing data for heatmaps.
 }
 \details{
 If you want to reorder columns plotted, arrange the data passed into \code{data}.
+See the examples
 }
 \examples{
 \dontrun{
+
+## Normalize data for plotting
+data_to_plot <- normalizeCountsForHeatmapByIndividual(assay(assays(obj.pbmc)$rld),
+  obj.pbmc@colData,
+  group_var = 'Timepoint', baseline = 'pre', 
+  individual_var = 'Individual',
+  remove_baseline = FALSE)
+  
 ## Simple call
 heatmapFromGenelist(
   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+  data_to_plot,
   baseline_grouping = "Group",
   baseline = "Cont"
 )
@@ -176,6 +180,7 @@ heatmapFromGenelist(
 ## run with custom reordering of data and labeled slices
 heatmapFromGenelist(
   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
+  data_to_plot,
   baseline_grouping = "Group",
   baseline = "Cont",
   column_split = c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3)),

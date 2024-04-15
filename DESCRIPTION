@@ -1,6 +1,6 @@
 Package: gencoreBulk
 Title: NPRC Genomics Core Bulk RNA Analysis Utilities
-Version: 0.2.1
+Version: 0.2.2
 Date: 2024-03-22
 Author: person("Derrik", "Gratz", email = "derrik.gratz@gmail.com", role =
     c("aut", "cre"), comment = c(ORCID = "0009-0002-5934-576X"))
@@ -9,6 +9,7 @@ Description: A shared codebase for custom R functions we find useful for
     bulk RNA analysis.
 License: MIT + file LICENSE
 URL: https://github.com/yerkes-gencore/gencoreBulk
+biocViews:
 Imports:
     Biobase,
     circlize,
@@ -35,7 +36,9 @@ Imports:
     SummarizedExperiment,
     tibble,
     tidyr
-biocViews: ComplexHeatmap, EnhancedVolcano, DESeq2, SummarizedExperiment, fgsea
 Encoding: UTF-8
 Roxygen: list(markdown=TRUE)
 RoxygenNote: 7.2.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
