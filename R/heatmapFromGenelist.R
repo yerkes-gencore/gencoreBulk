@@ -99,7 +99,7 @@ heatmapFromGenelist <- function(geneList,
       message(paste0('Genes ', paste0(duds, collapse = ', '), ' not found in data'))
     }
   }
-  data <- data[geneList, ]
+  data <- data[geneList,,drop=FALSE]
   ComplexHeatmap::Heatmap(data,
                           heatmap_legend_param = heatmap_legend_param,
                           #border = "black",
