@@ -116,6 +116,6 @@ gseaDotplot_single <- function(result,
       labels = c(0.5, 0.1, 0.01, 0.001)
     ) +
     scale_y_discrete(limits = toppaths$name) +
-    geom_text(na.rm = TRUE, color = 'black', size = 3)
+    geom_text(na.rm = TRUE, color = 'white', size = 3)
   return(dotplot)
 }
