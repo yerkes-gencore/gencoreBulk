@@ -117,7 +117,7 @@ plotPCAFromConfig <- function(analysis,
 #' }
 #' 
 pcaPlotSimple <- function(counts, metadata, xpc = 1, ypc = 2, ntop = 500) {
-  if (colnames(counts) != rownames(metadata)) {
+  if (all(colnames(counts) != rownames(metadata))) {
     stop('Colnames of counts does not match rownames of metadata')
   }
   rv <- matrixStats::rowVars(counts)
