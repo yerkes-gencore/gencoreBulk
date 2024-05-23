@@ -45,20 +45,15 @@
 #' ## Simple call
 #' heatmapFromGenelist(
 #'   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
-#'   data_to_plot,
-#'   baseline_grouping = "Group",
-#'   baseline = "Cont"
+#'   data_to_plot
 #' )
 #'
-#' ## run with custom reordering of data and labeled slices
+#' ## run with labeled slices
 #' heatmapFromGenelist(
 #'   geneList = c("Ccl2", "Cxcl1", "Cxcl2", "Postn", "Fn1", "Thbs1"),
 #'   data_to_plot,
-#'   baseline_grouping = "Group",
-#'   baseline = "Cont",
 #'   column_split = c(rep(1, 3), rep(2, 3), rep(3, 3), rep(4, 3)),
-#'   slice_labels = c("Cont", "Fac", "L", "M"),
-#'   data = assays(analysis$dds)$rld[, sort(colnames(assays(analysis$dds)$rld))]
+#'   slice_labels = c("Cont", "Fac", "L", "M")
 #' )
 #' }
 #'
