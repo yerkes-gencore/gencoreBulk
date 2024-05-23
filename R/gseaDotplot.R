@@ -13,6 +13,7 @@
 #'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 #'  If this is null, no asterisks will be plotted.
 #' @param p_val_col Column to use for significance values. Default 'pval'.
+#' @inheritParams ggplot2::scale_radius
 #'
 #' @return A ggplot object
 #' @export
@@ -38,6 +39,9 @@ gseaDotplot_joint <- function(gsea_results,
                               pathway_order = NULL,
                               x_order = NULL,
                               significance = c(0.05, 0.01, 0.001),
+                              range = c(1,8),
+                              breaks = -log10(c(0.1,0.01,0.001,0.0001)),
+                              labels = c(0.1,0.01,0.001,0.0001),
                               p_val_col = 'pval'){
   if (!is.null(pathway_order)) {
     if (all(pathway_order %in% unique(gsea_results$pathway))){
@@ -101,9 +105,9 @@ gseaDotplot_joint <- function(gsea_results,
          title="GSEA pathway enrichments",
          caption = caption) +
     scale_radius(name="NOM p-val", 
-                 range=c(1,8),
-                 breaks=-log10(c(0.1,0.01,0.001,0.0001)),
-                 labels=c(0.1,0.01,0.001,0.0001)) +
+                 range=range,
+                 breaks=breaks,
+                 labels=labels) +
     geom_text(na.rm = TRUE, color = 'white', size = 3)
 }
 
@@ -126,7 +130,8 @@ gseaDotplot_joint <- function(gsea_results,
 #'  rather than pathway (if `runfgsea()` call had `breakdown_pathway_names` set 
 #'  to `TRUE`)
 #' @param p_val_col Column to use for significance values. Default 'pval'.
-#'
+#' @inheritParams ggplot2::scale_radius
+#' 
 #' @return A ggplot object
 #' @export
 #'
@@ -148,6 +153,9 @@ gseaDotplot_single <- function(result,
                                sig_cutoff = 0.05,
                                use_shortened_pathway_names = FALSE,
                                significance = c(0.05, 0.01, 0.001),
+                               range = c(1,8),
+                               breaks = -log10(c(0.1,0.01,0.001,0.0001)),
+                               labels = c(0.1,0.01,0.001,0.0001),
                                p_val_col = 'pval') {
   if (use_shortened_pathway_names){
     result$pathway <- result$pathway_short
@@ -219,10 +227,10 @@ gseaDotplot_single <- function(result,
       caption = paste0("n = number of genes in pathway\n", caption)) +
     scale_radius(
       name = "NOM p-val",
-      range = c(1, 8),
-      breaks = -log10(c(0.5, 0.1, 0.01, 0.001)),
-      limits = c(0, 3),
-      labels = c(0.5, 0.1, 0.01, 0.001)
+      range = range,
+      breaks = breaks,
+      # limits = c(0, 3),
+      labels = labels
     ) +
     scale_y_discrete(limits = toppaths$name) +
     geom_text(na.rm = TRUE, color = 'white', size = 3)

@@ -13,6 +13,9 @@ gseaDotplot_single(
   sig_cutoff = 0.05,
   use_shortened_pathway_names = FALSE,
   significance = c(0.05, 0.01, 0.001),
+  range = c(1, 8),
+  breaks = -log10(c(0.1, 0.01, 0.001, 1e-04)),
+  labels = c(0.1, 0.01, 0.001, 1e-04),
   p_val_col = "pval"
 )
 }
@@ -37,6 +40,32 @@ to \code{TRUE})}
 Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
 give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 If this is null, no asterisks will be plotted.}
+
+\item{range}{a numeric vector of length 2 that specifies the minimum and
+maximum size of the plotting symbol after transformation.}
+
+\item{breaks}{One of:
+\itemize{
+\item \code{NULL} for no breaks
+\item \code{waiver()} for the default breaks computed by the
+\link[scales:trans_new]{transformation object}
+\item A numeric vector of positions
+\item A function that takes the limits as input and returns breaks
+as output (e.g., a function returned by \code{\link[scales:breaks_extended]{scales::extended_breaks()}}).
+Also accepts rlang \link[rlang:as_function]{lambda} function notation.
+}}
+
+\item{labels}{One of:
+\itemize{
+\item \code{NULL} for no labels
+\item \code{waiver()} for the default labels computed by the
+transformation object
+\item A character vector giving labels (must be same length as \code{breaks})
+\item An expression vector (must be the same length as breaks). See ?plotmath for details.
+\item A function that takes the breaks as input and returns labels
+as output. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
 
 \item{p_val_col}{Column to use for significance values. Default 'pval'.}
 }
