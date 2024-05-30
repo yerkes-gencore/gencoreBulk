@@ -7,7 +7,6 @@
 runfgsea(
   result,
   pathways,
-  nperm = 1000,
   minSize = 10,
   maxSize = 500,
   breakdown_pathway_names = FALSE,
@@ -18,8 +17,6 @@ runfgsea(
 \item{result}{A DESeqResults result object}
 
 \item{pathways}{List of gene sets to check.}
-
-\item{nperm}{Number of permutations to do. Minimial possible nominal p-value is about 1/nperm}
 
 \item{minSize}{Minimal size of a gene set to test. All pathways below the threshold are excluded.}
 
@@ -33,18 +30,6 @@ all values for NAs so be mindful of modified \code{result} objects}
 }
 \value{
 A table with GSEA results. Each row corresponds to a tested pathway.
-The columns are the following:
-\itemize{
- \item pathway -- name of the pathway as in `names(pathway)`;
- \item pval -- an enrichment p-value;
- \item padj -- a BH-adjusted p-value;
- \item ES -- enrichment score, same as in Broad GSEA implementation;
- \item NES -- enrichment score normalized to mean enrichment of random samples of the same size;
- \item nMoreExtreme` -- a number of times a random gene set had a more
-     extreme enrichment score value;
- \item size -- size of the pathway after removing genes not present in `names(stats)`.
- \item leadingEdge -- vector with indexes of leading edge genes that drive the enrichment, see \url{http://software.broadinstitute.org/gsea/doc/GSEAUserGuideTEXT.htm#_Running_a_Leading}.
-}
 }
 \description{
 Perform GSEA on a DESeq2 result using the given pathways and fGSEA

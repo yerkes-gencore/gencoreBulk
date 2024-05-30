@@ -12,10 +12,10 @@
 #'  all values for NAs so be mindful of modified `result` objects
 #' @inheritParams fgsea::fgseaSimple
 #'
-#' @inherit fgsea::fgseaSimple return
+#' @inherit fgsea::fgsea return
 #' @export
 #'
-#' @importFrom fgsea fgseaSimple
+#' @importFrom fgsea fgsea
 #' @importFrom stringr str_split
 #' @importFrom stats na.omit
 #' @examples
@@ -25,7 +25,6 @@
 #'
 runfgsea <- function(result,
                      pathways,
-                     nperm = 1000,
                      minSize = 10,
                      maxSize = 500,
                      breakdown_pathway_names = FALSE,
@@ -37,10 +36,9 @@ runfgsea <- function(result,
   names(fgsea_data) <- rownames(result)
   fgsea_data <- fgsea_data[!is.na(fgsea_data)]
   fgsea_data <- sort(fgsea_data, decreasing = TRUE)
-  res <- fgsea::fgseaSimple(
+  res <- fgsea::fgsea(
     pathways = pathways,
     stats = fgsea_data,
-    nperm = nperm,
     minSize = minSize,
     maxSize = maxSize
   )
