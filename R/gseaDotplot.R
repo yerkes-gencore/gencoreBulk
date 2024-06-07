@@ -203,7 +203,7 @@ gseaDotplot_single <- function(result,
     if (is.numeric(significance)) {
       label <- '*'
       for (cutoff in significance) {
-        result$label <- ifelse(result$pval < cutoff, label, result$label)
+        result$label <- ifelse(result[[p_val_col]] < cutoff, label, result$label)
         caption <- paste(caption, label, '<', cutoff, ';', sep = ' ')
         label <- paste0(label, '*')
       }
