@@ -20,6 +20,7 @@
 #'
 #' @importFrom rlang .data
 #' @importFrom scales trans_new
+#' @importFrom scales log_breaks
 #' @import ggplot2
 #' @import dplyr
 #'
@@ -147,6 +148,7 @@ gseaDotplot_joint <- function(gsea_results,
 #' @importFrom rlang .data
 #' @importFrom utils head
 #' @importFrom scales trans_new
+#' @importFrom scales log_breaks
 #' @import ggplot2
 #' @import dplyr
 #'
@@ -254,6 +256,6 @@ reverselog_trans <- function(base = 10) {
   trans <- function(x) -log(x, base)
   inv <- function(x) base^(-x)
   scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
-            log_breaks(base = base), 
+            scales::log_breaks(base = base), 
             domain = c(1e-100, Inf))
 }
