@@ -13,8 +13,6 @@ gseaDotplot_single(
   sig_cutoff = 0.05,
   use_shortened_pathway_names = FALSE,
   significance = c(0.05, 0.01, 0.001),
-  range = c(ceiling(-log(max(result[[p_val_col]]))),
-    floor(-log(min(result[[p_val_col]])))),
   breaks = c(0.1, 0.01, 0.001, 1e-04),
   cap_max = tail(breaks, 1)/10,
   p_val_col = "pval"
@@ -41,9 +39,6 @@ to \code{TRUE})}
 Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
 give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 If this is null, no asterisks will be plotted.}
-
-\item{range}{a numeric vector of length 2 that specifies the minimum and
-maximum size of the plotting symbol after transformation.}
 
 \item{breaks}{One of:
 \itemize{

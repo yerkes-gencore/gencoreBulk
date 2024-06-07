@@ -9,8 +9,6 @@ gseaDotplot_joint(
   pathway_order = NULL,
   x_order = NULL,
   significance = c(0.05, 0.01, 0.001),
-  range = c(ceiling(-log(max(result[[p_val_col]]))),
-    floor(-log(min(result[[p_val_col]])))),
   breaks = c(0.1, 0.01, 0.001, 1e-04),
   p_val_col = "pval",
   cap_max = tail(breaks, 1)/10
@@ -28,9 +26,6 @@ combined by \code{combine_GSEA_results()}}
 Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
 give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 If this is null, no asterisks will be plotted.}
-
-\item{range}{a numeric vector of length 2 that specifies the minimum and
-maximum size of the plotting symbol after transformation.}
 
 \item{breaks}{One of:
 \itemize{

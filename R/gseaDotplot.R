@@ -41,8 +41,7 @@ gseaDotplot_joint <- function(gsea_results,
                               pathway_order = NULL,
                               x_order = NULL,
                               significance = c(0.05, 0.01, 0.001),
-                              range = c(ceiling(-log(max(result[[p_val_col]]))),
-                                        floor(-log(min(result[[p_val_col]])))),
+                              # range = ,
                               breaks = c(0.1,0.01,0.001,0.0001),
                               # cap_values = TRUE,
                               p_val_col = 'pval',
@@ -75,6 +74,8 @@ gseaDotplot_joint <- function(gsea_results,
     ## Set the minimum value to be 1/10th of the smallest label
     gsea_results[[p_val_col]] <- pmax(cap_max, gsea_results[[p_val_col]])
   }
+  range <- c(ceiling(-log(max(result[[p_val_col]]))),
+             floor(-log(min(result[[p_val_col]]))))+1
   gsea_results$label <- NA
   caption <- ''
   if (!is.null(significance)) {
@@ -165,8 +166,8 @@ gseaDotplot_single <- function(result,
                                sig_cutoff = 0.05,
                                use_shortened_pathway_names = FALSE,
                                significance = c(0.05, 0.01, 0.001),
-                               range = c(ceiling(-log(max(result[[p_val_col]]))),
-                                         floor(-log(min(result[[p_val_col]])))),
+                               # range = c(ceiling(-log(max(result[[p_val_col]]))),
+                               #           floor(-log(min(result[[p_val_col]])))),
                                breaks = c(0.1,0.01,0.001,0.0001),
                                cap_max = tail(breaks, 1)/10,
                                # labels = c(0.1,0.01,0.001,0.0001),
@@ -204,6 +205,12 @@ gseaDotplot_single <- function(result,
     }
   } 
   
+  if (!missing(cap_max)) {
+    ## Set the minimum value to be 1/10th of the smallest label
+    gsea_results[[p_val_col]] <- pmax(cap_max, gsea_results[[p_val_col]])
+  }
+  range <- c(ceiling(-log(max(result[[p_val_col]]))),
+             floor(-log(min(result[[p_val_col]]))))+1
   
   toppaths <- rbind(utils::head(result, n = top_n))
   toppaths$name <- factor(toppaths$name)
