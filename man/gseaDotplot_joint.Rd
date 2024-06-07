@@ -5,7 +5,7 @@
 \title{GSEA dotplot for multiple contrasts}
 \usage{
 gseaDotplot_joint(
-  gsea_results,
+  result,
   pathway_order = NULL,
   x_order = NULL,
   significance = c(0.05, 0.01, 0.001),
@@ -15,7 +15,7 @@ gseaDotplot_joint(
 )
 }
 \arguments{
-\item{gsea_results}{A table with multiple GSEA results from \code{fgsea::fgseaSimple()}
+\item{result}{A table with multiple GSEA results from \code{fgsea::fgseaSimple()}
 combined by \code{combine_GSEA_results()}}
 
 \item{pathway_order}{Order of pathways to plot}

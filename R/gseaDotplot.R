@@ -4,7 +4,7 @@
 #'
 #' @rdname gseaDotplot_joint
 #'
-#' @param gsea_results A table with multiple GSEA results from `fgsea::fgseaSimple()` 
+#' @param result A table with multiple GSEA results from `fgsea::fgseaSimple()` 
 #'  combined by `combine_GSEA_results()`
 #' @param pathway_order Order of pathways to plot
 #' @param x_order Order of comparisons on X axis
@@ -37,7 +37,7 @@
 #' joint_GSEA_results <- combine_GSEA_results(gsea_results, pathways)
 #' gseaDotplot_joint(joint_GSEA_results)
 #' }
-gseaDotplot_joint <- function(gsea_results,
+gseaDotplot_joint <- function(result,
                               pathway_order = NULL,
                               x_order = NULL,
                               significance = c(0.05, 0.01, 0.001),
@@ -49,22 +49,22 @@ gseaDotplot_joint <- function(gsea_results,
                               # labels = c(0.1,0.01,0.001,0.0001),
                               ){
   if (!is.null(pathway_order)) {
-    if (all(pathway_order %in% unique(gsea_results$pathway))){
-      pathway_order <- order(factor(gsea_results$pathway, levels = pathway_order))
-      gsea_results$pathway <- .wrap_underscore_strings_balance(gsea_results$pathway,36)
+    if (all(pathway_order %in% unique(result$pathway))){
+      pathway_order <- order(factor(result$pathway, levels = pathway_order))
+      result$pathway <- .wrap_underscore_strings_balance(result$pathway,36)
       ## reordering
-      gsea_results <- gsea_results[pathway_order,]
-      gsea_results$pathway <- factor(gsea_results$pathway, levels = unique(gsea_results$pathway))
+      result <- result[pathway_order,]
+      result$pathway <- factor(result$pathway, levels = unique(result$pathway))
     } else {
       warning('pathways specified in pathway_order not found, defaulting to arbitrary order')
     }
   } else {
-    gsea_results$pathway <- .wrap_underscore_strings_balance(gsea_results$pathway,36)
+    result$pathway <- .wrap_underscore_strings_balance(result$pathway,36)
   }
   
   if (!is.null(x_order)) {
-    if (all(x_order %in% unique(gsea_results$ID))){
-      gsea_results$ID <- factor(gsea_results$ID, levels = x_order)
+    if (all(x_order %in% unique(result$ID))){
+      result$ID <- factor(result$ID, levels = x_order)
     } else {
       warning('Specified x_order not all found in data, defaulting to arbitrary order')
     }
@@ -72,26 +72,26 @@ gseaDotplot_joint <- function(gsea_results,
   
   if (!missing(cap_max)) {
     ## Set the minimum value to be 1/10th of the smallest label
-    gsea_results[[p_val_col]] <- pmax(cap_max, gsea_results[[p_val_col]])
+    result[[p_val_col]] <- pmax(cap_max, result[[p_val_col]])
   }
   range <- c(ceiling(-log(max(result[[p_val_col]]))),
              floor(-log(min(result[[p_val_col]]))))+1
-  gsea_results$label <- NA
+  result$label <- NA
   caption <- ''
   if (!is.null(significance)) {
     if (is.numeric(significance)) {
       label <- '*'
       for (cutoff in significance) {
-        gsea_results$label <- ifelse(gsea_results[[p_val_col]] < cutoff, label, gsea_results$label)
+        result$label <- ifelse(result[[p_val_col]] < cutoff, label, result$label)
         caption <- paste(caption, label, '<', cutoff, ';', sep = ' ')
         label <- paste0(label, '*')
       }
-      # gsea_results$label[is.numeric(gsea_results$label)] <- NA
+      # result$label[is.numeric(result$label)] <- NA
     } else {
       stop('Significance argument should be a numeric vector')
     }
   } 
-  ggplot(gsea_results, aes(x=.data$ID, y=.data$pathway, size=.data[[p_val_col]],
+  ggplot(result, aes(x=.data$ID, y=.data$pathway, size=.data[[p_val_col]],
                            color=.data$NES, label = .data$label)) + 
     geom_point() +
     scale_color_gradient2(low="blue",
@@ -99,8 +99,8 @@ gseaDotplot_joint <- function(gsea_results,
                           high="red",
                           midpoint=0,
                           breaks=c(-2,-1,0,1,2),
-                          limits=c(min(gsea_results$NES,-1),
-                                   max(gsea_results$NES,1))) +
+                          limits=c(min(result$NES,-1),
+                                   max(result$NES,1))) +
     theme_classic(11) +
     theme(panel.grid.major = element_line(colour = "grey92"),
           panel.grid.minor = element_line(colour = "grey92"),
@@ -199,7 +199,7 @@ gseaDotplot_single <- function(result,
         caption <- paste(caption, label, '<', cutoff, ';', sep = ' ')
         label <- paste0(label, '*')
       }
-      # gsea_results$label[is.numeric(gsea_results$label)] <- NA
+      # result$label[is.numeric(result$label)] <- NA
     } else {
       stop('Significance argument should be a numeric vector')
     }
@@ -207,7 +207,7 @@ gseaDotplot_single <- function(result,
   
   if (!missing(cap_max)) {
     ## Set the minimum value to be 1/10th of the smallest label
-    gsea_results[[p_val_col]] <- pmax(cap_max, gsea_results[[p_val_col]])
+    result[[p_val_col]] <- pmax(cap_max, result[[p_val_col]])
   }
   range <- c(ceiling(-log(max(result[[p_val_col]]))),
              floor(-log(min(result[[p_val_col]]))))+1
