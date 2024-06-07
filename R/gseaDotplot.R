@@ -13,6 +13,9 @@
 #'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 #'  If this is null, no asterisks will be plotted.
 #' @param p_val_col Column to use for significance values. Default 'pval'.
+#' @param use_shortened_pathway_names Pull names from column 'pathway_short' 
+#'  rather than pathway (if `runfgsea()` call had `breakdown_pathway_names` set 
+#'  to `TRUE`)
 #' @inheritParams ggplot2::scale_radius
 #'
 #' @return A ggplot object
@@ -44,9 +47,13 @@ gseaDotplot_joint <- function(result,
                               # range = ,
                               breaks = c(0.1,0.01,0.001,0.0001),
                               cap_pvalues = TRUE,
-                              p_val_col = 'pval'
+                              p_val_col = 'pval',
+                              use_shortened_pathway_names = FALSE
                               # labels = c(0.1,0.01,0.001,0.0001),
                               ){
+  if (use_shortened_pathway_names){
+    result$pathway <- result$pathway_short
+  }
   if (!is.null(pathway_order)) {
     if (all(pathway_order %in% unique(result$pathway))){
       pathway_order <- order(factor(result$pathway, levels = pathway_order))

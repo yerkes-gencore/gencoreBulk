@@ -11,7 +11,8 @@ gseaDotplot_joint(
   significance = c(0.05, 0.01, 0.001),
   breaks = c(0.1, 0.01, 0.001, 1e-04),
   cap_pvalues = TRUE,
-  p_val_col = "pval"
+  p_val_col = "pval",
+  use_shortened_pathway_names = FALSE
 )
 }
 \arguments{
@@ -39,6 +40,10 @@ Also accepts rlang \link[rlang:as_function]{lambda} function notation.
 }}
 
 \item{p_val_col}{Column to use for significance values. Default 'pval'.}
+
+\item{use_shortened_pathway_names}{Pull names from column 'pathway_short'
+rather than pathway (if \code{runfgsea()} call had \code{breakdown_pathway_names} set
+to \code{TRUE})}
 }
 \value{
 A ggplot object
