@@ -241,8 +241,9 @@ gseaDotplot_single <- function(result,
       # name = "NOM p-val",
       range = range,
       breaks = breaks,
+      trans=reverselog_trans()
       # limits = c(0, 3),
-      labels = labels
+      # labels = labels
     ) +
     scale_y_discrete(limits = toppaths$name) +
     geom_text(na.rm = TRUE, color = 'white', size = 3)
