@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @importFrom rlang .data
+#' @importFrom scales trans_new
 #' @import ggplot2
 #' @import dplyr
 #'
@@ -39,10 +40,14 @@ gseaDotplot_joint <- function(gsea_results,
                               pathway_order = NULL,
                               x_order = NULL,
                               significance = c(0.05, 0.01, 0.001),
-                              range = c(1,8),
-                              breaks = -log10(c(0.1,0.01,0.001,0.0001)),
-                              labels = c(0.1,0.01,0.001,0.0001),
-                              p_val_col = 'pval'){
+                              range = c(ceiling(-log(max(result[[p_val_col]]))),
+                                        floor(-log(min(result[[p_val_col]])))),
+                              breaks = c(0.1,0.01,0.001,0.0001),
+                              # cap_values = TRUE,
+                              p_val_col = 'pval',
+                              cap_max = tail(breaks, 1)/10
+                              # labels = c(0.1,0.01,0.001,0.0001),
+                              ){
   if (!is.null(pathway_order)) {
     if (all(pathway_order %in% unique(gsea_results$pathway))){
       pathway_order <- order(factor(gsea_results$pathway, levels = pathway_order))
@@ -65,6 +70,10 @@ gseaDotplot_joint <- function(gsea_results,
     }
   }
   
+  if (!missing(cap_max)) {
+    ## Set the minimum value to be 1/10th of the smallest label
+    gsea_results[[p_val_col]] <- pmax(cap_max, gsea_results[[p_val_col]])
+  }
   gsea_results$label <- NA
   caption <- ''
   if (!is.null(significance)) {
@@ -80,7 +89,7 @@ gseaDotplot_joint <- function(gsea_results,
       stop('Significance argument should be a numeric vector')
     }
   } 
-  ggplot(gsea_results, aes(x=.data$ID, y=.data$pathway, size=-log(.data[[p_val_col]]),
+  ggplot(gsea_results, aes(x=.data$ID, y=.data$pathway, size=.data[[p_val_col]],
                            color=.data$NES, label = .data$label)) + 
     geom_point() +
     scale_color_gradient2(low="blue",
@@ -104,10 +113,10 @@ gseaDotplot_joint <- function(gsea_results,
          size="Nom p-val",
          title="GSEA pathway enrichments",
          caption = caption) +
-    scale_radius(name="NOM p-val", 
-                 range=range,
-                 breaks=breaks,
-                 labels=labels) +
+    scale_radius(range=range,
+                 trans=reverselog_trans(),
+                 breaks=breaks
+                 ) +
     geom_text(na.rm = TRUE, color = 'white', size = 3)
 }
 
@@ -137,6 +146,7 @@ gseaDotplot_joint <- function(gsea_results,
 #'
 #' @importFrom rlang .data
 #' @importFrom utils head
+#' @importFrom scales trans_new
 #' @import ggplot2
 #' @import dplyr
 #'
@@ -153,9 +163,11 @@ gseaDotplot_single <- function(result,
                                sig_cutoff = 0.05,
                                use_shortened_pathway_names = FALSE,
                                significance = c(0.05, 0.01, 0.001),
-                               range = c(1,8),
-                               breaks = -log10(c(0.1,0.01,0.001,0.0001)),
-                               labels = c(0.1,0.01,0.001,0.0001),
+                               range = c(ceiling(-log(max(result[[p_val_col]]))),
+                                         floor(-log(min(result[[p_val_col]])))),
+                               breaks = c(0.1,0.01,0.001,0.0001),
+                               cap_max = tail(breaks, 1)/10,
+                               # labels = c(0.1,0.01,0.001,0.0001),
                                p_val_col = 'pval') {
   if (use_shortened_pathway_names){
     result$pathway <- result$pathway_short
@@ -197,7 +209,7 @@ gseaDotplot_single <- function(result,
                     aes(
                       x = .data[['perc']],
                       y = .data[['name']],
-                      size = -log10(.data[['pval']]),
+                      size = .data[[p_val_col]],
                       color = .data[['NES']],
                       label = .data[['label']])) +
     geom_point() +
@@ -226,7 +238,7 @@ gseaDotplot_single <- function(result,
       size = "Nom p-val", title = "Top enriched pathways",
       caption = paste0("n = number of genes in pathway\n", caption)) +
     scale_radius(
-      name = "NOM p-val",
+      # name = "NOM p-val",
       range = range,
       breaks = breaks,
       # limits = c(0, 3),
@@ -235,4 +247,12 @@ gseaDotplot_single <- function(result,
     scale_y_discrete(limits = toppaths$name) +
     geom_text(na.rm = TRUE, color = 'white', size = 3)
   return(dotplot)
+}
+
+reverselog_trans <- function(base = 10) {
+  trans <- function(x) -log(x, base)
+  inv <- function(x) base^(-x)
+  scales::trans_new(paste0("reverselog-", format(base)), trans, inv, 
+            log_breaks(base = base), 
+            domain = c(1e-100, Inf))
 }
