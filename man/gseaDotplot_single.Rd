@@ -14,7 +14,7 @@ gseaDotplot_single(
   use_shortened_pathway_names = FALSE,
   significance = c(0.05, 0.01, 0.001),
   breaks = c(0.1, 0.01, 0.001, 1e-04),
-  cap_max = tail(breaks, 1)/10,
+  cap_pvalues = TRUE,
   p_val_col = "pval"
 )
 }

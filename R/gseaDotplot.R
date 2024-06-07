@@ -43,9 +43,8 @@ gseaDotplot_joint <- function(result,
                               significance = c(0.05, 0.01, 0.001),
                               # range = ,
                               breaks = c(0.1,0.01,0.001,0.0001),
-                              # cap_values = TRUE,
-                              p_val_col = 'pval',
-                              cap_max = tail(breaks, 1)/10
+                              cap_pvalues = TRUE,
+                              p_val_col = 'pval'
                               # labels = c(0.1,0.01,0.001,0.0001),
                               ){
   if (!is.null(pathway_order)) {
@@ -70,8 +69,9 @@ gseaDotplot_joint <- function(result,
     }
   }
   
-  if (!missing(cap_max)) {
+  if (cap_pvalues) {
     ## Set the minimum value to be 1/10th of the smallest label
+    cap_max = tail(breaks, 1)/10
     result[[p_val_col]] <- pmax(cap_max, result[[p_val_col]])
   }
   range <- c(ceiling(-log(max(result[[p_val_col]]))),
@@ -169,7 +169,8 @@ gseaDotplot_single <- function(result,
                                # range = c(ceiling(-log(max(result[[p_val_col]]))),
                                #           floor(-log(min(result[[p_val_col]])))),
                                breaks = c(0.1,0.01,0.001,0.0001),
-                               cap_max = tail(breaks, 1)/10,
+                               cap_pvalues= TRUE,
+                               # cap_max = tail(breaks, 1)/10,
                                # labels = c(0.1,0.01,0.001,0.0001),
                                p_val_col = 'pval') {
   if (use_shortened_pathway_names){
@@ -205,8 +206,10 @@ gseaDotplot_single <- function(result,
     }
   } 
   
-  if (!missing(cap_max)) {
+  if (cap_pvalues) {
     ## Set the minimum value to be 1/10th of the smallest label
+    cap_max = tail(breaks, 1)/10
+    
     result[[p_val_col]] <- pmax(cap_max, result[[p_val_col]])
   }
   range <- c(ceiling(-log(max(result[[p_val_col]]))),
