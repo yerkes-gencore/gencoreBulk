@@ -119,7 +119,7 @@ gseaDotplot_joint <- function(result,
     labs(x="Comparison",
          y="Gene set", 
          color = "Normalized\nenrichment\nscore",
-         size="Nom p-val",
+         size="p-value",
          title="GSEA pathway enrichments",
          caption = caption) +
     scale_radius(range=range,
@@ -185,7 +185,7 @@ gseaDotplot_single <- function(result,
   }
   result <- result %>%
     arrange(.data[[p_val_col]], desc(.data$NES)) %>%
-    mutate(perc = 100 * length(.data$leadingEdge) / .data$size) %>%
+    mutate(perc = 100 * length(strsplit(.data$leadingEdge, ', ')[[1]]) / .data$size) %>%
     mutate(name = paste0(.wrap_underscore_strings_balance(.data$pathway, 36), "\nn=", .data$size)) %>%
     filter(.data$size >= min_size)
   if (!is.null(filter_source)) {
@@ -254,10 +254,9 @@ gseaDotplot_single <- function(result,
     labs(
       x = "% of genes in leading edge", y = "Gene set",
       color = "Normalized\nenrichment\nscore",
-      size = "Nom p-val", title = "Top enriched pathways",
+      size = "p-value", title = "Top enriched pathways",
       caption = paste0("n = number of genes in pathway\n", caption)) +
     scale_radius(
-      # name = "NOM p-val",
       range = range,
       breaks = breaks,
       trans=reverselog_trans()
