@@ -185,7 +185,7 @@ gseaDotplot_single <- function(result,
   }
   result <- result %>%
     arrange(.data[[p_val_col]], desc(.data$NES)) %>%
-    mutate(perc = 100 * length(strsplit(.data$leadingEdge, ', ')[[1]]) / .data$size) %>%
+    mutate(perc = 100 * sapply(str_split(leadingEdge, ', '), length) / .data$size) %>%
     mutate(name = paste0(.wrap_underscore_strings_balance(.data$pathway, 36), "\nn=", .data$size)) %>%
     filter(.data$size >= min_size)
   if (!is.null(filter_source)) {
