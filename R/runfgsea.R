@@ -10,7 +10,7 @@
 #'  pathway for easier reading
 #' @param na_omit Bool, exclude genes with missing data in results? This checks
 #'  all values for NAs so be mindful of modified `result` objects
-#' @inheritParams fgsea::fgseaSimple
+#' @inheritParams fgsea::fgsea
 #'
 #' @inherit fgsea::fgsea return
 #' @export
