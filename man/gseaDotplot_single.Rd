@@ -40,16 +40,9 @@ Each subsequent value will add an extra asterisk. E.g. \code{c(0.05, 0.01)} will
 give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 If this is null, no asterisks will be plotted.}
 
-\item{breaks}{One of:
-\itemize{
-\item \code{NULL} for no breaks
-\item \code{waiver()} for the default breaks computed by the
-\link[scales:trans_new]{transformation object}
-\item A numeric vector of positions
-\item A function that takes the limits as input and returns breaks
-as output (e.g., a function returned by \code{\link[scales:breaks_extended]{scales::extended_breaks()}}).
-Also accepts rlang \link[rlang:as_function]{lambda} function notation.
-}}
+\item{breaks}{Values to mark for scaling radius}
+
+\item{cap_pvalues}{Bool; cap small pvalues to keep the range of dots smaller}
 
 \item{p_val_col}{Column to use for significance values. Default 'pval'.}
 }

@@ -12,11 +12,13 @@
 #'  Each subsequent value will add an extra asterisk. E.g. `c(0.05, 0.01)` will 
 #'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
 #'  If this is null, no asterisks will be plotted.
+#' @param cap_pvalues Bool; cap small pvalues to keep the range of dots smaller
 #' @param p_val_col Column to use for significance values. Default 'pval'.
 #' @param use_shortened_pathway_names Pull names from column 'pathway_short' 
 #'  rather than pathway (if `runfgsea()` call had `breakdown_pathway_names` set 
 #'  to `TRUE`)
-#' @inheritParams ggplot2::scale_radius
+#' @param breaks Values to mark for scaling radius
+#' result,
 #'
 #' @return A ggplot object
 #' @export
@@ -44,12 +46,10 @@ gseaDotplot_joint <- function(result,
                               pathway_order = NULL,
                               x_order = NULL,
                               significance = c(0.05, 0.01, 0.001),
-                              # range = ,
                               breaks = c(0.1,0.01,0.001,0.0001),
                               cap_pvalues = TRUE,
                               p_val_col = 'pval',
                               use_shortened_pathway_names = FALSE
-                              # labels = c(0.1,0.01,0.001,0.0001),
                               ){
   if (use_shortened_pathway_names){
     result$pathway <- result$pathway_short
@@ -140,6 +140,7 @@ gseaDotplot_joint <- function(result,
 #' @param signif_only If TRUE, only plot results with p value < `sig_cutoff`
 #' @param top_n Show the top N results sorted by pval
 #' @param sig_cutoff Threshold for significance, default to 0.05
+#' @param p_val_col Column to use for significance values. Default 'pval'.
 #' @param significance A vector of values to indicate significance with asterisks.
 #'  Each subsequent value will add an extra asterisk. E.g. `c(0.05, 0.01)` will 
 #'  give one asteriks to values below 0.05 and two asterisks to values below 0.01.
@@ -147,8 +148,8 @@ gseaDotplot_joint <- function(result,
 #' @param use_shortened_pathway_names Pull names from column 'pathway_short' 
 #'  rather than pathway (if `runfgsea()` call had `breakdown_pathway_names` set 
 #'  to `TRUE`)
-#' @param p_val_col Column to use for significance values. Default 'pval'.
-#' @inheritParams ggplot2::scale_radius
+#' @param breaks Values to mark for scaling radius
+#' @param cap_pvalues Bool; cap small pvalues to keep the range of dots smaller
 #' 
 #' @return A ggplot object
 #' @export
@@ -177,8 +178,6 @@ gseaDotplot_single <- function(result,
                                #           floor(-log(min(result[[p_val_col]])))),
                                breaks = c(0.1,0.01,0.001,0.0001),
                                cap_pvalues= TRUE,
-                               # cap_max = tail(breaks, 1)/10,
-                               # labels = c(0.1,0.01,0.001,0.0001),
                                p_val_col = 'pval') {
   if (use_shortened_pathway_names){
     result$pathway <- result$pathway_short
